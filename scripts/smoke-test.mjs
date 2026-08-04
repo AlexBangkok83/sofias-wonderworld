@@ -316,6 +316,95 @@ async function main() {
   if (!touchVisible) problems.push('touch controls are hidden on a touch device');
   console.log('  📸 13-phone-title, 14-phone-play');
 
+  // --- Touch controls, actually driven ---
+  //
+  // Sofia plays on a phone as often as a laptop, so these are the controls
+  // that matter most. Real touch events through CDP rather than synthesised
+  // DOM events, so the same code path a finger takes gets exercised.
+  console.log('  Phone controls…');
+  const cdp = await phone.context().newCDPSession(phone);
+  const touch = (type, points) => cdp.send('Input.dispatchTouchEvent', {
+    type,
+    touchPoints: points.map(([x, y], i) => ({ x, y, id: i })),
+  });
+
+  // Joystick: press and drag on the left half, and check she moves.
+  const startPos = await phone.evaluate(() => window.__game.state.player.position.toArray());
+  await touch('touchStart', [[90, 620]]);
+  await waitForFrames(phone, 2);
+  const joystickShown = await phone.evaluate(
+    () => document.getElementById('joystick').classList.contains('active'),
+  );
+  for (let i = 0; i < 8; i++) {
+    await touch('touchMove', [[90, 560]]);   // push "up" = forward
+    await waitForFrames(phone, 2);
+  }
+  await touch('touchEnd', []);
+  await waitForFrames(phone, 2);
+  const movedPos = await phone.evaluate(() => window.__game.state.player.position.toArray());
+  const walked = Math.hypot(movedPos[0] - startPos[0], movedPos[2] - startPos[2]);
+  console.log(`    joystick shown: ${joystickShown}, walked ${walked.toFixed(2)} blocks`);
+  if (!joystickShown) problems.push('the virtual joystick did not appear on touch');
+  if (!(walked > 0.5)) problems.push(`joystick did not move the player (${walked.toFixed(2)} blocks)`);
+  await phone.screenshot({ path: path.join(SHOTS, '15-phone-joystick.png') });
+
+  // Tap-to-place on the right half.
+  await phone.evaluate(() => window.__game.setLook(0, 0.85));
+  await waitForFrames(phone, 2);
+  const beforeTap = await probeNumber(phone, 'blockCount', () => window.__game.blockCount());
+  await touch('touchStart', [[300, 420]]);
+  await touch('touchEnd', []);
+  await waitForFrames(phone, 3);
+  const afterTap = await probeNumber(phone, 'blockCount', () => window.__game.blockCount());
+  console.log(`    tap-to-place: ${beforeTap} → ${afterTap}`);
+  if (!(afterTap > beforeTap)) {
+    problems.push(`tap-to-place put no block down (${beforeTap} → ${afterTap})`);
+  }
+
+  // The on-screen place and remove buttons.
+  const tapButton = async (selector) => {
+    const box = await phone.locator(selector).boundingBox();
+    if (!box) throw new Error(`${selector} has no box`);
+    await touch('touchStart', [[box.x + box.width / 2, box.y + box.height / 2]]);
+    await touch('touchEnd', []);
+    await waitForFrames(phone, 3);
+  };
+  await phone.evaluate(() => window.__game.setLook(0, 0.85));
+  await waitForFrames(phone, 2);
+  const beforeBtn = await probeNumber(phone, 'blockCount', () => window.__game.blockCount());
+  await tapButton('#touch-buttons .round-btn >> nth=1');   // ▣ place
+  const afterPlaceBtn = await probeNumber(phone, 'blockCount', () => window.__game.blockCount());
+  await tapButton('#touch-buttons .round-btn >> nth=0');   // ⛏ remove
+  const afterBreakBtn = await probeNumber(phone, 'blockCount', () => window.__game.blockCount());
+  console.log(`    place button: ${beforeBtn} → ${afterPlaceBtn}, remove button: → ${afterBreakBtn}`);
+  if (!(afterPlaceBtn > beforeBtn)) problems.push('the on-screen place button did nothing');
+  if (!(afterBreakBtn < afterPlaceBtn)) problems.push('the on-screen remove button did nothing');
+
+  // Picking a different block from the hotbar by tapping it.
+  const firstBlock = await phone.evaluate(() => window.__game.ui.selectedBlockId);
+  await tapButton('#hotbar .slot >> nth=3');
+  const pickedBlock = await phone.evaluate(() => window.__game.ui.selectedBlockId);
+  console.log(`    hotbar tap: block ${firstBlock} → ${pickedBlock}`);
+  if (pickedBlock === firstBlock) problems.push('tapping a hotbar slot did not change the block');
+
+  // Talking, via the on-screen Talk button.
+  await phone.evaluate(() => window.__game.goToNearestNpc());
+  await waitForFrames(phone, 3);
+  const talkShown = await phone.evaluate(
+    () => !document.getElementById('touch-buttons').querySelector('.wide').hidden,
+  );
+  if (!talkShown) problems.push('the Talk button did not appear next to a villager');
+  else {
+    await tapButton('#touch-buttons .wide');
+    const spoke = await phone.evaluate(
+      () => document.getElementById('dialogue').classList.contains('show'),
+    );
+    console.log(`    talk button opened dialogue: ${spoke}`);
+    if (!spoke) problems.push('the Talk button did not open dialogue');
+  }
+  await phone.screenshot({ path: path.join(SHOTS, '16-phone-built.png') });
+  console.log('  📸 15-phone-joystick, 16-phone-built');
+
   await browser.close();
   server.close();
 

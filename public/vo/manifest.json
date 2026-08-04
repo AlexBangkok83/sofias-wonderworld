@@ -1,0 +1,4 @@
+{
+  "comment": "No pre-rendered voice lines yet, so every villager uses the browser's own speech synthesis. Run `npm run voices` with an ElevenLabs key to fill this in.",
+  "lines": {}
+}
