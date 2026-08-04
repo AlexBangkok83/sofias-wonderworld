@@ -17,8 +17,14 @@ function nameplate(text) {
   ctx.textBaseline = 'middle';
   ctx.fillStyle = 'rgba(38, 30, 44, 0.72)';
   ctx.beginPath();
-  ctx.roundRect(0, 8, width, 48, 24);
-  ctx.fill();
+  if (ctx.roundRect) {
+    ctx.roundRect(0, 8, width, 48, 24);
+    ctx.fill();
+  } else {
+    // Older Safari has no roundRect, and a thrown error here would take out
+    // every villager in the zone.
+    ctx.fillRect(0, 8, width, 48);
+  }
   ctx.fillStyle = '#fbf3e6';
   ctx.fillText(text, width / 2, 33);
 

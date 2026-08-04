@@ -96,7 +96,9 @@ canvas#scene {
 
 /* ---------- title screen ---------- */
 
-#title { z-index: 60; background: radial-gradient(circle at 50% 30%, #3a2c46, #17121e); }
+/* Deliberately translucent: the village is already built and framed behind
+   this, and seeing where you're about to be standing beats a flat panel. */
+#title { z-index: 60; background: rgba(26, 19, 33, 0.62); }
 #title .card { text-align: center; padding: 34px 40px 30px; max-width: 460px; width: 100%; }
 #title h1 {
   margin: 0 0 4px;

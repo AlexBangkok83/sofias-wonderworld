@@ -83,8 +83,9 @@ export function buildVillage(zone) {
   path(49, 70, 63, 71);         // barn spur
   path(62, 71, 63, 71);
   path(40, 50, 41, 85);         // library spur
-  path(50, 86, 72, 87);         // the way east, toward the grove
-  path(71, 80, 72, 90);
+  path(40, 86, 70, 87);         // the way east, toward the grove
+  path(74, 86, 75, 92);         // and on to the moon gate
+  path(75, 91, 84, 92);
 
   // ---- Plaza pond ----------------------------------------------------
   b.box(44, GROUND - 2, 44, 52, GROUND, 52, 'dirt');
@@ -113,8 +114,9 @@ export function buildVillage(zone) {
     }
   };
   hedge(70, 78, 93, 93);
-  b.box(71, GROUND + 1, 78, 72, GROUND + 3, 78, 'air');   // the gap
-  b.box(71, GROUND, 78, 72, GROUND, 80, 'path');
+  // The one way in, lined up with the path that arrives from the village.
+  b.box(70, GROUND + 1, 86, 70, GROUND + 3, 87, 'air');
+  b.box(70, GROUND, 86, 74, GROUND, 87, 'path');
 
   buildMoonGate(b, ...MOON_GATE);
   b.box(MOON_GATE[0] - 2, GROUND, MOON_GATE[2] + 1, MOON_GATE[0] + 2, GROUND, MOON_GATE[2] + 6, 'path');

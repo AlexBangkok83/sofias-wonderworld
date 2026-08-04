@@ -5,7 +5,7 @@ import { UI } from './ui/ui.js';
 import { Input, IS_TOUCH } from './core/input.js';
 import { SaveStore, emptySave } from './core/save.js';
 import { Lighting } from './core/lighting.js';
-import { World } from './world/world.js';
+import { World, validateWorld } from './world/world.js';
 import { AIR, getBlock } from './world/blocks.js';
 import { Player } from './player/player.js';
 import { DEFAULT_CHARACTER } from './player/avatar.js';
@@ -527,6 +527,7 @@ function installTestHooks() {
     zoneId: () => state.zone?.id ?? null,
     enterZone: (id, spawnKey = null) => enterZone(id, spawnKey),
     characterCount: () => state.save.characters.length,
+    activeCharacterName: () => activeCharacter().name,
     blockCount: () => {
       const { data } = state.zone;
       let count = 0;
@@ -553,6 +554,7 @@ function installTestHooks() {
       return true;
     },
     saveNow,
+    validateWorld,
   };
 }
 

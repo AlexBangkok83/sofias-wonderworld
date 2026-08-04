@@ -110,6 +110,13 @@ async function main() {
   await waitForFrames(page, 8);
   await shot(page, '01-title');
 
+  // --- Structural checks over every zone ---
+  console.log('  Checking the world holds together…');
+  const worldProblems = await page.evaluate(() => window.__game.validateWorld());
+  for (const problem of worldProblems) console.log(`    ✗ ${problem}`);
+  if (worldProblems.length) problems.push(...worldProblems.map((p) => `world: ${p}`));
+  else console.log('    all zones, doors and spawns line up');
+
   // --- Village ---
   console.log('  Village…');
   await page.click('#title .btn');
@@ -184,27 +191,42 @@ async function main() {
   const chipCount = await page.evaluate(() => document.querySelectorAll('#creator .chip').length);
   if (chipCount < 10) problems.push(`character creator only rendered ${chipCount} options`);
 
-  // Make a new character and switch to them.
-  await page.evaluate(() => {
-    const buttons = [...document.querySelectorAll('#character-list .btn')];
-    buttons[buttons.length - 1].click();
-  });
+  // Make a new character and switch to them. Buttons are found by their label
+  // rather than by class — several share `.btn.secondary`, including the per-row
+  // Edit buttons, and picking the wrong one silently edits the existing
+  // character instead of creating a new one.
+  const clickByText = (label) => page.evaluate((text) => {
+    const button = [...document.querySelectorAll('#creator button')]
+      .find((b) => b.textContent.trim() === text);
+    if (!button) throw new Error(`no button labelled "${text}"`);
+    button.click();
+  }, label);
+
+  await clickByText('+ New character');
   await waitForFrames(page, 6);
   await page.fill('#creator input[type="text"]', 'Star');
-  await page.click('#creator .btn.secondary >> nth=0');   // Surprise me
+  await clickByText('🎲 Surprise me');
   await waitForFrames(page, 8);
-  await page.evaluate(() => {
-    [...document.querySelectorAll('#creator .btn')].find((b) => b.textContent === 'Save').click();
-  });
+  const editingBeforeSave = await page.evaluate(() => window.__game && document
+    .querySelector('#creator h2').textContent);
+  if (editingBeforeSave !== 'Make a character') {
+    problems.push(`expected to be making a new character, header said "${editingBeforeSave}"`);
+  }
+  await clickByText('Save');
   await waitForFrames(page, 8);
   const charCount = await probeNumber(page, 'characterCount', () => window.__game.characterCount());
   console.log(`    characters: ${charCount}`);
-  if (charCount < 2) problems.push('saving a new character did not add one');
+  if (!(charCount >= 2)) problems.push(`saving a new character did not add one (${charCount})`);
+
+  // Switching who you're playing as is half of what the creator is for.
+  await clickByText('Play as');
+  await waitForFrames(page, 10);
+  const playingAs = await page.evaluate(() => window.__game.activeCharacterName());
+  console.log(`    playing as: ${playingAs}`);
+  if (playingAs !== 'Star') problems.push(`switching character failed (playing as ${playingAs})`);
   await shot(page, '08-two-characters');
 
-  await page.evaluate(() => {
-    [...document.querySelectorAll('#creator .btn')].find((b) => b.textContent === 'Done').click();
-  });
+  await clickByText('Done');
   await waitForFrames(page, 10);
 
   // --- Other interiors ---

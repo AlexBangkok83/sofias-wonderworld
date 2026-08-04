@@ -35,10 +35,13 @@ export function getZoneDefinition(id) {
  * into a room you decorated is instant and nothing is lost.
  */
 export class World {
-  constructor({ edits = {}, castShadows = true } = {}) {
+  constructor({ edits = {}, castShadows = true, skipMeshing = false } = {}) {
     this.zones = new Map();
     this.edits = edits;
     this.castShadows = castShadows;
+    // Layout-only mode: skips building geometry, so the structural checks can
+    // run in plain Node without a canvas.
+    this.skipMeshing = skipMeshing;
   }
 
   has(id) {
@@ -70,7 +73,7 @@ export class World {
     zone.doors = (def.doors || []).map((d) => ({ ...d }));
     zone.npcs = (def.npcs || []).map((n) => ({ ...n }));
     zone.spawns = def.spawns || null;
-    zone.rebuild(this.castShadows);
+    if (!this.skipMeshing) zone.rebuild(this.castShadows);
     this.zones.set(id, zone);
     return zone;
   }
@@ -98,6 +101,94 @@ export class World {
     }
     return out;
   }
+}
+
+/**
+ * Structural checks over every zone: that doors lead somewhere real, that the
+ * spawn points they lead to exist, and that you can actually stand where you
+ * land. Cheap to run and it catches the kind of mistake — a door pointing at a
+ * renamed zone, a spawn buried in a wall — that only shows up when someone
+ * walks into it.
+ *
+ * Returns a list of human-readable problems; empty means everything lines up.
+ */
+export function validateWorld() {
+  const problems = [];
+  const world = new World({ castShadows: false, skipMeshing: true });
+
+  const standable = (zone, [x, y, z], label) => {
+    const fx = Math.floor(x);
+    const fy = Math.floor(y);
+    const fz = Math.floor(z);
+    if (!zone.inBounds(fx, fy, fz)) {
+      problems.push(`${label} is outside ${zone.id}`);
+      return;
+    }
+    if (zone.isSolidAt(fx, fy, fz) || zone.isSolidAt(fx, fy + 1, fz)) {
+      problems.push(`${label} is inside a solid block in ${zone.id}`);
+    }
+    // Something to land on within a short drop.
+    let ground = false;
+    for (let drop = 1; drop <= 6; drop++) {
+      if (zone.isSolidAt(fx, fy - drop, fz)) { ground = true; break; }
+    }
+    if (!ground) problems.push(`${label} has no floor under it in ${zone.id}`);
+  };
+
+  for (const id of ZONE_IDS) {
+    let zone;
+    try {
+      zone = world.get(id);
+    } catch (error) {
+      problems.push(`zone "${id}" failed to build: ${error.message}`);
+      continue;
+    }
+
+    standable(zone, zone.spawn, `default spawn of "${id}"`);
+
+    for (const [key, spawn] of Object.entries(zone.spawns || {})) {
+      standable(zone, spawn.pos, `spawn "${key}" of "${id}"`);
+    }
+
+    for (const door of zone.doors) {
+      if (!DEFINITIONS.has(door.target)) {
+        problems.push(`door in "${id}" points at unknown zone "${door.target}"`);
+        continue;
+      }
+      if (door.spawnKey) {
+        const target = world.get(door.target);
+        if (!target.spawns || !target.spawns[door.spawnKey]) {
+          problems.push(`door in "${id}" wants spawn "${door.spawnKey}" in "${door.target}", which doesn't exist`);
+        }
+      }
+      // You have to be able to stand in a doorway for it to trigger.
+      let reachable = false;
+      for (let x = door.x0; x <= door.x1 && !reachable; x++) {
+        for (let z = door.z0; z <= door.z1 && !reachable; z++) {
+          for (let y = 0; y < zone.sizeY - 1; y++) {
+            if (!zone.isSolidAt(x, y, z) && !zone.isSolidAt(x, y + 1, z)
+              && zone.isSolidAt(x, y - 1, z)) {
+              reachable = true;
+              break;
+            }
+          }
+        }
+      }
+      if (!reachable) {
+        problems.push(`door to "${door.target}" in "${id}" is blocked — nowhere to stand in it`);
+      }
+    }
+
+    for (const npc of zone.npcs) {
+      const fx = Math.floor(npc.x);
+      const fz = Math.floor(npc.z);
+      if (!zone.inBounds(fx, 1, fz)) {
+        problems.push(`villager "${npc.id}" is outside "${id}"`);
+      }
+    }
+  }
+
+  return problems;
 }
 
 export { GROUND };

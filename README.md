@@ -146,21 +146,29 @@ src/
   ui/                DOM interface, character-creator turntable
 scripts/
   generate-voices.mjs  ElevenLabs pre-render
+  check-world.mjs      zone/door/spawn layout checks (no browser)
   smoke-test.mjs       headless playthrough + screenshots
 ```
 
 ### Testing
 
 ```bash
-npm run build
-node scripts/smoke-test.mjs
+npm run check     # ~1s, no browser — layout checks over every zone
+npm test          # check, then build, then the full playthrough
 ```
 
-Boots the built game in headless Chromium and plays through it: loads the
-village, walks around, enters the cottage, places and removes blocks, talks to
-a villager, makes a second character, visits every interior and the moon house,
-reloads to check the save survived, and checks the phone layout. It fails on
-any console error. Screenshots land in `shots/`.
+`npm run check` walks every zone and verifies that doors point at zones that
+exist, that the spawn points those doors ask for are defined, that you can
+stand where you land, and that every doorway has somewhere to stand in it. It's
+the fast loop when moving buildings around — it catches things like a hedge
+gap that no longer lines up with the path leading to it.
+
+`npm test` adds a headless Chromium playthrough: loads the village, walks into
+the cottage, places and removes blocks, talks to a villager, makes a second
+character and switches to them, visits every interior and the moon house,
+reloads to confirm the save survived, and checks the phone layout. It fails on
+any console error, and every probe asserts on a real value rather than a
+possibly-undefined one. Screenshots land in `shots/`.
 
 On a machine without a GPU, pass the browser explicitly:
 `CHROMIUM_PATH=/path/to/chrome node scripts/smoke-test.mjs`.

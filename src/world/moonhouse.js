@@ -30,6 +30,8 @@ const ISLAND_Z0 = 42;
 const ISLAND_Z1 = 61;
 const STAIR_X0 = 13;   // internal stairwell
 const STAIR_X1 = 16;
+const BRIDGE_X0 = 19;  // causeway in, aligned with the lowest floor
+const BRIDGE_X1 = 23;
 
 function inCrescent(x, y) {
   const outer = Math.hypot(x - CX, y - CY);
@@ -61,7 +63,7 @@ export const MOON_ZONE = {
   editable: true,
   indoor: true,
   night: true,
-  spawn: [24.5, 2, 56.5],
+  spawn: [21.5, 2, 56.5],
   spawnYaw: 0,
   ambient: { sky: 0x6f74b8, ground: 0x2b2740, hemi: 1.15, sun: 0.55, fog: 0x232144 },
   build(zone) {
@@ -124,8 +126,8 @@ export const MOON_ZONE = {
       // floor from outside and she can't walk off one by accident.
       for (let x = 2; x < zone.sizeX - 2; x++) {
         if (!inCrescent(x, fy) || isEdge(x, fy)) continue;
-        // Gap where the entrance bridge lands on the lowest floor.
-        if (level === 0 && x >= 22 && x <= 26) continue;
+        // Gap where the entrance causeway lands on the lowest floor.
+        if (level === 0 && x >= BRIDGE_X0 && x <= BRIDGE_X1) continue;
         b.set(x, fy + 1, Z_FRONT - 1, 'fence');
       }
     }
@@ -172,26 +174,30 @@ export const MOON_ZONE = {
     b.box(14, FLOORS[0], Z_BACK + 8, 19, FLOORS[0], Z_BACK + 13, 'rug');
     b.box(13, FLOORS[0] + 1, Z_BACK + 9, 13, FLOORS[0] + 3, Z_BACK + 12, 'bookshelf');
 
-    // A moonstone causeway from the island, rising into the open front face.
-    b.box(22, 1, 33, 26, 1, ISLAND_Z0, 'moonstone');
+    // A moonstone causeway from the island, rising through the open front face
+    // and landing on the lowest floor. Its x range is chosen to overlap that
+    // floor, which sits to the left of the crescent's bite.
+    b.box(BRIDGE_X0, 1, 33, BRIDGE_X1, 1, ISLAND_Z0, 'moonstone');
     for (let i = 1; i <= FLOORS[0] - 1; i++) {
-      b.box(22, 1 + i, 33 - i, 26, 1 + i, 33 - i, 'moonstone');
+      b.box(BRIDGE_X0, 1 + i, 33 - i, BRIDGE_X1, 1 + i, 33 - i, 'moonstone');
     }
-    // Level run from where the climb tops out to the building's floor.
-    b.box(22, FLOORS[0], Z_BACK + 14, 26, FLOORS[0], 33 - (FLOORS[0] - 1), 'moonstone');
 
-    // Lanterns down the causeway, set off to the sides so they don't block
-    // the view of the crescent on the way in.
-    b.lampPosts([[20, 38], [28, 38], [20, 44], [28, 44], [20, 50], [28, 50]], 2, 3);
+    // Lanterns down the causeway, set off to the sides so they don't block the
+    // view of the crescent on the way in.
+    b.lampPosts([
+      [BRIDGE_X0 - 3, 38], [BRIDGE_X1 + 3, 38],
+      [BRIDGE_X0 - 3, 45], [BRIDGE_X1 + 3, 45],
+      [BRIDGE_X0 - 3, 52], [BRIDGE_X1 + 3, 52],
+    ], 2, 3);
   },
   doors: [
     {
-      x0: 18, x1: 30, z0: ISLAND_Z1, z1: ISLAND_Z1 + 2,
+      x0: 12, x1: 34, z0: ISLAND_Z1, z1: ISLAND_Z1 + 2,
       target: 'village', spawnKey: 'moongate', label: 'Back to the village',
     },
   ],
   npcs: [
-    { id: 'luna', x: 20.5, z: 54.5, yaw: 0 },
+    { id: 'luna', x: 17.5, z: 54.5, yaw: 0 },
   ],
 };
 
