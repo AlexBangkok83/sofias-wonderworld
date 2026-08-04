@@ -68,7 +68,7 @@ export const MOON_ZONE = {
   // Arrive already looking up at it. The whole point of the crescent is that
   // you see every floor at once, and that only lands if it's in frame.
   spawnPitch: -0.34,
-  ambient: { sky: 0x6f74b8, ground: 0x2b2740, hemi: 1.15, sun: 0.55, fog: 0x232144 },
+  ambient: { sky: 0x8b90d4, ground: 0x342f4d, hemi: 1.5, sun: 0.7, fog: 0x232144 },
   build(zone) {
     const b = new Build(zone);
 
@@ -105,10 +105,12 @@ export const MOON_ZONE = {
       }
     }
 
-    // Rim the open face in dark stone so the cutaway reads as deliberate.
+    // Rim the open face in moonstone. Against a night sky this traces the
+    // crescent in glowing pale stone, which is what makes the shape read from
+    // the island — in dark stone the whole thing just sank into the sky.
     for (let y = 2; y < zone.sizeY - 2; y++) {
       for (let x = 2; x < zone.sizeX - 2; x++) {
-        if (isEdge(x, y)) b.set(x, y, Z_FRONT, 'darkstone');
+        if (isEdge(x, y)) b.set(x, y, Z_FRONT, 'moonstone');
       }
     }
 

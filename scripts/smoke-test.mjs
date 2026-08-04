@@ -50,7 +50,7 @@ async function shot(page, name) {
   console.log(`  📸 ${name}`);
 }
 
-async function waitForFrames(page, count = 6) {
+async function waitForFrames(page, count = 3) {
   await page.evaluate((n) => new Promise((resolve) => {
     let i = 0;
     const tick = () => (++i >= n ? resolve() : requestAnimationFrame(tick));
@@ -85,7 +85,9 @@ async function main() {
     executablePath: process.env.CHROMIUM_PATH || undefined,
     args: ['--use-gl=swiftshader', '--enable-unsafe-swiftshader', '--no-sandbox'],
   });
-  const page = await browser.newPage({ viewport: { width: 1280, height: 800 } });
+  // Modest viewport on purpose: this usually runs on software GL, where cost
+  // scales with pixels and a full-size window turns a 5 minute run into 25.
+  const page = await browser.newPage({ viewport: { width: 900, height: 560 } });
 
   // This runs on software GL, where a 2048² shadow map costs seconds a frame.
   // Turn shadows off up front so the test finishes in a sane amount of time.
@@ -107,7 +109,7 @@ async function main() {
   console.log('\n  Booting…');
   await page.goto(`http://localhost:${PORT}/`, { waitUntil: 'load' });
   await page.waitForSelector('#title:not([hidden])', { timeout: 45000 });
-  await waitForFrames(page, 8);
+  await waitForFrames(page, 4);
   await shot(page, '01-title');
 
   // --- Structural checks over every zone ---
@@ -120,25 +122,34 @@ async function main() {
   // --- Village ---
   console.log('  Village…');
   await page.click('#title .btn');
-  await waitForFrames(page, 10);
+  await waitForFrames(page, 5);
   const zoneName = await page.textContent('#zone-name');
   console.log(`    zone: ${zoneName}`);
   await shot(page, '02-village');
 
-  // Walk forward toward the cottage door.
+  // Walk forward toward the cottage door, stopping as soon as we're inside.
   console.log('  Walking to the cottage…');
   await page.keyboard.down('KeyW');
-  for (let i = 0; i < 25; i++) await waitForFrames(page, 4);
+  let inside = null;
+  for (let i = 0; i < 45; i++) {
+    await waitForFrames(page, 3);
+    inside = await page.evaluate(() => window.__game.zoneId());
+    if (inside === 'cottage_in') break;
+  }
   await page.keyboard.up('KeyW');
-  await waitForFrames(page, 8);
-  const inside = await page.textContent('#zone-name');
+  await waitForFrames(page, 4);
   console.log(`    zone: ${inside}`);
+  // Walking into a door is the whole way you get indoors — there's no prompt
+  // and no button, so if this stops working the village becomes scenery.
+  if (inside !== 'cottage_in') {
+    problems.push(`walking into the cottage door did not go inside (ended in ${inside})`);
+  }
   await shot(page, '03-walked');
 
-  // --- Force our way into the cottage interior and build ---
+  // --- Cottage interior: building ---
   console.log('  Cottage interior + building…');
   await page.evaluate(() => window.__game.enterZone('cottage_in'));
-  await waitForFrames(page, 8);
+  await waitForFrames(page, 4);
   await shot(page, '04-cottage-interior');
 
   const before = await probeNumber(page, 'blockCount', () => window.__game.blockCount());
@@ -146,7 +157,7 @@ async function main() {
   // Park the cursor before aiming. Moving the mouse is itself a look input —
   // the game applies it, correctly — so aiming first and moving second left the
   // camera pointing at open air by the time the click landed.
-  await page.mouse.move(640, 400);
+  await page.mouse.move(450, 280);   // dead centre, over the canvas
   // Steeply down at the floor just ahead, and re-aimed before every click so a
   // stray pixel of drift can't send the ray off into nothing.
   const aimAtFloor = async () => {
@@ -171,7 +182,7 @@ async function main() {
   // Remove one back off.
   await page.mouse.down({ button: 'left' });
   await page.mouse.up({ button: 'left' });
-  await waitForFrames(page, 6);
+  await waitForFrames(page, 3);
   const afterBreak = await probeNumber(page, 'blockCount', () => window.__game.blockCount());
   console.log(`    after removing: ${afterBreak}`);
   if (!(afterBreak < after)) {
@@ -181,9 +192,9 @@ async function main() {
   // --- Talking ---
   console.log('  Talking to a villager…');
   await page.evaluate(() => window.__game.goToNearestNpc());
-  await waitForFrames(page, 6);
+  await waitForFrames(page, 3);
   await page.keyboard.press('KeyE');
-  await waitForFrames(page, 10);
+  await waitForFrames(page, 5);
   const dialogueVisible = await page.evaluate(
     () => document.getElementById('dialogue').classList.contains('show'),
   );
@@ -195,9 +206,9 @@ async function main() {
   // --- Character creator ---
   console.log('  Character creator…');
   await page.keyboard.press('Escape');
-  await waitForFrames(page, 6);
+  await waitForFrames(page, 3);
   await page.click('#pause .btn.lilac');
-  await waitForFrames(page, 8);
+  await waitForFrames(page, 4);
   await shot(page, '07-character-creator');
   const chipCount = await page.evaluate(() => document.querySelectorAll('#creator .chip').length);
   if (chipCount < 10) problems.push(`character creator only rendered ${chipCount} options`);
@@ -214,48 +225,48 @@ async function main() {
   }, label);
 
   await clickByText('+ New character');
-  await waitForFrames(page, 6);
+  await waitForFrames(page, 3);
   await page.fill('#creator input[type="text"]', 'Star');
   await clickByText('🎲 Surprise me');
-  await waitForFrames(page, 8);
+  await waitForFrames(page, 4);
   const editingBeforeSave = await page.evaluate(() => window.__game && document
     .querySelector('#creator h2').textContent);
   if (editingBeforeSave !== 'Make a character') {
     problems.push(`expected to be making a new character, header said "${editingBeforeSave}"`);
   }
   await clickByText('Save');
-  await waitForFrames(page, 8);
+  await waitForFrames(page, 4);
   const charCount = await probeNumber(page, 'characterCount', () => window.__game.characterCount());
   console.log(`    characters: ${charCount}`);
   if (!(charCount >= 2)) problems.push(`saving a new character did not add one (${charCount})`);
 
   // Switching who you're playing as is half of what the creator is for.
   await clickByText('Play as');
-  await waitForFrames(page, 10);
+  await waitForFrames(page, 5);
   const playingAs = await page.evaluate(() => window.__game.activeCharacterName());
   console.log(`    playing as: ${playingAs}`);
   if (playingAs !== 'Star') problems.push(`switching character failed (playing as ${playingAs})`);
   await shot(page, '08-two-characters');
 
   await clickByText('Done');
-  await waitForFrames(page, 10);
+  await waitForFrames(page, 5);
 
   // --- Other interiors ---
   for (const zone of ['modern_in', 'bakery_in', 'barn_in', 'library_in']) {
     console.log(`  ${zone}…`);
     await page.evaluate((z) => window.__game.enterZone(z), zone);
-    await waitForFrames(page, 8);
+    await waitForFrames(page, 4);
     await shot(page, `09-${zone}`);
   }
 
   // --- Moon house ---
   console.log('  Moon house…');
   await page.evaluate(() => window.__game.enterZone('moon_house'));
-  await waitForFrames(page, 10);
+  await waitForFrames(page, 5);
   await shot(page, '10-moon-house');
   // Stand at the back of the viewing island, looking up at the whole crescent.
   await page.evaluate(() => window.__game.placeAt([21.5, 2, 59.5], 0, -0.36));
-  await waitForFrames(page, 10);
+  await waitForFrames(page, 5);
   await shot(page, '11-moon-house-front');
 
   // --- Persistence ---
@@ -267,7 +278,7 @@ async function main() {
   // The hook only exists once boot() has finished; without this wait every
   // probe below returns undefined and the comparisons pass without testing.
   await page.waitForFunction(() => !!window.__game, null, { timeout: 45000 });
-  await waitForFrames(page, 8);
+  await waitForFrames(page, 4);
   const restored = await probeNumber(page, 'characterCount', () => window.__game.characterCount());
   const restoredZone = await page.evaluate(() => window.__game.zoneId());
   const restoredEdits = await probeNumber(page, 'editCount', () => window.__game.editCount());
@@ -294,9 +305,9 @@ async function main() {
   await phone.waitForSelector('#title:not([hidden])', { timeout: 45000 });
   await phone.screenshot({ path: path.join(SHOTS, '13-phone-title.png') });
   await phone.click('#title .btn');
-  await waitForFrames(phone, 30);
+  await waitForFrames(phone, 6);
   await phone.evaluate(() => window.__game.enterZone('cottage_in'));
-  await waitForFrames(phone, 25);
+  await waitForFrames(phone, 6);
   await phone.screenshot({ path: path.join(SHOTS, '14-phone-play.png') });
   const touchVisible = await phone.evaluate(
     () => !document.getElementById('touch').hasAttribute('hidden'),
