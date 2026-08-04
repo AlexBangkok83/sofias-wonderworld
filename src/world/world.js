@@ -63,6 +63,7 @@ export class World {
       spawnYaw: def.spawnYaw || 0,
       ambient: def.ambient,
     });
+    zone.spawnPitch = def.spawnPitch || 0;
     zone.night = !!def.night;
     def.build(zone);
     zone.snapshotBaseline();
@@ -83,9 +84,9 @@ export class World {
     const zone = this.get(zoneId);
     if (spawnKey && zone.spawns && zone.spawns[spawnKey]) {
       const s = zone.spawns[spawnKey];
-      return { pos: s.pos.slice(), yaw: s.yaw };
+      return { pos: s.pos.slice(), yaw: s.yaw, pitch: s.pitch || 0 };
     }
-    return { pos: zone.spawn.slice(), yaw: zone.spawnYaw };
+    return { pos: zone.spawn.slice(), yaw: zone.spawnYaw, pitch: zone.spawnPitch || 0 };
   }
 
   /** Collect every zone's player edits for saving. */

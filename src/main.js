@@ -133,9 +133,9 @@ function enterZone(zoneId, spawnKey = null, { keepPosition = null } = {}) {
   state.npcs.setZone(zone);
 
   const spawn = keepPosition
-    ? { pos: keepPosition.pos, yaw: keepPosition.yaw }
+    ? { pos: keepPosition.pos, yaw: keepPosition.yaw, pitch: 0 }
     : state.world.spawnFor(zoneId, spawnKey);
-  state.player.teleport(spawn.pos, spawn.yaw);
+  state.player.teleport(spawn.pos, spawn.yaw, spawn.pitch || 0);
 
   // Frame the camera straight away so the world behind the title screen and
   // the pause menu is the place you're actually standing.
@@ -524,6 +524,8 @@ function frame(now) {
 function installTestHooks() {
   window.__game = {
     state,
+    input,
+    ui,
     zoneId: () => state.zone?.id ?? null,
     enterZone: (id, spawnKey = null) => enterZone(id, spawnKey),
     characterCount: () => state.save.characters.length,
@@ -555,6 +557,8 @@ function installTestHooks() {
     },
     saveNow,
     validateWorld,
+    place: () => placeBlock(),
+    remove: () => removeBlock(),
   };
 }
 

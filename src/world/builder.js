@@ -208,7 +208,7 @@ export class Build {
   /** A run of lantern posts along a path. */
   lampPosts(points, y, height = 3) {
     for (const [x, z] of points) {
-      for (let i = 0; i < height; i++) this.set(x, y + i, z, 'log');
+      for (let i = 0; i < height; i++) this.set(x, y + i, z, 'lamppost');
       this.set(x, y + height, z, 'lantern');
     }
   }

@@ -59,10 +59,12 @@ All five phases from the spec are built.
 6. **Building is inside houses only** — enforced by an `editable` flag per
    zone. The village is authored and locked; every interior is hers.
 7. **Talking villagers** — eight of them, with real voices (see below).
-8. **A secret moon house** — a crescent sliced open down the front so all five
+8. **A secret moon house** — a crescent sliced open down the front so all four
    floors are visible at once, with a glass atrium and vines hanging through
-   it. It's behind a hedge with one gap in it; nothing signposts it except a
-   line of lanterns and something the librarian says.
+   it. You arrive on an island facing it, far enough back to take the whole
+   thing in, and walk up a moonstone causeway to get inside. It's behind a
+   hedge with one gap in it; nothing signposts it except a line of lanterns
+   and something the librarian says.
 
 ### Explicitly not built
 

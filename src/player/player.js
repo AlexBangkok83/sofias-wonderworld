@@ -64,11 +64,11 @@ export class Player {
     this.eyeHeight = this.height - 0.22;
   }
 
-  teleport(pos, yaw = this.yaw) {
+  teleport(pos, yaw = this.yaw, pitch = 0) {
     this.position.set(pos[0], pos[1], pos[2]);
     this.velocity.set(0, 0, 0);
     this.yaw = yaw;
-    this.pitch = 0;
+    this.pitch = pitch;
     this.smoothY = this.position.y;
     this.grounded = false;
   }

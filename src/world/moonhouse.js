@@ -65,6 +65,9 @@ export const MOON_ZONE = {
   night: true,
   spawn: [21.5, 2, 56.5],
   spawnYaw: 0,
+  // Arrive already looking up at it. The whole point of the crescent is that
+  // you see every floor at once, and that only lands if it's in frame.
+  spawnPitch: -0.34,
   ambient: { sky: 0x6f74b8, ground: 0x2b2740, hemi: 1.15, sun: 0.55, fog: 0x232144 },
   build(zone) {
     const b = new Build(zone);

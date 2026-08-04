@@ -142,14 +142,24 @@ async function main() {
   await shot(page, '04-cottage-interior');
 
   const before = await probeNumber(page, 'blockCount', () => window.__game.blockCount());
-  await page.evaluate(() => {
-    // Look slightly down at the floor ahead, then place a small stack.
-    window.__game.setLook(0, 0.45);
-  });
-  await waitForFrames(page, 4);
-  for (let i = 0; i < 6; i++) {
-    await page.mouse.click(640, 400, { button: 'right' });
-    await waitForFrames(page, 4);
+
+  // Park the cursor before aiming. Moving the mouse is itself a look input —
+  // the game applies it, correctly — so aiming first and moving second left the
+  // camera pointing at open air by the time the click landed.
+  await page.mouse.move(640, 400);
+  // Steeply down at the floor just ahead, and re-aimed before every click so a
+  // stray pixel of drift can't send the ray off into nothing.
+  const aimAtFloor = async () => {
+    await page.evaluate(() => window.__game.setLook(0, 0.85));
+    await waitForFrames(page, 2);
+  };
+
+  await aimAtFloor();
+  for (let i = 0; i < 5; i++) {
+    await page.mouse.down({ button: 'right' });
+    await page.mouse.up({ button: 'right' });
+    await waitForFrames(page, 3);
+    await aimAtFloor();
   }
   const after = await probeNumber(page, 'blockCount', () => window.__game.blockCount());
   console.log(`    blocks: ${before} → ${after}`);
@@ -159,7 +169,8 @@ async function main() {
   await shot(page, '05-built-blocks');
 
   // Remove one back off.
-  await page.mouse.click(640, 400, { button: 'left' });
+  await page.mouse.down({ button: 'left' });
+  await page.mouse.up({ button: 'left' });
   await waitForFrames(page, 6);
   const afterBreak = await probeNumber(page, 'blockCount', () => window.__game.blockCount());
   console.log(`    after removing: ${afterBreak}`);
@@ -242,8 +253,8 @@ async function main() {
   await page.evaluate(() => window.__game.enterZone('moon_house'));
   await waitForFrames(page, 10);
   await shot(page, '10-moon-house');
-  // Stand well back on the viewing island so the whole crescent is in frame.
-  await page.evaluate(() => window.__game.placeAt([24.5, 2, 40.5], 0, -0.22));
+  // Stand at the back of the viewing island, looking up at the whole crescent.
+  await page.evaluate(() => window.__game.placeAt([21.5, 2, 59.5], 0, -0.36));
   await waitForFrames(page, 10);
   await shot(page, '11-moon-house-front');
 

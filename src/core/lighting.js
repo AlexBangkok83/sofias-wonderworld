@@ -205,8 +205,11 @@ export class Lighting {
       light.color.setHex(point.glow.color);
       light.distance = point.glow.distance;
       // Fade out at the edge of range so lights don't pop as she walks.
+      // Lanterns cluster — the cottage hearth is four of them in one block —
+      // so keep each one modest and let the raised ambient carry the room.
+      // At 9x this washed the loft underside orange.
       const fade = Math.max(0, 1 - entry.d2 / 900);
-      light.intensity = point.glow.intensity * (0.35 + 0.65 * fade) * 9;
+      light.intensity = point.glow.intensity * (0.35 + 0.65 * fade) * 5;
     }
   }
 }

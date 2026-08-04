@@ -36,7 +36,7 @@ const DEFS = [
   },
   {
     id: 6, key: 'lantern', label: 'Lantern',
-    paint: tex.lantern(26), glow: { color: 0xffcf85, intensity: 1.5, distance: 11 },
+    paint: tex.lantern(26), glow: { color: 0xffcf85, intensity: 1.2, distance: 11 },
     palette: 'light', icon: '#ffd98a',
   },
   {
@@ -128,6 +128,13 @@ const DEFS = [
   { id: 30, key: 'concrete', label: 'Concrete', paint: tex.plaster(0xb9b6ae, 52) },
   { id: 31, key: 'darkstone', label: 'Slate', paint: tex.cobble(0x6f6f74, 53) },
   { id: 32, key: 'sand', label: 'Sand', paint: tex.speckle(0xe3d3a8, 0.1, 54) },
+  {
+    // Slim, so a run of lamp posts reads as lamp posts and not as a row of
+    // tree trunks blocking the view.
+    id: 33, key: 'lamppost', label: 'Lamp Post',
+    paint: tex.beam(0x533a26, 55), geometry: 'post', opaque: false,
+    palette: 'light', icon: '#533a26',
+  },
 ];
 
 /** id -> definition, with defaults applied. */
