@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "voices": "node scripts/generate-voices.mjs",
     "check": "node scripts/check-world.mjs",
-    "test": "node scripts/check-world.mjs && npm run build && node scripts/smoke-test.mjs"
+    "test": "node scripts/check-world.mjs && npm run build && node scripts/smoke-test.mjs",
+    "standalone": "node scripts/build-standalone.mjs"
   },
   "dependencies": {
     "three": "^0.185.1"
