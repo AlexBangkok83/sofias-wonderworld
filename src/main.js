@@ -12,11 +12,14 @@ import { DEFAULT_CHARACTER } from './player/avatar.js';
 import { NpcManager } from './npc/npc.js';
 import { Voice } from './npc/voice.js';
 import { getVillager } from './npc/dialogue.js';
+import { Phone } from './phone/phone.js';
 
 const root = document.getElementById('app');
 const ui = new UI(root);
 const store = new SaveStore();
 const voice = new Voice();
+const phone = new Phone(root, voice);
+ui.extraOverlays.push(phone.overlay);
 
 // ---------------------------------------------------------------------------
 // Renderer
@@ -251,6 +254,40 @@ state.npcs = new NpcManager(scene, voice);
 state.npcs.onDialogueEnd = () => ui.hideDialogue();
 
 // ---------------------------------------------------------------------------
+// The phone
+// ---------------------------------------------------------------------------
+
+let phoneHinted = false;
+
+function openPhone() {
+  if (!state.world) return;
+  state.playing = false;
+  input.setEnabled(false);
+  input.exitPointerLock();
+  ui.closePause();
+  ui.closeCreator();
+  ui.hideTitle();
+  ui.hideDialogue();
+  ui.hideHint();
+  voice.stop();
+  if (!state.save.discovered.phone) {
+    state.save.discovered.phone = true;
+    autosave();
+  }
+  phone.open();
+}
+
+phone.getContext = () => ({
+  playerName: activeCharacter().name,
+  moonFound: !!state.save.discovered.moon,
+});
+phone.onVoiceChange = (id) => {
+  state.save.settings.phoneVoice = id;
+  autosave();
+};
+phone.onRequestClose = () => resume();
+
+// ---------------------------------------------------------------------------
 // Pausing
 // ---------------------------------------------------------------------------
 
@@ -265,12 +302,20 @@ function pause() {
 }
 
 function resume() {
+  if (phone.isOpen) phone.hide();
   ui.closePause();
   ui.closeCreator();
   ui.hideTitle();
   state.playing = true;
   input.setEnabled(true);
   if (!IS_TOUCH) input.requestPointerLock();
+
+  if (!state.save.discovered.phone && !phoneHinted) {
+    phoneHinted = true;
+    setTimeout(() => ui.toast(IS_TOUCH
+      ? '📱 You have a phone! Tap it to call a villager'
+      : '📱 You have a phone! Press P to call a villager', 4600), 1800);
+  }
 }
 
 input.onPointerUnlock = () => {
@@ -327,6 +372,7 @@ ui.on('play', () => resume())
     autosave();
   })
   .on('talk', () => talk())
+  .on('openPhone', () => openPhone())
   .on('setting', (key, value) => {
     state.save.settings[key] = value;
     if (key === 'voice') voice.setEnabled(value);
@@ -409,7 +455,9 @@ ui.on('play', () => resume())
 
 window.addEventListener('keydown', (e) => {
   if (e.code === 'Escape') {
-    if (!ui.creator.hidden) {
+    if (phone.isOpen) {
+      resume();
+    } else if (!ui.creator.hidden) {
       ui.closeCreator();
       resume();
     } else if (!ui.helpMenu.hidden) {
@@ -425,6 +473,7 @@ window.addEventListener('keydown', (e) => {
   if (!state.playing) return;
   if (e.code === 'KeyC') ui.emit('toggleCamera');
   if (e.code === 'KeyE') talk();
+  if (e.code === 'KeyP') openPhone();
   if (/^Digit[1-9]$/.test(e.code)) ui.selectSlot(Number(e.code.slice(5)) - 1);
 });
 
@@ -555,6 +604,8 @@ function installTestHooks() {
       state.player.teleport([p.x, p.y + 0.1, p.z + 1.4], Math.PI);
       return true;
     },
+    phone,
+    openPhone,
     saveNow,
     validateWorld,
     place: () => placeBlock(),
@@ -570,6 +621,7 @@ async function boot() {
   state.save = await store.load();
   await voice.init();
   voice.setEnabled(state.save.settings.voice !== false);
+  phone.setVoice(state.save.settings.phoneVoice);
 
   if (state.save.settings.shadows === null || state.save.settings.shadows === undefined) {
     // Phones get shadows off by default; it's the single biggest cost here.

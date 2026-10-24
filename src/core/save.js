@@ -22,7 +22,7 @@ export function emptySave() {
     edits: {},
     location: null,
     discovered: {},
-    settings: { voice: true, firstPerson: false, shadows: null, music: false },
+    settings: { voice: true, firstPerson: false, shadows: null, music: false, phoneVoice: 'me' },
     playedBefore: false,
   };
 }

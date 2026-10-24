@@ -44,6 +44,8 @@ export class UI {
   constructor(root) {
     this.root = root;
     this.callbacks = {};
+    /** Overlays owned elsewhere (the phone) that count as a menu being open. */
+    this.extraOverlays = [];
     this.paletteGroups = paletteBlocks();
     this.activeGroup = this.paletteGroups[0]?.key || 'build';
     this.selectedBlockId = this.paletteGroups[0]?.blocks[0]?.id ?? null;
@@ -80,7 +82,13 @@ export class UI {
       onclick: () => this.emit('toggleCamera'),
     }, '👁');
 
-    this.topLeft = el('div', { id: 'top-left' }, this.menuBtn, this.cameraBtn, this.zoneName);
+    this.phoneBtn = el('button', {
+      class: 'icon-btn', title: 'Phone', 'aria-label': 'Phone',
+      onclick: () => this.emit('openPhone'),
+    }, '📱');
+
+    this.topLeft = el('div', { id: 'top-left' },
+      this.menuBtn, this.cameraBtn, this.phoneBtn, this.zoneName);
 
     // --- hotbar ---
     this.tabsEl = el('div', { id: 'palette-tabs' });
@@ -183,6 +191,7 @@ export class UI {
     this.pauseRows = el('div', { class: 'menu-rows' },
       el('button', { class: 'btn', onclick: () => this.emit('resume') }, 'Back to playing'),
       el('button', { class: 'btn lilac', onclick: () => this.emit('openCharacters') }, 'Characters'),
+      el('button', { class: 'btn secondary', onclick: () => this.emit('openPhone') }, '📱 Phone'),
       el('button', {
         class: 'btn secondary',
         onclick: () => { this.pauseMenu.hidden = true; this.helpMenu.hidden = false; },
@@ -217,6 +226,7 @@ export class UI {
         ['Build', '▣ puts a block down. ⛏ takes one away. Tap the screen to place too.'],
         ['Pick a block', 'Tap one in the bar at the bottom.'],
         ['Talk', 'Walk up to a villager and press 💬 Talk.'],
+        ['Phone', 'Tap 📱 to call a villager. Write what you want to say, pick a voice, and send it.'],
         ['Go inside', 'Just walk into a door.'],
       ]
       : [
@@ -226,6 +236,7 @@ export class UI {
         ['Build', 'Right-click places a block. Left-click removes one.'],
         ['Pick a block', 'Number keys 1–9, the mouse wheel, or click the bar at the bottom.'],
         ['Talk', 'Walk up to a villager and press E.'],
+        ['Phone', 'P (or 📱 in the menu) calls a villager. Write what you want to say, pick a voice, and send it.'],
         ['Change view', 'C swaps between watching yourself and looking through your own eyes.'],
         ['Go inside', 'Just walk into a door.'],
       ];
@@ -256,7 +267,8 @@ export class UI {
 
   get anyMenuOpen() {
     return !this.pauseMenu.hidden || !this.helpMenu.hidden
-      || !this.creator.hidden || !this.titleScreen.hidden;
+      || !this.creator.hidden || !this.titleScreen.hidden
+      || this.extraOverlays.some((overlay) => !overlay.hidden);
   }
 
   setSettingValue(key, value) {

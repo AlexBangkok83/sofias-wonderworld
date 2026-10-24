@@ -22,6 +22,7 @@ export class Voice {
     this.audioCache = new Map();
     this.current = null;
     this.currentUtterance = null;
+    this.unlocked = false;
     this.synth = typeof window !== 'undefined' ? window.speechSynthesis : null;
     this.voices = [];
     this._loadVoices();
@@ -108,9 +109,50 @@ export class Voice {
       }
     }
 
+    await this._synthesize(text, villager.voice || {});
+  }
+
+  /**
+   * Say any text at all, with the browser voice — the phone's lines are typed
+   * in, so there's never a recording of them. Settles when the line finishes,
+   * or after roughly as long as it should take: some browsers never fire
+   * `end` (headless Chromium, or a device with no voices installed), and a
+   * phone call that waits forever on that would just stop.
+   */
+  async sayText(text, tuning = {}) {
+    if (!this.enabled || !text) return;
+    this.stop();
+    const rate = Math.max(0.5, Math.min(2, tuning.rate ?? 1));
+    const longest = 1200 + (String(text).length * 85) / rate;
+    let timer = null;
+    await Promise.race([
+      this._synthesize(text, tuning),
+      new Promise((resolve) => { timer = setTimeout(resolve, longest); }),
+    ]);
+    clearTimeout(timer);
+  }
+
+  /**
+   * iPhone Safari only lets speech start from inside a tap. A phone call's
+   * first line comes after the ringing, outside any tap — so the tap that
+   * dials says nothing, silently, which unlocks speech for the rest of the
+   * visit.
+   */
+  unlock() {
+    if (this.unlocked || !this.synth || !this.enabled) return;
+    this.unlocked = true;
+    try {
+      const silent = new SpeechSynthesisUtterance(' ');
+      silent.volume = 0;
+      this.synth.speak(silent);
+    } catch {
+      // Nothing to unlock.
+    }
+  }
+
+  async _synthesize(text, tuning) {
     if (!this.synth) return;
     const utterance = new SpeechSynthesisUtterance(text);
-    const tuning = villager.voice || {};
     utterance.pitch = Math.max(0.1, Math.min(2, tuning.pitch ?? 1));
     utterance.rate = Math.max(0.5, Math.min(2, tuning.rate ?? 1));
     utterance.volume = 1;

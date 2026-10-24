@@ -30,7 +30,8 @@ runs on a server, so there's nothing to configure and no bill beyond hosting.
 
 ## What's in it
 
-All five phases from the spec are built.
+All five phases from the spec are built, plus the phone Sofia asked for
+afterwards.
 
 | Phase | What it is | Where the code lives |
 |---|---|---|
@@ -39,6 +40,7 @@ All five phases from the spec are built.
 | 3 | Character creator, multiple saved characters | `src/player/avatar.js`, `src/ui/ui.js` |
 | 4 | Eight villagers with proximity dialogue and voices | `src/npc/`, `scripts/generate-voices.mjs` |
 | 5 | The secret moon house | `src/world/moonhouse.js` |
+| + | A phone for calling the villagers | `src/phone/` |
 
 ### Sofia's requirements, and where each one landed
 
@@ -66,12 +68,46 @@ All five phases from the spec are built.
    hedge with one gap in it; nothing signposts it except a line of lanterns
    and something the librarian says.
 
+### The phone
+
+Sofia asked for a phone where you call people and talk to AI bots — "like
+Roblox, but even more safe" — and described how it works: you write what you
+say, you pick the voice, and it sends over.
+
+- **Opening it:** 📱 at the top left, `P` on a laptop, or Phone in the menu.
+- **Contacts are the villagers, and only the villagers.** Luna joins once
+  you've found the moon house, so the phone doesn't give the secret away.
+- **A call:** it rings, they pick up and say hello out loud. Then it's three
+  numbered steps on repeat: **1** write it, **2** pick a voice (Me, Mouse,
+  Bear, Robot, Fairy, Ghost — tapping one plays it, and 👂 Try it plays your
+  message in it), **3** Send. Your message is spoken in the voice you picked,
+  and the villager answers in theirs. Saying bye ends the call. The voice you
+  picked is saved.
+- **The safety shield:** before anything is sent, it's checked for phone
+  numbers, email addresses, where you live, passwords, the name of your
+  school, your surname, and unkind words. Those don't go, and the phone says
+  why in a sentence a seven-year-old can read. Nothing would actually leave
+  the device — there's no network — but it builds the habit she'll need on
+  any real chat.
+- **Villagers are honest.** Ask "are you real?" or to meet up, and they say
+  they're game characters. They never ask anything personal.
+  `scripts/check-phone.mjs` fails `npm run check` if a line ever does.
+- **The "AI" is a hand-written brain** (`src/phone/brain.js`). It works out
+  what you're talking about (hellos, jokes, favourites, feelings, the moon
+  house, each villager's own topic), answers in character, and sends you to
+  the right villager for topics that aren't theirs ("Bruno is the one who
+  knows all about baking! You should call Bruno next."). It runs on the
+  device: no key, no cost, no server, and it works in the GitHub Pages build.
+- **Voices** are the browser's own speech, since phone lines are typed in and
+  can't be pre-recorded. They follow the Villager voices setting.
+
 ### Explicitly not built
 
 **No online player chat, no multiplayer, no accounts, no user-to-user
 messaging.** The spec is explicit that when she said "chat feature" she meant
-NPCs talking to her, and that this was checked with her directly. There is no
-networking code in this repo at all.
+NPCs talking to her, and that this was checked with her directly. The phone
+keeps to that: it only reaches villagers. There is no networking code in this
+repo at all.
 
 ---
 
@@ -108,12 +144,13 @@ If you edit `src/npc/dialogue.js`, re-run `npm run voices`.
 
 **Laptop** — WASD or arrows to walk, Shift to run, Space to jump, mouse to
 look. Right-click places a block, left-click removes one. `1`–`9` or the mouse
-wheel picks a block, `E` talks, `C` swaps between third and first person, `Esc`
-pauses.
+wheel picks a block, `E` talks, `P` opens the phone, `C` swaps between third
+and first person, `Esc` pauses (or puts the phone away).
 
 **Phone** — left thumb anywhere on the left half of the screen is the
 joystick, drag on the right half to look. Buttons for jump, place, remove and
-talk. Tapping the screen also places a block.
+talk, and 📱 at the top left for the in-game phone. Tapping the screen also
+places a block.
 
 ---
 
@@ -145,19 +182,28 @@ src/
   world/             blocks, textures, grid, builder DSL, the village, moon house
   player/            avatar construction + movement/camera
   npc/               villagers, dialogue, voice
+  phone/             the phone: brain.js (replies + safety shield), phone.js (screens)
   ui/                DOM interface, character-creator turntable
 scripts/
   generate-voices.mjs  ElevenLabs pre-render
   check-world.mjs      zone/door/spawn layout checks (no browser)
+  check-phone.mjs      safety shield + villager reply checks (no browser)
   smoke-test.mjs       headless playthrough + screenshots
 ```
 
 ### Testing
 
 ```bash
-npm run check     # ~1s, no browser — layout checks over every zone
+npm run check     # ~1s, no browser — layout checks over every zone, and the phone's brain
 npm test          # check, then build, then the full playthrough
 ```
+
+The phone half of `npm run check` feeds the safety shield things it must stop
+(phone numbers, addresses, emails, passwords, surnames, unkind words) and
+things it must let through ("I am 7", "my name is Sofia", "glass"), then talks
+to every villager about forty different ways and checks they always answer,
+never leave a `{placeholder}` showing, never ask for anything personal, and
+never give Luna away before the moon house is found.
 
 `npm run check` walks every zone and verifies that doors point at zones that
 exist, that the spawn points those doors ask for are defined, that you can
@@ -166,9 +212,11 @@ the fast loop when moving buildings around — it catches things like a hedge
 gap that no longer lines up with the path leading to it.
 
 `npm test` adds a headless Chromium playthrough: loads the village, walks into
-the cottage, places and removes blocks, talks to a villager, makes a second
-character and switches to them, visits every interior and the moon house,
-reloads to confirm the save survived, and checks the phone layout. It fails on
+the cottage, places and removes blocks, talks to a villager, calls one on the
+in-game phone (write, pick a voice, send, get stopped by the shield, say bye),
+makes a second character and switches to them, visits every interior and the
+moon house, reloads to confirm the save survived, and checks the layout and
+touch controls on a phone-sized screen, in-game phone included. It fails on
 any console error, and every probe asserts on a real value rather than a
 possibly-undefined one. Screenshots land in `shots/`.
 
@@ -193,6 +241,17 @@ From the spec, plus what came up building it:
 - **Day/night? Weather?** Not built. The village sits at a permanent late
   afternoon; the moon house has its own night sky. Adding a day cycle is
   mostly a matter of animating the values in `Lighting.applyZone`.
+- **Calling real people.** Not built, on purpose. Calls between real players
+  would need accounts, a server, moderation, and a grown-up deciding who is
+  allowed to call whom. That's Alex's decision, not something to slip in. The
+  phone says "No strangers, ever", and right now the code keeps that promise.
+- **A real AI brain.** The villagers' phone replies are hand-written, so
+  anything truly open-ended gets a friendly "Hmm, I don't know! What do you
+  think?". Swapping in a real model means replacing one function (`respond` in
+  `src/phone/brain.js`), but it needs a server to hold an API key (GitHub
+  Pages can't), it costs money per message, and what she types would go to an
+  AI company. That's Alex's call too. The safety shield would still run first,
+  on the device.
 - **The animal barn has no animals in it yet.** She asked for a village, not
   for animals, so this wasn't invented on her behalf — but a barn with empty
   stalls is an obvious thing for her to notice, and blocky animals would reuse

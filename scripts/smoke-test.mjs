@@ -203,6 +203,79 @@ async function main() {
   if (!dialogueVisible) problems.push('dialogue did not appear after pressing E next to a villager');
   await shot(page, '06-dialogue');
 
+  // --- The phone ---
+  //
+  // Sofia's spec for it: call someone, write what you say, pick a voice, send
+  // it. Voices go on for this part so the ring tone and speech code actually
+  // run; in headless Chromium speech never reports finishing, which is exactly
+  // the case the phone's timeout has to survive.
+  console.log('  Phone…');
+  await page.evaluate(() => window.__game.ui.emit('setting', 'voice', true));
+  await page.keyboard.press('KeyP');
+  await waitForFrames(page, 3);
+  const phoneOpen = await page.evaluate(() => window.__game.phone.isOpen);
+  const contactIds = await page.evaluate(
+    () => [...document.querySelectorAll('#phone .contact')].map((c) => c.dataset.id),
+  );
+  console.log(`    open: ${phoneOpen}, contacts: ${contactIds.join(', ')}`);
+  if (!phoneOpen) problems.push('pressing P did not open the phone');
+  if (contactIds.length !== 7) problems.push(`expected 7 villagers in the phone, found ${contactIds.length}`);
+  if (contactIds.includes('luna')) problems.push('Luna is in the phone before the moon house was found');
+  await shot(page, '19-phone-contacts');
+
+  await page.click('#phone .contact[data-id="bruno"]');
+  const ringing = await page.evaluate(() => !document.querySelector('#phone .ringing').hidden);
+  if (!ringing) problems.push('calling a villager did not ring');
+  await page.waitForSelector('#phone .phone-screen.call:not([hidden])', { timeout: 15000 });
+
+  const theirBubbles = () => page.evaluate(() => document.querySelectorAll('#phone .bubble.them').length);
+  const myBubbles = () => page.evaluate(() => [...document.querySelectorAll('#phone .bubble.me')]
+    .map((b) => b.textContent));
+  await page.fill('#phone input', 'Hi Bruno! Can you bake me a cake?');
+  await page.click('#phone .voice-chip[data-voice="bear"]');
+  await page.click('#phone .send-btn');
+  await page.waitForFunction(
+    () => document.querySelectorAll('#phone .bubble.them').length >= 2, null, { timeout: 20000 },
+  );
+  const sent = await myBubbles();
+  const replied = await page.evaluate(
+    () => [...document.querySelectorAll('#phone .bubble.them')].pop().textContent,
+  );
+  console.log(`    sent: "${sent.at(-1)}" — Bruno: "${replied}"`);
+  if (!/bake me a cake/.test(sent.at(-1) || '')) problems.push('the typed message never appeared in the call');
+  if (!/Bear voice/.test(sent.at(-1) || '')) problems.push('the message did not go in the picked voice');
+  const savedVoice = await page.evaluate(() => window.__game.state.save.settings.phoneVoice);
+  if (savedVoice !== 'bear') problems.push(`the picked voice was not remembered (got ${savedVoice})`);
+
+  // The safety shield: a phone number never goes out.
+  const sentBefore = (await myBubbles()).length;
+  const repliesBefore = await theirBubbles();
+  await page.fill('#phone input', 'my number is 081 234 5678');
+  await page.click('#phone .send-btn');
+  await waitForFrames(page, 3);
+  const shieldShown = await page.evaluate(() => !document.querySelector('#phone .shield').hidden);
+  const afterShield = (await myBubbles()).length;
+  console.log(`    shield up for a phone number: ${shieldShown}, sent anyway: ${afterShield !== sentBefore}`);
+  if (!shieldShown) problems.push('the safety shield did not stop a phone number');
+  if (afterShield !== sentBefore) problems.push('a phone number was sent');
+  if ((await theirBubbles()) !== repliesBefore) problems.push('a villager replied to a blocked message');
+  await shot(page, '20-phone-call');
+
+  // Saying bye ends the call and goes back to the contacts.
+  await page.fill('#phone input', 'bye bruno!');
+  await page.click('#phone .send-btn');
+  await page.waitForSelector('#phone .phone-screen.contacts:not([hidden])', { timeout: 20000 });
+
+  // Esc puts the phone away and play carries on.
+  await page.keyboard.press('Escape');
+  await waitForFrames(page, 3);
+  const afterPhone = await page.evaluate(
+    () => ({ open: window.__game.phone.isOpen, playing: window.__game.state.playing }),
+  );
+  console.log(`    after Esc — phone open: ${afterPhone.open}, playing: ${afterPhone.playing}`);
+  if (afterPhone.open || !afterPhone.playing) problems.push('Esc did not put the phone away and resume play');
+  await page.evaluate(() => window.__game.ui.emit('setting', 'voice', false));
+
   // --- Character creator ---
   console.log('  Character creator…');
   await page.keyboard.press('Escape');
@@ -404,6 +477,36 @@ async function main() {
   }
   await phone.screenshot({ path: path.join(SHOTS, '16-phone-built.png') });
   console.log('  📸 15-phone-joystick, 16-phone-built');
+
+  // The in-game phone, on a real phone: tap 📱, call, write, pick, send.
+  await tapButton('#top-left button[aria-label="Phone"]');
+  const phoneOpenOnPhone = await phone.evaluate(() => window.__game.phone.isOpen);
+  if (!phoneOpenOnPhone) problems.push('tapping 📱 did not open the phone');
+  else {
+    await tapButton('#phone .contact[data-id="wren"]');
+    await phone.waitForSelector('#phone .phone-screen.call:not([hidden])', { timeout: 15000 });
+    await phone.fill('#phone input', 'are you real?');
+    await tapButton('#phone .voice-chip[data-voice="fairy"]');
+    await tapButton('#phone .send-btn');
+    await phone.waitForFunction(
+      () => document.querySelectorAll('#phone .bubble.them').length >= 2, null, { timeout: 20000 },
+    );
+    const answerText = await phone.evaluate(
+      () => [...document.querySelectorAll('#phone .bubble.them')].pop().textContent,
+    );
+    console.log(`    phone call on a phone — Wren: "${answerText}"`);
+    // Asked straight out, a villager has to say they're not a real person.
+    if (!/pretend|game character/i.test(answerText)) {
+      problems.push(`asked "are you real?", Wren said "${answerText}"`);
+    }
+    await phone.screenshot({ path: path.join(SHOTS, '21-phone-on-a-phone.png') });
+    await tapButton('#phone .phone-home');
+    const resumed = await phone.evaluate(
+      () => !window.__game.phone.isOpen && window.__game.state.playing,
+    );
+    if (!resumed) problems.push('closing the phone on a phone did not go back to playing');
+    console.log('  📸 21-phone-on-a-phone');
+  }
 
   await browser.close();
   server.close();
