@@ -1,8 +1,12 @@
 import * as THREE from 'three';
 import { getClothNoise } from '../world/textures.js';
+import { isUnlocked } from '../shop/packs.js';
 
 // Blocky characters, Minecraft proportions. Everything is boxes — no models to
 // load, and it means the character creator can rebuild an avatar instantly.
+//
+// Entries with a `pack` only appear in the character creator once she's
+// bought that pack in the shop (src/shop/packs.js).
 
 export const SKIN_TONES = [
   { id: 'porcelain', color: 0xf6ddc9 },
@@ -27,6 +31,9 @@ export const HAIR_COLORS = [
   { id: 'purple', color: 0x9a72c8 },
   { id: 'blue', color: 0x6f9fd8 },
   { id: 'mint', color: 0x8fd8bb },
+  { id: 'cherry', color: 0xb8343a, pack: 'salon' },
+  { id: 'teal', color: 0x3fa7a3, pack: 'salon' },
+  { id: 'silver', color: 0xc9ccd6, pack: 'salon' },
 ];
 
 export const CLOTH_COLORS = [
@@ -57,6 +64,9 @@ export const HAIR_STYLES = [
   { id: 'braids', label: 'Braids' },
   { id: 'curly', label: 'Curly' },
   { id: 'bald', label: 'None' },
+  { id: 'pigtails', label: 'Pigtails', pack: 'salon' },
+  { id: 'mohawk', label: 'Mohawk', pack: 'salon' },
+  { id: 'puff', label: 'Big Puff', pack: 'salon' },
 ];
 
 export const ACCESSORIES = [
@@ -67,7 +77,27 @@ export const ACCESSORIES = [
   { id: 'ears', label: 'Cat Ears' },
   { id: 'hat', label: 'Pointy Hat' },
   { id: 'halo', label: 'Star' },
+  { id: 'bunny', label: 'Bunny Ears', pack: 'animals' },
+  { id: 'bear', label: 'Bear Ears', pack: 'animals' },
+  { id: 'unicorn', label: 'Unicorn Horn', pack: 'animals' },
+  { id: 'hearts', label: 'Heart Glasses', pack: 'rainbow' },
+  { id: 'antennae', label: 'Antennae', pack: 'space' },
+  { id: 'tiara', label: 'Tiara', pack: 'castle' },
 ];
+
+/** The entries of one of the lists above that she has unlocked. */
+export function unlockedOptions(list, owned = new Set()) {
+  return list.filter((entry) => isUnlocked(entry, owned));
+}
+
+/** Every hairstyle, hair colour and extra that comes in a given pack. */
+export function packLooks(packId) {
+  return [
+    ...HAIR_STYLES.filter((e) => e.pack === packId).map((e) => ({ ...e, kind: 'Hairstyle' })),
+    ...HAIR_COLORS.filter((e) => e.pack === packId).map((e) => ({ ...e, kind: 'Hair colour' })),
+    ...ACCESSORIES.filter((e) => e.pack === packId).map((e) => ({ ...e, kind: 'Extra' })),
+  ];
+}
 
 export const BODY_TYPES = [
   { id: 'small', label: 'Small', scale: 0.78 },
@@ -132,7 +162,7 @@ function part(w, h, d, color, { x = 0, y = 0, z = 0 } = {}) {
 
 function buildHair(group, style, color, headTop, headY) {
   const c = color;
-  const add = (w, h, d, x, y, z) => group.add(part(w, h, d, c, { x, y, z }));
+  const add = (w, h, d, x, y, z, tint = c) => group.add(part(w, h, d, tint, { x, y, z }));
   if (style === 'bald') return;
 
   // Cap over the crown, on every style.
@@ -170,6 +200,24 @@ function buildHair(group, style, color, headTop, headY) {
       add(0.14, 0.66, 0.14, 0.29, headY - 0.24, -0.04);
       add(0.16, 0.1, 0.16, -0.29, headY - 0.58, -0.04);
       add(0.16, 0.1, 0.16, 0.29, headY - 0.58, -0.04);
+      add(0.54, 0.12, 0.12, 0, headY + 0.16, 0.22);
+      break;
+    case 'pigtails':
+      add(0.18, 0.34, 0.18, -0.35, headY - 0.04, -0.06);
+      add(0.18, 0.34, 0.18, 0.35, headY - 0.04, -0.06);
+      add(0.1, 0.08, 0.1, -0.29, headY + 0.1, -0.06, 0xe98cb4);
+      add(0.1, 0.08, 0.1, 0.29, headY + 0.1, -0.06, 0xe98cb4);
+      add(0.54, 0.12, 0.12, 0, headY + 0.16, 0.22);
+      break;
+    case 'mohawk':
+      add(0.14, 0.24, 0.56, 0, headTop + 0.1, -0.02);
+      add(0.14, 0.12, 0.12, 0, headTop + 0.02, 0.26);
+      break;
+    case 'puff':
+      add(0.72, 0.34, 0.56, 0, headTop + 0.08, -0.06);
+      add(0.12, 0.42, 0.5, -0.31, headY + 0.04, -0.06);
+      add(0.12, 0.42, 0.5, 0.31, headY + 0.04, -0.06);
+      add(0.64, 0.52, 0.14, 0, headY, -0.3);
       add(0.54, 0.12, 0.12, 0, headY + 0.16, 0.22);
       break;
     case 'curly':
@@ -221,6 +269,52 @@ function buildAccessory(group, kind, color, headTop) {
       add(0.24, 0.05, 0.05, 0, headTop + 0.34, 0, 0xf7e07a);
       add(0.05, 0.24, 0.05, 0, headTop + 0.34, 0, 0xf7e07a);
       add(0.05, 0.05, 0.05, 0, headTop + 0.2, 0, 0xf7e07a);
+      break;
+    case 'bunny':
+      for (const dx of [-0.12, 0.12]) {
+        add(0.11, 0.4, 0.08, dx, headTop + 0.2, -0.04);
+        add(0.05, 0.28, 0.02, dx, headTop + 0.2, 0.01, 0xf0a8bd);
+      }
+      break;
+    case 'bear':
+      for (const dx of [-0.21, 0.21]) {
+        add(0.16, 0.15, 0.1, dx, headTop + 0.06, -0.02);
+        add(0.08, 0.08, 0.02, dx, headTop + 0.05, 0.04, 0x5d3f28);
+      }
+      break;
+    case 'unicorn':
+      add(0.12, 0.1, 0.12, 0, headTop + 0.03, 0.17);
+      add(0.09, 0.1, 0.09, 0, headTop + 0.12, 0.18);
+      add(0.06, 0.1, 0.06, 0, headTop + 0.21, 0.19);
+      add(0.03, 0.08, 0.03, 0, headTop + 0.29, 0.2);
+      break;
+    case 'hearts': {
+      // Over the eyes, which sit just above the middle of the face.
+      const eyeY = headTop - 0.2;
+      const z = 0.27;
+      for (const dx of [-0.12, 0.12]) {
+        add(0.07, 0.07, 0.03, dx - 0.035, eyeY + 0.03, z);
+        add(0.07, 0.07, 0.03, dx + 0.035, eyeY + 0.03, z);
+        add(0.12, 0.05, 0.03, dx, eyeY - 0.02, z);
+        add(0.05, 0.04, 0.03, dx, eyeY - 0.06, z);
+      }
+      add(0.06, 0.03, 0.03, 0, eyeY + 0.02, z, 0x35323a);
+      add(0.03, 0.03, 0.26, -0.255, eyeY + 0.03, 0.14, 0x35323a);
+      add(0.03, 0.03, 0.26, 0.255, eyeY + 0.03, 0.14, 0x35323a);
+      break;
+    }
+    case 'antennae':
+      for (const dx of [-0.13, 0.13]) {
+        add(0.04, 0.3, 0.04, dx, headTop + 0.15, 0, 0x35323a);
+        add(0.11, 0.11, 0.11, dx, headTop + 0.34, 0);
+      }
+      break;
+    case 'tiara':
+      add(0.52, 0.05, 0.06, 0, headTop + 0.04, 0.2, 0xf0c05a);
+      add(0.08, 0.12, 0.04, 0, headTop + 0.12, 0.21, 0xf0c05a);
+      add(0.05, 0.07, 0.04, -0.13, headTop + 0.09, 0.21, 0xf0c05a);
+      add(0.05, 0.07, 0.04, 0.13, headTop + 0.09, 0.21, 0xf0c05a);
+      add(0.05, 0.05, 0.03, 0, headTop + 0.12, 0.235);
       break;
     default:
       break;
@@ -344,8 +438,12 @@ export function lookAt(avatar, target) {
   data.head.rotation.y += (clamped - data.head.rotation.y) * 0.15;
 }
 
-export function randomCharacter(seedName = 'Friend') {
-  const pick = (list) => list[Math.floor(Math.random() * list.length)].id;
+/** A random look, only ever using things she has unlocked. */
+export function randomCharacter(seedName = 'Friend', owned = new Set()) {
+  const pick = (all) => {
+    const list = unlockedOptions(all, owned);
+    return list[Math.floor(Math.random() * list.length)].id;
+  };
   return {
     name: seedName,
     body: pick(BODY_TYPES),

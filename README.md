@@ -66,6 +66,54 @@ All five phases from the spec are built.
    hedge with one gap in it; nothing signposts it except a line of lanterns
    and something the librarian says.
 
+### The shop
+
+Packs of new things, bought with in-game money she never sees.
+
+- **Money arrives by itself, once a day.** The first time she opens the game
+  on a new day, the day's money goes into a hidden piggy bank. Days she
+  doesn't play still count, up to a week's worth at once.
+- **There is no number anywhere.** Not on the screen, not in the shop, not on
+  a pack. Each pack just has one button: **Buy**, **Not yet 🌙** (there isn't
+  enough yet — pressing it says to come back another day), or **Yours ✓**.
+  The shop code is never even handed the balance or the prices, and the smoke
+  test fails if a digit ever appears in the shop.
+- **Buy is one tap.** The pack pops open with a little ta-da and confetti,
+  shows what was inside, and says where to find it: new blocks get their own
+  tab in the hotbar (already selected), new looks appear in Characters.
+- **Locked things are just not there.** The hotbar and the character creator
+  only show what she has. The shop shows what's in each pack before buying.
+
+Open it from the 🛍 button (top left), the pause menu, the title screen, or
+the gold **🛍 More** tab at the end of the hotbar.
+
+| Pack | Costs | What's in it |
+|---|---|---|
+| 🍭 Candy | 1 day | Candy Stripe, Chocolate, Cake, Sprinkles blocks |
+| 🐚 Ocean | 1 day | Sea Glass, Coral, Seaweed, Pearl Tiles blocks |
+| 🐰 Animal Friends | 1 day | Bunny Ears, Bear Ears, Unicorn Horn; Hay and Paw Rug blocks |
+| 💇 Hair Salon | 1 day | Pigtails, Mohawk, Big Puff; cherry, teal and silver hair |
+| 🌈 Rainbow | 2 days | Rainbow, Cloud, Glitter Lamp blocks; Heart Glasses |
+| 🚀 Space | 2 days | Starry Sky, Planet, Rocket Metal blocks; Antennae |
+| 🏰 Castle | 3 days | Castle Brick, Gold, Royal Carpet, Torch blocks; Tiara |
+
+So on day one she can pick any one of the first four, and owning everything
+takes eleven days of money. Everything that was in the game before the shop
+is still free.
+
+**Changing the numbers:** the daily amount and the week cap are at the top of
+`src/shop/piggybank.js`; each pack's price is in `src/shop/packs.js` (a
+one-day pack costs exactly the daily amount).
+
+**Adding a pack:** add an entry to `PACKS` in `src/shop/packs.js`, then tag
+the new things with it — `pack: 'yourpack'` on a block in
+`src/world/blocks.js` (always append, with a new id), or on a hairstyle, hair
+colour or extra in `src/player/avatar.js`. `npm run check` fails if a pack is
+empty or something points at a pack that doesn't exist.
+
+"Start over" in the pause menu empties the piggy bank and the packs along
+with everything else.
+
 ### Explicitly not built
 
 **No online player chat, no multiplayer, no accounts, no user-to-user
@@ -109,11 +157,11 @@ If you edit `src/npc/dialogue.js`, re-run `npm run voices`.
 **Laptop** — WASD or arrows to walk, Shift to run, Space to jump, mouse to
 look. Right-click places a block, left-click removes one. `1`–`9` or the mouse
 wheel picks a block, `E` talks, `C` swaps between third and first person, `Esc`
-pauses.
+pauses. The shop is in the pause menu.
 
 **Phone** — left thumb anywhere on the left half of the screen is the
 joystick, drag on the right half to look. Buttons for jump, place, remove and
-talk. Tapping the screen also places a block.
+talk. Tapping the screen also places a block. 🛍 opens the shop.
 
 ---
 
@@ -145,17 +193,19 @@ src/
   world/             blocks, textures, grid, builder DSL, the village, moon house
   player/            avatar construction + movement/camera
   npc/               villagers, dialogue, voice
-  ui/                DOM interface, character-creator turntable
+  ui/                DOM interface, character-creator turntable, shop screen
+  shop/              the packs, and the hidden daily piggy bank
 scripts/
   generate-voices.mjs  ElevenLabs pre-render
   check-world.mjs      zone/door/spawn layout checks (no browser)
+  check-shop.mjs       piggy bank and pack checks (no browser)
   smoke-test.mjs       headless playthrough + screenshots
 ```
 
 ### Testing
 
 ```bash
-npm run check     # ~1s, no browser — layout checks over every zone
+npm run check     # ~1s, no browser — layout checks, plus the shop's rules
 npm test          # check, then build, then the full playthrough
 ```
 
@@ -163,12 +213,20 @@ npm test          # check, then build, then the full playthrough
 exist, that the spawn points those doors ask for are defined, that you can
 stand where you land, and that every doorway has somewhere to stand in it. It's
 the fast loop when moving buildings around — it catches things like a hedge
-gap that no longer lines up with the path leading to it.
+gap that no longer lines up with the path leading to it. It also checks the
+shop's rules: money is paid once a day and never twice, missed days count up
+to the cap, a phone clock that jumps backwards doesn't leave her stuck, a
+pack can't be bought without enough or bought twice, and the shop is never
+handed a number.
 
 `npm test` adds a headless Chromium playthrough: loads the village, walks into
 the cottage, places and removes blocks, talks to a villager, makes a second
-character and switches to them, visits every interior and the moon house,
-reloads to confirm the save survived, and checks the phone layout. It fails on
+character and switches to them, buys a pack in the shop (checking there's no
+number on screen, that the next pack says "Not yet", and that it can be
+bought the next day), finds the new blocks in the hotbar and the new ears in
+the character creator, visits every interior and the moon house, reloads to
+confirm the save survived, and checks the phone layout, including buying from
+the 🛍 button. It fails on
 any console error, and every probe asserts on a real value rather than a
 possibly-undefined one. Screenshots land in `shots/`.
 
@@ -193,6 +251,11 @@ From the spec, plus what came up building it:
 - **Day/night? Weather?** Not built. The village sits at a permanent late
   afternoon; the moon house has its own night sky. Adding a day cycle is
   mostly a matter of animating the values in `Lighting.applyZone`.
+- **The shop.** Which packs does she want next, and is a day's money the right
+  pace? Right now nothing tells her when there's enough for something new —
+  she finds out by opening the shop. A small sparkle on the 🛍 button when
+  something has become buyable would be easy to add, if she'd like that and it
+  doesn't count as "seeing the money".
 - **The animal barn has no animals in it yet.** She asked for a village, not
   for animals, so this wasn't invented on her behalf — but a barn with empty
   stalls is an obvious thing for her to notice, and blocky animals would reuse

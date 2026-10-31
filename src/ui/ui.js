@@ -1,50 +1,22 @@
-import { paletteBlocks, getBlockRender } from '../world/blocks.js';
+import { paletteBlocks, packBlocks } from '../world/blocks.js';
 import {
   SKIN_TONES, HAIR_COLORS, CLOTH_COLORS, HAIR_STYLES, ACCESSORIES, BODY_TYPES,
-  DEFAULT_CHARACTER, randomCharacter,
+  DEFAULT_CHARACTER, randomCharacter, unlockedOptions,
 } from '../player/avatar.js';
+import { PACKS } from '../shop/packs.js';
 import { CharacterPreview } from './preview.js';
+import { ShopPanel } from './shop.js';
+import { el, blockIcon } from './dom.js';
 import { IS_TOUCH } from '../core/input.js';
-
-/** Small helper — build an element from a tag, props and children. */
-function el(tag, props = {}, ...children) {
-  const node = document.createElement(tag);
-  for (const [key, value] of Object.entries(props)) {
-    if (key === 'class') node.className = value;
-    else if (key === 'html') node.innerHTML = value;
-    else if (key.startsWith('on') && typeof value === 'function') {
-      node.addEventListener(key.slice(2).toLowerCase(), value);
-    } else if (value !== null && value !== undefined && value !== false) {
-      node.setAttribute(key, value === true ? '' : value);
-    }
-  }
-  for (const child of children.flat()) {
-    if (child == null) continue;
-    node.append(typeof child === 'string' ? document.createTextNode(child) : child);
-  }
-  return node;
-}
-
-/** Turn a block's procedural texture into an <img>-able data URL for the hotbar. */
-const iconCache = new Map();
-function blockIcon(id) {
-  if (iconCache.has(id)) return iconCache.get(id);
-  const render = getBlockRender(id);
-  let url = '';
-  try {
-    url = render.material.map.image.toDataURL();
-  } catch {
-    url = '';
-  }
-  iconCache.set(id, url);
-  return url;
-}
 
 export class UI {
   constructor(root) {
     this.root = root;
     this.callbacks = {};
-    this.paletteGroups = paletteBlocks();
+    // Shop packs she owns. Locked blocks and looks are simply left out of the
+    // hotbar and the character creator; the shop is where she sees them.
+    this.owned = new Set();
+    this.paletteGroups = paletteBlocks(this.owned);
     this.activeGroup = this.paletteGroups[0]?.key || 'build';
     this.selectedBlockId = this.paletteGroups[0]?.blocks[0]?.id ?? null;
     this.creatorState = null;
@@ -79,8 +51,13 @@ export class UI {
       class: 'icon-btn', title: 'Change view', 'aria-label': 'Change view',
       onclick: () => this.emit('toggleCamera'),
     }, '👁');
+    this.shopBtn = el('button', {
+      id: 'shop-btn', class: 'icon-btn', title: 'Shop', 'aria-label': 'Shop',
+      onclick: () => this.emit('openShop'),
+    }, '🛍');
 
-    this.topLeft = el('div', { id: 'top-left' }, this.menuBtn, this.cameraBtn, this.zoneName);
+    this.topLeft = el('div', { id: 'top-left' },
+      this.menuBtn, this.cameraBtn, this.shopBtn, this.zoneName);
 
     // --- hotbar ---
     this.tabsEl = el('div', { id: 'palette-tabs' });
@@ -118,13 +95,18 @@ export class UI {
     this.pauseMenu = this._buildPause();
     this.helpMenu = this._buildHelp();
     this.creator = this._buildCreator();
+    this.shop = new ShopPanel({
+      onBuy: (id) => this.emit('buyPack', id),
+      onClose: () => this.emit('closeShop'),
+    });
     this.loading = el('div', { id: 'loading' },
       el('span', { class: 'moon' }, '🌙'),
       el('div', {}, 'Building the village…'));
 
     this.root.append(
       this.canvas, this.hud, this.touch, this.dialogue,
-      this.titleScreen, this.pauseMenu, this.helpMenu, this.creator, this.loading,
+      this.titleScreen, this.pauseMenu, this.helpMenu, this.creator, this.shop.root,
+      this.loading,
     );
 
     this.renderPalette();
@@ -143,6 +125,9 @@ export class UI {
     this.titleCharBtn = el('button', {
       class: 'btn lilac', onclick: () => this.emit('openCharacters'),
     }, 'Characters');
+    this.titleShopBtn = el('button', {
+      class: 'btn secondary', onclick: () => this.emit('openShop'),
+    }, '🛍 Shop');
 
     return el('div', { id: 'title', class: 'overlay' },
       el('div', { class: 'panel card' },
@@ -150,7 +135,7 @@ export class UI {
         el('h1', {}, "Sofia's Village"),
         el('p', {}, 'Wander around, go inside the houses, make characters, '
           + 'and build whatever you like out of blocks.'),
-        el('div', { class: 'row' }, this.titlePlayBtn, this.titleCharBtn)));
+        el('div', { class: 'row' }, this.titlePlayBtn, this.titleCharBtn, this.titleShopBtn)));
   }
 
   showTitle(hasSave) {
@@ -183,6 +168,7 @@ export class UI {
     this.pauseRows = el('div', { class: 'menu-rows' },
       el('button', { class: 'btn', onclick: () => this.emit('resume') }, 'Back to playing'),
       el('button', { class: 'btn lilac', onclick: () => this.emit('openCharacters') }, 'Characters'),
+      el('button', { class: 'btn', onclick: () => this.emit('openShop') }, '🛍 Shop'),
       el('button', {
         class: 'btn secondary',
         onclick: () => { this.pauseMenu.hidden = true; this.helpMenu.hidden = false; },
@@ -218,6 +204,7 @@ export class UI {
         ['Pick a block', 'Tap one in the bar at the bottom.'],
         ['Talk', 'Walk up to a villager and press 💬 Talk.'],
         ['Go inside', 'Just walk into a door.'],
+        ['Shop', 'The 🛍 button. Something new to get, a little every day.'],
       ]
       : [
         ['Walk', 'W A S D, or the arrow keys. Hold Shift to run.'],
@@ -228,6 +215,7 @@ export class UI {
         ['Talk', 'Walk up to a villager and press E.'],
         ['Change view', 'C swaps between watching yourself and looking through your own eyes.'],
         ['Go inside', 'Just walk into a door.'],
+        ['Shop', 'Esc, then 🛍 Shop. Something new to get, a little every day.'],
       ];
 
     return el('div', { id: 'help', class: 'overlay', hidden: true },
@@ -256,7 +244,42 @@ export class UI {
 
   get anyMenuOpen() {
     return !this.pauseMenu.hidden || !this.helpMenu.hidden
-      || !this.creator.hidden || !this.titleScreen.hidden;
+      || !this.creator.hidden || !this.titleScreen.hidden || this.shop.isOpen;
+  }
+
+  // ------------------------------------------------------------------
+  // Shop
+  // ------------------------------------------------------------------
+  openShop(view) {
+    this.shop.open(view);
+  }
+
+  closeShop() {
+    this.shop.close();
+  }
+
+  get shopOpen() {
+    return this.shop.isOpen;
+  }
+
+  /** She bought something (or the save loaded): show what's now hers. */
+  setOwnedPacks(owned) {
+    this.owned = new Set(owned);
+    this.paletteGroups = paletteBlocks(this.owned);
+    if (!this.paletteGroups.some((g) => g.key === this.activeGroup)) {
+      this.activeGroup = this.paletteGroups[0]?.key || 'build';
+    }
+    this.renderPalette();
+    if (this.creatorState) this._renderCreatorOptions();
+  }
+
+  /** Jump the hotbar to a pack's tab — used right after buying it. */
+  showPaletteGroup(key) {
+    const group = this.paletteGroups.find((g) => g.key === key);
+    if (!group) return;
+    this.activeGroup = key;
+    if (group.blocks[0]) this.selectedBlockId = group.blocks[0].id;
+    this.renderPalette();
   }
 
   setSettingValue(key, value) {
@@ -270,7 +293,7 @@ export class UI {
   // Hotbar
   // ------------------------------------------------------------------
   renderPalette() {
-    this.tabsEl.replaceChildren(...this.paletteGroups.map((group) => el('button', {
+    const tabs = this.paletteGroups.map((group) => el('button', {
       class: `tab${group.key === this.activeGroup ? ' active' : ''}`,
       onclick: () => {
         this.activeGroup = group.key;
@@ -278,7 +301,16 @@ export class UI {
         if (first) this.selectBlock(first.id);
         this.renderPalette();
       },
-    }, group.label)));
+    }, group.label));
+    // While there are still blocks in the shop she doesn't have, a way there
+    // from the place she'd go looking for more.
+    if (PACKS.some((pack) => !this.owned.has(pack.id) && packBlocks(pack.id).length)) {
+      tabs.push(el('button', {
+        class: 'tab shop-tab', onclick: () => this.emit('openShop'),
+      }, '🛍 More'));
+    }
+    this.tabsEl.replaceChildren(...tabs);
+    this._revealActiveTab();
 
     const group = this.paletteGroups.find((g) => g.key === this.activeGroup);
     const blocks = group ? group.blocks : [];
@@ -295,6 +327,20 @@ export class UI {
       return slot;
     }));
     this._updateSelectedName();
+  }
+
+  /**
+   * With a few packs bought the tabs scroll sideways, and a pack she's just
+   * bought lands at the end — so keep the open tab in view.
+   */
+  _revealActiveTab() {
+    const tab = this.tabsEl.querySelector('.tab.active');
+    if (!tab || this.hotbarWrap.hidden) return;
+    const box = this.tabsEl.getBoundingClientRect();
+    const rect = tab.getBoundingClientRect();
+    if (rect.left < box.left || rect.right > box.right) {
+      this.tabsEl.scrollLeft += rect.left - box.left - (box.width - rect.width) / 2;
+    }
   }
 
   _updateSelectedName() {
@@ -327,6 +373,7 @@ export class UI {
 
   setBuildingAllowed(allowed) {
     this.hotbarWrap.hidden = !allowed;
+    if (allowed) this._revealActiveTab();
     this.placeBtn.hidden = !allowed;
     this.breakBtn.hidden = !allowed;
     this.crosshair.classList.toggle('hidden', !allowed);
@@ -423,7 +470,9 @@ export class UI {
           el('button', {
             class: 'btn secondary',
             onclick: () => {
-              this.creatorState.draft = randomCharacter(this.creatorState.draft.name || 'Friend');
+              this.creatorState.draft = randomCharacter(
+                this.creatorState.draft.name || 'Friend', this.owned,
+              );
               this.nameInput.value = this.creatorState.draft.name;
               this._renderCreatorOptions();
             },
@@ -505,9 +554,10 @@ export class UI {
     const draft = this.creatorState.draft;
     this.preview?.setCharacter(draft);
 
-    const chips = (label, list, key) => el('div', { class: 'opt-group' },
+    const owned = this.owned;
+    const chips = (label, all, key) => el('div', { class: 'opt-group' },
       el('div', { class: 'opt-label' }, label),
-      el('div', { class: 'chips' }, list.map((entry) => el('button', {
+      el('div', { class: 'chips' }, unlockedOptions(all, owned).map((entry) => el('button', {
         class: `chip${draft[key] === entry.id ? ' active' : ''}`,
         onclick: () => {
           draft[key] = entry.id;
@@ -515,9 +565,9 @@ export class UI {
         },
       }, entry.label))));
 
-    const swatches = (label, list, key) => el('div', { class: 'opt-group' },
+    const swatches = (label, all, key) => el('div', { class: 'opt-group' },
       el('div', { class: 'opt-label' }, label),
-      el('div', { class: 'chips' }, list.map((entry) => {
+      el('div', { class: 'chips' }, unlockedOptions(all, owned).map((entry) => {
         const btn = el('button', {
           class: `swatch${draft[key] === entry.id ? ' active' : ''}`,
           'aria-label': entry.id,

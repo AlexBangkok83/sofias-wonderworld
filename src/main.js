@@ -12,6 +12,9 @@ import { DEFAULT_CHARACTER } from './player/avatar.js';
 import { NpcManager } from './npc/npc.js';
 import { Voice } from './npc/voice.js';
 import { getVillager } from './npc/dialogue.js';
+import {
+  emptyBank, payAllowance, buyPack, shopView, dayKey,
+} from './shop/piggybank.js';
 
 const root = document.getElementById('app');
 const ui = new UI(root);
@@ -234,6 +237,67 @@ function removeBlock() {
 }
 
 // ---------------------------------------------------------------------------
+// Shop and piggy bank
+//
+// Money arrives once a day and is never shown (src/shop/piggybank.js). It's
+// collected here whenever it could have become a new day: on boot, when the
+// tab or app comes back to the front, and when the shop opens.
+// ---------------------------------------------------------------------------
+
+// Only ever changed by the test hook below, to step into tomorrow.
+let dayOffset = 0;
+const today = () => dayKey(new Date(Date.now() + dayOffset * 24 * 60 * 60 * 1000));
+
+function ownedPacks() {
+  return new Set(state.save.packs);
+}
+
+function collectAllowance() {
+  if (!state.save.piggyBank) state.save.piggyBank = emptyBank();
+  const days = payAllowance(state.save.piggyBank, today());
+  // No toast and no sound: she's not meant to see the money arrive.
+  if (days) autosave();
+  return days;
+}
+
+function currentShopView() {
+  return shopView(state.save.piggyBank, ownedPacks());
+}
+
+function openShop() {
+  if (state.playing) {
+    state.playing = false;
+    input.setEnabled(false);
+    input.exitPointerLock();
+  }
+  voice.stop();
+  ui.hideDialogue();
+  ui.closePause();
+  ui.closeCreator();
+  ui.hideTitle();
+  collectAllowance();
+  ui.openShop(currentShopView());
+}
+
+function buy(packId) {
+  collectAllowance();
+  const owned = ownedPacks();
+  const result = buyPack(state.save.piggyBank, owned, packId);
+  if (result.ok) {
+    state.save.packs = [...owned];
+    ui.setOwnedPacks(owned);
+    // So the hotbar is already on the new tab next time she's indoors.
+    ui.showPaletteGroup(packId);
+  }
+  ui.shop.refresh(currentShopView());
+  if (result.ok) {
+    ui.shop.reveal(packId);
+    saveNow();
+  }
+  return result.ok;
+}
+
+// ---------------------------------------------------------------------------
 // Talking
 // ---------------------------------------------------------------------------
 
@@ -362,6 +426,12 @@ ui.on('play', () => resume())
     ui.closeCreator();
     resume();
   })
+  .on('openShop', () => openShop())
+  .on('closeShop', () => {
+    ui.closeShop();
+    resume();
+  })
+  .on('buyPack', (id) => buy(id))
   .on('saveCharacter', (draft) => {
     const name = (draft.name || '').trim() || 'Someone';
     const editingId = ui.editingCharacterId;
@@ -409,7 +479,14 @@ ui.on('play', () => resume())
 
 window.addEventListener('keydown', (e) => {
   if (e.code === 'Escape') {
-    if (!ui.creator.hidden) {
+    if (ui.shopOpen) {
+      if (ui.shop.revealOpen) {
+        ui.shop.closeReveal();
+      } else {
+        ui.closeShop();
+        resume();
+      }
+    } else if (!ui.creator.hidden) {
       ui.closeCreator();
       resume();
     } else if (!ui.helpMenu.hidden) {
@@ -432,6 +509,10 @@ document.addEventListener('visibilitychange', () => {
   if (document.hidden) {
     voice.stop();
     if (state.world) saveNow();
+  } else if (state.world) {
+    // A phone left on the game overnight comes back to a new day.
+    collectAllowance();
+    if (ui.shopOpen) ui.shop.refresh(currentShopView());
   }
 });
 window.addEventListener('pagehide', () => { if (state.world) saveNow(); });
@@ -559,6 +640,16 @@ function installTestHooks() {
     validateWorld,
     place: () => placeBlock(),
     remove: () => removeBlock(),
+    // The shop. Deliberately no way to read the balance here either — tests
+    // check what she'd see (Buy / Not yet / Yours), not the number behind it.
+    ownedPacks: () => [...state.save.packs],
+    packStatus: (id) => currentShopView().find((v) => v.pack.id === id)?.status ?? null,
+    /** Pretend `days` more days have gone by, then collect what's owed. */
+    skipDays: (days = 1) => {
+      dayOffset += days;
+      collectAllowance();
+      if (ui.shopOpen) ui.shop.refresh(currentShopView());
+    },
   };
 }
 
@@ -584,6 +675,10 @@ async function boot() {
     state.save.characters = [{ ...DEFAULT_CHARACTER, id: newCharacterId() }];
     state.save.activeCharacterId = state.save.characters[0].id;
   }
+
+  // Today's money, if it hasn't arrived yet, and whatever she's bought before.
+  collectAllowance();
+  ui.setOwnedPacks(ownedPacks());
 
   state.world = new World({
     edits: state.save.edits,

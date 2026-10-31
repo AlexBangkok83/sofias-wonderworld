@@ -251,6 +251,108 @@ async function main() {
   await clickByText('Done');
   await waitForFrames(page, 5);
 
+  // --- Shop ---
+  //
+  // The rule for the shop: money arrives every day but is never shown. So
+  // besides buying, this checks there is no number anywhere on the screen.
+  console.log('  Shop…');
+  const shopText = () => page.evaluate(() => document.getElementById('shop').innerText);
+  const noNumbers = async (when) => {
+    const text = await shopText();
+    if (/\d/.test(text)) problems.push(`the shop shows a number ${when}: "${text.match(/.{0,20}\d.{0,20}/)[0]}"`);
+  };
+  const status = (id) => page.evaluate((p) => window.__game.packStatus(p), id);
+
+  await page.keyboard.press('Escape');
+  await waitForFrames(page, 3);
+  await page.evaluate(() => {
+    const button = [...document.querySelectorAll('#pause button')]
+      .find((b) => b.textContent.includes('Shop'));
+    if (!button) throw new Error('no Shop button in the pause menu');
+    button.click();
+  });
+  await waitForFrames(page, 3);
+  const shopShown = await page.evaluate(() => !document.getElementById('shop').hidden);
+  if (!shopShown) problems.push('the Shop button in the pause menu did not open the shop');
+  const statuses = await page.evaluate(() => [...document.querySelectorAll('#shop .pack-card')]
+    .map((c) => c.dataset.status));
+  console.log(`    first visit: ${statuses.join(', ')}`);
+  if (!statuses.includes('buy')) problems.push('nothing in the shop can be bought on the first day');
+  if (!statuses.includes('not-yet')) problems.push('every pack was buyable on the first day');
+  await noNumbers('on the first visit');
+  await shot(page, '09a-shop');
+
+  await page.click('#shop .pack-card[data-pack="candy"] .btn.buy');
+  await waitForFrames(page, 4);
+  const revealed = await page.evaluate(() => !document.querySelector('#shop .shop-reveal').hidden
+    && document.querySelector('#shop .reveal-card h2').textContent);
+  console.log(`    bought candy: ${revealed || 'NO REVEAL'}, owned: ${await page.evaluate(() => window.__game.ownedPacks())}`);
+  if (revealed !== "It's yours!") problems.push('buying a pack did not show the reveal');
+  if ((await status('candy')) !== 'owned') problems.push('buying the candy pack did not make it hers');
+  await noNumbers('after buying');
+  await shot(page, '09b-shop-bought');
+  await page.click('#shop .reveal-card .btn');
+  await waitForFrames(page, 2);
+
+  // That was the day's money. Everything else should say "Not yet" now, and
+  // pressing it should say so kindly rather than do anything.
+  const oceanAfter = await status('ocean');
+  if (oceanAfter !== 'not-yet') problems.push(`after spending the day's money, ocean was "${oceanAfter}"`);
+  await page.click('#shop .pack-card[data-pack="ocean"] .btn.not-yet');
+  await waitForFrames(page, 2);
+  const note = await page.textContent('#shop .pack-card[data-pack="ocean"] .pack-note');
+  console.log(`    not yet: "${note}"`);
+  if (!/come back/i.test(note || '')) problems.push('pressing "Not yet" did not say to come back');
+  if ((await status('ocean')) !== 'not-yet') problems.push('pressing "Not yet" bought the pack anyway');
+
+  // Tomorrow, the money is back.
+  await page.evaluate(() => window.__game.skipDays(1));
+  await waitForFrames(page, 2);
+  const tomorrow = await status('ocean');
+  console.log(`    next day, ocean: ${tomorrow}`);
+  if (tomorrow !== 'buy') problems.push(`a new day did not make a one-day pack buyable (got "${tomorrow}")`);
+  await page.click('#shop .pack-card[data-pack="animals"] .btn.buy');
+  await waitForFrames(page, 3);
+  await page.keyboard.press('Escape');   // closes the reveal
+  await waitForFrames(page, 2);
+  await page.keyboard.press('Escape');   // closes the shop
+  await waitForFrames(page, 3);
+  if (await page.evaluate(() => !document.getElementById('shop').hidden)) {
+    problems.push('Escape did not close the shop');
+  }
+
+  // The new blocks are in their own hotbar tab, already picked.
+  await page.evaluate(() => window.__game.enterZone('cottage_in'));
+  await waitForFrames(page, 3);
+  const tabs = await page.evaluate(() => [...document.querySelectorAll('#palette-tabs .tab')]
+    .map((t) => t.textContent));
+  const picked = await page.evaluate(() => window.__game.ui.selectedBlockId);
+  console.log(`    hotbar tabs: ${tabs.join(' | ')}; picked block ${picked}`);
+  if (!tabs.some((t) => t.includes('Candy'))) problems.push('the candy blocks have no hotbar tab');
+  // Animal Friends was bought last, so its tab is the one that should be open.
+  const newestActive = await page.evaluate(() => document.querySelector('#palette-tabs .tab.active')
+    ?.textContent.includes('Animals'));
+  if (!newestActive) problems.push('the hotbar did not switch to the most recently bought blocks');
+
+  // And the new looks are in the character creator.
+  await page.keyboard.press('Escape');
+  await waitForFrames(page, 2);
+  await page.click('#pause .btn.lilac');
+  await waitForFrames(page, 3);
+  const extras = await page.evaluate(() => [...document.querySelectorAll('#creator .chip')]
+    .map((c) => c.textContent));
+  if (!extras.includes('Bunny Ears')) problems.push('Bunny Ears are not in the creator after buying Animal Friends');
+  if (extras.includes('Antennae')) problems.push('Antennae show in the creator without buying the Space pack');
+  await page.evaluate(() => {
+    const chip = [...document.querySelectorAll('#creator .chip')]
+      .find((c) => c.textContent === 'Bunny Ears');
+    chip?.click();
+  });
+  await waitForFrames(page, 4);
+  await shot(page, '09c-bunny-ears');
+  await clickByText('Done');
+  await waitForFrames(page, 3);
+
   // --- Other interiors ---
   for (const zone of ['modern_in', 'bakery_in', 'barn_in', 'library_in']) {
     console.log(`  ${zone}…`);
@@ -282,7 +384,17 @@ async function main() {
   const restored = await probeNumber(page, 'characterCount', () => window.__game.characterCount());
   const restoredZone = await page.evaluate(() => window.__game.zoneId());
   const restoredEdits = await probeNumber(page, 'editCount', () => window.__game.editCount());
-  console.log(`    after reload — characters: ${restored}, zone: ${restoredZone}, edits: ${restoredEdits}`);
+  const restoredPacks = await page.evaluate(() => window.__game.ownedPacks());
+  console.log(`    after reload — characters: ${restored}, zone: ${restoredZone}, edits: ${restoredEdits}, packs: ${restoredPacks}`);
+  if (!(restoredPacks.includes('candy') && restoredPacks.includes('animals'))) {
+    problems.push(`bought packs not persisted across reload (got ${restoredPacks})`);
+  }
+  // Both days' money is spent, so coming back the same day must not pay again.
+  const buyableAfterReload = await page.evaluate(() => ['ocean', 'salon', 'rainbow', 'space', 'castle']
+    .filter((id) => window.__game.packStatus(id) === 'buy'));
+  if (buyableAfterReload.length) {
+    problems.push(`reloading paid the day's money again (buyable: ${buyableAfterReload})`);
+  }
   if (!(restored >= 2)) problems.push(`characters not persisted across reload (got ${restored})`);
   if (!(restoredEdits >= 1)) problems.push(`block edits not persisted across reload (got ${restoredEdits})`);
   if (restoredZone !== 'moon_house') {
@@ -404,6 +516,25 @@ async function main() {
   }
   await phone.screenshot({ path: path.join(SHOTS, '16-phone-built.png') });
   console.log('  📸 15-phone-joystick, 16-phone-built');
+
+  // The shop, from the 🛍 button, at phone size.
+  await tapButton('#shop-btn');
+  const phoneShop = await phone.evaluate(() => !document.getElementById('shop').hidden);
+  console.log(`    🛍 opened the shop: ${phoneShop}`);
+  if (!phoneShop) problems.push('the 🛍 button did not open the shop on a phone');
+  const phoneOverflow = await phone.evaluate(
+    () => document.querySelector('#shop .shop-card').scrollWidth
+      > document.querySelector('#shop .shop-card').clientWidth,
+  );
+  if (phoneOverflow) problems.push('the shop scrolls sideways on a phone');
+  await phone.screenshot({ path: path.join(SHOTS, '19-phone-shop.png') });
+  const firstBuy = '#shop .pack-card .btn.buy >> nth=0';
+  await phone.locator(firstBuy).scrollIntoViewIfNeeded();
+  await tapButton(firstBuy);
+  await phone.screenshot({ path: path.join(SHOTS, '20-phone-bought.png') });
+  const phoneOwned = await phone.evaluate(() => window.__game.ownedPacks().length);
+  if (phoneOwned !== 1) problems.push(`tapping Buy on a phone left ${phoneOwned} packs owned`);
+  console.log('  📸 19-phone-shop, 20-phone-bought');
 
   await browser.close();
   server.close();

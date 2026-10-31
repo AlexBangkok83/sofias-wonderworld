@@ -79,8 +79,10 @@ export class CharacterPreview {
     this.avatar = buildAvatar(config);
     this.pivot.add(this.avatar);
     const height = characterHeight(config);
-    this.camera.position.set(0, height * 0.6, height * 2.35);
-    this.camera.lookAt(0, height * 0.5, 0);
+    // Framed with room above the head, so tall extras (the pointy hat, bunny
+    // ears, antennae) aren't cut off at the top.
+    this.camera.position.set(0, height * 0.66, height * 2.65);
+    this.camera.lookAt(0, height * 0.58, 0);
   }
 
   resize() {

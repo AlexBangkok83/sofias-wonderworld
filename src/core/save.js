@@ -6,6 +6,8 @@
  * Syncing across her phone and laptop would be a separate conversation.
  */
 
+import { cleanBank } from '../shop/piggybank.js';
+
 const DB_NAME = 'sofias-village';
 const DB_VERSION = 1;
 const STORE = 'state';
@@ -24,6 +26,11 @@ export function emptySave() {
     discovered: {},
     settings: { voice: true, firstPerson: false, shadows: null, music: false },
     playedBefore: false,
+    // Hidden money (src/shop/piggybank.js). Never shown on screen. Filled in
+    // on boot, which is also when the day's money arrives.
+    piggyBank: null,
+    // Ids of the shop packs she's bought.
+    packs: [],
   };
 }
 
@@ -95,6 +102,11 @@ export class SaveStore {
     if (!Array.isArray(merged.characters)) merged.characters = [];
     if (!merged.edits || typeof merged.edits !== 'object') merged.edits = {};
     if (!merged.discovered || typeof merged.discovered !== 'object') merged.discovered = {};
+    // Saves from before the shop existed have neither of these.
+    merged.piggyBank = merged.piggyBank ? cleanBank(merged.piggyBank) : null;
+    merged.packs = Array.isArray(merged.packs)
+      ? [...new Set(merged.packs.filter((id) => typeof id === 'string'))]
+      : [];
     return merged;
   }
 

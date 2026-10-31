@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import * as tex from './textures.js';
+import { PACKS, isUnlocked } from '../shop/packs.js';
 
 // Block ids are written into save files. Never renumber an existing block —
 // only append new ones at the end.
@@ -9,6 +10,7 @@ import * as tex from './textures.js';
 //   geometry  -> 'box' for a normal cube, 'cross' for two crossed planes
 //   glow      -> emits light; the renderer places a point light nearby
 //   palette   -> shows up in Sofia's building hotbar
+//   pack      -> only in the hotbar once she's bought that pack (src/shop/)
 
 export const AIR = 0;
 
@@ -135,6 +137,71 @@ const DEFS = [
     paint: tex.beam(0x533a26, 55), geometry: 'post', opaque: false,
     palette: 'light', icon: '#533a26',
   },
+
+  // --- Shop packs: each shows up in its own hotbar tab once bought ---
+  // 🍭 Candy
+  {
+    id: 34, key: 'candy_stripe', label: 'Candy Stripe', pack: 'candy',
+    paint: tex.candyStripe(0xf28cb1, 0xfdf3f6, 80), icon: '#f28cb1',
+  },
+  { id: 35, key: 'chocolate', label: 'Chocolate', pack: 'candy', paint: tex.chocolate(81), icon: '#5a3320' },
+  {
+    id: 36, key: 'cake', label: 'Cake', pack: 'candy', icon: '#f7c6d6',
+    faces: {
+      top: tex.icingTop(0xfbe3ec, 82),
+      side: tex.icingSide(0xfbe3ec, 0xf0d29a, 83),
+      bottom: tex.speckle(0xf0d29a, 0.1, 84),
+    },
+  },
+  { id: 37, key: 'sprinkles', label: 'Sprinkles', pack: 'candy', paint: tex.sprinkles(0xfbeef3, 85), icon: '#fbeef3' },
+  // 🐚 Ocean
+  {
+    id: 38, key: 'sea_glass', label: 'Sea Glass', pack: 'ocean',
+    paint: tex.glassPane('#6fd1c4', 86), opaque: false, transparent: true, icon: '#6fd1c4',
+  },
+  {
+    id: 39, key: 'coral', label: 'Coral', pack: 'ocean',
+    paint: tex.coral('#f27a7a', 87), geometry: 'cross', solid: false,
+    opaque: false, transparent: true, icon: '#f27a7a',
+  },
+  {
+    id: 40, key: 'seaweed', label: 'Seaweed', pack: 'ocean',
+    paint: tex.seaweed(0x3f9a6a, 88), geometry: 'cross', solid: false,
+    opaque: false, transparent: true, icon: '#3f9a6a',
+  },
+  { id: 41, key: 'pearl', label: 'Pearl Tiles', pack: 'ocean', paint: tex.pearl(89), icon: '#f3eefb' },
+  // 🐰 Animal Friends
+  { id: 42, key: 'hay', label: 'Hay', pack: 'animals', paint: tex.hay(90), icon: '#d9b65a' },
+  {
+    id: 43, key: 'paw_rug', label: 'Paw Rug', pack: 'animals',
+    paint: tex.pawRug(0x9fc7e8, '#5d7fa3', 91), icon: '#9fc7e8',
+  },
+  // 🌈 Rainbow
+  { id: 44, key: 'rainbow', label: 'Rainbow', pack: 'rainbow', paint: tex.rainbow(92), icon: '#f2d04a' },
+  { id: 45, key: 'cloud', label: 'Cloud', pack: 'rainbow', paint: tex.cloud(93), icon: '#f7f9ff' },
+  {
+    id: 46, key: 'glitter', label: 'Glitter Lamp', pack: 'rainbow',
+    paint: tex.glitter(94), glow: { color: 0xf4d9ff, intensity: 1.0, distance: 11 }, icon: '#e9d8f7',
+  },
+  // 🚀 Space
+  {
+    id: 47, key: 'starry', label: 'Starry Sky', pack: 'space',
+    paint: tex.starfield(95), glow: { color: 0x9fb0ff, intensity: 0.5, distance: 8 }, icon: '#1d2152',
+  },
+  { id: 48, key: 'planet', label: 'Planet', pack: 'space', paint: tex.planet(96), icon: '#e9b07a' },
+  { id: 49, key: 'rocket', label: 'Rocket Metal', pack: 'space', paint: tex.metalPanel(0xc9d0da, 97), icon: '#c9d0da' },
+  // 🏰 Castle
+  { id: 50, key: 'castle_brick', label: 'Castle Brick', pack: 'castle', paint: tex.castleBrick(0xb7ad9c, 98), icon: '#b7ad9c' },
+  { id: 51, key: 'gold', label: 'Gold', pack: 'castle', paint: tex.gold(99), icon: '#e8b730' },
+  {
+    id: 52, key: 'royal_carpet', label: 'Royal Carpet', pack: 'castle',
+    paint: tex.rug(0x9c2f52, '#f0c05a', 100), icon: '#9c2f52',
+  },
+  {
+    id: 53, key: 'torch', label: 'Torch', pack: 'castle',
+    paint: tex.torch(101), geometry: 'cross', solid: false, opaque: false, transparent: true,
+    glow: { color: 0xffb35c, intensity: 1.1, distance: 10 }, icon: '#f08a2e',
+  },
 ];
 
 /** id -> definition, with defaults applied. */
@@ -185,12 +252,28 @@ export const PALETTE_GROUPS = [
   { key: 'light', label: 'Lights' },
 ];
 
-export function paletteBlocks() {
-  const groups = new Map(PALETTE_GROUPS.map((g) => [g.key, []]));
-  for (const def of BLOCKS.values()) {
-    if (def.palette && groups.has(def.palette)) groups.get(def.palette).push(def);
+/**
+ * The hotbar tabs: the four starting tabs, then one tab per pack she owns, so
+ * a pack she's just bought is easy to find. `owned` is a Set of pack ids.
+ */
+export function paletteBlocks(owned = new Set()) {
+  const groups = new Map(PALETTE_GROUPS.map((g) => [g.key, { ...g, blocks: [] }]));
+  for (const pack of PACKS) {
+    if (owned.has(pack.id)) {
+      groups.set(pack.id, { key: pack.id, label: `${pack.emoji} ${pack.tab}`, pack: pack.id, blocks: [] });
+    }
   }
-  return PALETTE_GROUPS.map((g) => ({ ...g, blocks: groups.get(g.key) }));
+  for (const def of BLOCKS.values()) {
+    if (!isUnlocked(def, owned)) continue;
+    const group = groups.get(def.pack || def.palette);
+    if (group) group.blocks.push(def);
+  }
+  return [...groups.values()].filter((g) => g.blocks.length);
+}
+
+/** Every block that comes in a given pack. */
+export function packBlocks(packId) {
+  return [...BLOCKS.values()].filter((def) => def.pack === packId);
 }
 
 // --- Geometry + material construction (built lazily, once) ---

@@ -397,6 +397,367 @@ export function pathStone(seed = 20) {
   };
 }
 
+// ---------------------------------------------------------------------------
+// Shop pack blocks
+// ---------------------------------------------------------------------------
+
+/** Diagonal two-colour stripes — candy cane. */
+export function candyStripe(a, b, seed = 60) {
+  return (ctx) => {
+    const rand = makeRandom(seed);
+    for (let y = 0; y < TILE; y++) {
+      for (let x = 0; x < TILE; x++) {
+        const base = Math.floor((x + y) / 4) % 2 === 0 ? a : b;
+        px(ctx, x, y, shade(base, (rand() - 0.5) * 0.05));
+      }
+    }
+  };
+}
+
+/** A chocolate bar: square segments with a lit top edge. */
+export function chocolate(seed = 61) {
+  return (ctx) => {
+    const rand = makeRandom(seed);
+    ctx.fillStyle = shade(0x5a3320, -0.25);
+    ctx.fillRect(0, 0, TILE, TILE);
+    for (let gy = 0; gy < 2; gy++) {
+      for (let gx = 0; gx < 2; gx++) {
+        const x = gx * 8;
+        const y = gy * 8;
+        ctx.fillStyle = shade(0x5a3320, (rand() - 0.5) * 0.06);
+        ctx.fillRect(x + 1, y + 1, 6, 6);
+        ctx.fillStyle = shade(0x5a3320, 0.2);
+        ctx.fillRect(x + 1, y + 1, 6, 1);
+        ctx.fillRect(x + 1, y + 1, 1, 6);
+        ctx.fillStyle = shade(0x5a3320, 0.42);
+        ctx.fillRect(x + 2, y + 2, 1, 1);
+      }
+    }
+  };
+}
+
+/** Icing seen from above. */
+export function icingTop(icing, seed = 62) {
+  return (ctx) => {
+    const rand = makeRandom(seed);
+    for (let y = 0; y < TILE; y++) {
+      for (let x = 0; x < TILE; x++) {
+        px(ctx, x, y, shade(icing, (rand() - 0.5) * 0.08));
+      }
+    }
+    // A cherry on top.
+    ctx.fillStyle = '#d63a4f';
+    ctx.fillRect(6, 6, 4, 4);
+    ctx.fillStyle = '#f08a98';
+    ctx.fillRect(7, 7, 1, 1);
+  };
+}
+
+/** Sponge cake with icing dripping down from the top edge. */
+export function icingSide(icing, cake, seed = 63) {
+  return (ctx) => {
+    const rand = makeRandom(seed);
+    for (let y = 0; y < TILE; y++) {
+      for (let x = 0; x < TILE; x++) {
+        px(ctx, x, y, shade(cake, (rand() - 0.5) * 0.14));
+      }
+    }
+    for (let x = 0; x < TILE; x++) {
+      const drip = 3 + (x % 5 === 1 ? 4 : x % 7 === 3 ? 3 : Math.floor(rand() * 2));
+      for (let y = 0; y < drip; y++) px(ctx, x, y, shade(icing, (rand() - 0.5) * 0.06));
+    }
+    // A jam layer through the middle.
+    ctx.fillStyle = '#d6566c';
+    ctx.fillRect(0, 10, TILE, 1);
+  };
+}
+
+/** Pale icing scattered with coloured sprinkles. */
+export function sprinkles(base, seed = 64) {
+  return (ctx) => {
+    const rand = makeRandom(seed);
+    for (let y = 0; y < TILE; y++) {
+      for (let x = 0; x < TILE; x++) px(ctx, x, y, shade(base, (rand() - 0.5) * 0.06));
+    }
+    const colours = ['#e6546c', '#f2c94c', '#56b6e6', '#7bd389', '#a77ce0', '#ffffff'];
+    for (let i = 0; i < 16; i++) {
+      const x = Math.floor(rand() * (TILE - 1));
+      const y = Math.floor(rand() * (TILE - 1));
+      ctx.fillStyle = colours[i % colours.length];
+      if (rand() < 0.5) ctx.fillRect(x, y, 2, 1);
+      else ctx.fillRect(x, y, 1, 2);
+    }
+  };
+}
+
+/** Branching coral, transparent background (for a crossed-plane block). */
+export function coral(color, seed = 65) {
+  return (ctx) => {
+    ctx.clearRect(0, 0, TILE, TILE);
+    const c = typeof color === 'string' ? color : shade(color, 0);
+    const branch = (x, y, h, light) => {
+      ctx.fillStyle = light ? shade(c, 0.2) : c;
+      ctx.fillRect(x, y, 2, h);
+      ctx.fillStyle = shade(c, 0.35);
+      ctx.fillRect(x, y, 2, 1);
+    };
+    branch(7, 6, 10, false);
+    branch(3, 3, 7, true);
+    branch(11, 2, 8, true);
+    branch(5, 9, 2, false);
+    ctx.fillStyle = c;
+    ctx.fillRect(3, 9, 5, 2);
+    ctx.fillRect(8, 9, 4, 2);
+    branch(1, 6, 3, false);
+    branch(13, 5, 3, false);
+    ctx.fillRect(1, 8, 3, 1);
+    ctx.fillRect(12, 7, 2, 1);
+  };
+}
+
+/** Tall wavy seaweed, transparent background. */
+export function seaweed(base, seed = 66) {
+  return (ctx) => {
+    const rand = makeRandom(seed);
+    ctx.clearRect(0, 0, TILE, TILE);
+    for (const x0 of [2, 7, 12]) {
+      const top = Math.floor(rand() * 4);
+      for (let y = TILE - 1; y >= top; y--) {
+        const x = x0 + Math.round(Math.sin(y * 0.7 + x0) * 1.2);
+        px(ctx, x, y, shade(base, (rand() - 0.5) * 0.25));
+        px(ctx, x + 1, y, shade(base, -0.12));
+      }
+    }
+  };
+}
+
+/** Shimmering pearl tiles. */
+export function pearl(seed = 67) {
+  return (ctx) => {
+    const rand = makeRandom(seed);
+    const tints = [0xf6eef2, 0xeaf3f6, 0xf3eefb, 0xfdf6e8];
+    for (let gy = 0; gy < 2; gy++) {
+      for (let gx = 0; gx < 2; gx++) {
+        const tint = tints[gy * 2 + gx];
+        for (let y = 0; y < 8; y++) {
+          for (let x = 0; x < 8; x++) {
+            const shine = (x + y < 5 ? 0.25 : 0) - (x + y > 11 ? 0.08 : 0);
+            px(ctx, gx * 8 + x, gy * 8 + y, shade(tint, shine + (rand() - 0.5) * 0.04));
+          }
+        }
+      }
+    }
+    ctx.fillStyle = shade(0xd8cfe0, -0.1);
+    ctx.fillRect(0, 7, TILE, 1);
+    ctx.fillRect(7, 0, 1, TILE);
+  };
+}
+
+/** Loose golden straw. */
+export function hay(seed = 68) {
+  return (ctx) => {
+    const rand = makeRandom(seed);
+    for (let y = 0; y < TILE; y++) {
+      for (let x = 0; x < TILE; x++) px(ctx, x, y, shade(0xd9b65a, (rand() - 0.5) * 0.12));
+    }
+    for (let i = 0; i < 22; i++) {
+      const x = Math.floor(rand() * TILE);
+      const y = Math.floor(rand() * TILE);
+      const len = 2 + Math.floor(rand() * 4);
+      const tone = rand() < 0.5 ? shade(0xd9b65a, 0.25) : shade(0xd9b65a, -0.25);
+      for (let k = 0; k < len; k++) px(ctx, (x + k) % TILE, y, tone);
+    }
+    // Twine.
+    ctx.fillStyle = '#8a5a36';
+    ctx.fillRect(0, 4, TILE, 1);
+    ctx.fillRect(0, 11, TILE, 1);
+  };
+}
+
+/** A soft rug with paw prints on it. */
+export function pawRug(base, paw, seed = 69) {
+  return (ctx) => {
+    const rand = makeRandom(seed);
+    for (let y = 0; y < TILE; y++) {
+      for (let x = 0; x < TILE; x++) px(ctx, x, y, shade(base, (rand() - 0.5) * 0.08));
+    }
+    ctx.fillStyle = paw;
+    for (const [cx, cy] of [[4, 4], [11, 11]]) {
+      ctx.fillRect(cx - 1, cy, 3, 2);
+      ctx.fillRect(cx - 2, cy - 2, 1, 1);
+      ctx.fillRect(cx, cy - 3, 1, 1);
+      ctx.fillRect(cx + 2, cy - 2, 1, 1);
+    }
+  };
+}
+
+/** Rainbow bands, top to bottom. */
+export function rainbow(seed = 70) {
+  return (ctx) => {
+    const rand = makeRandom(seed);
+    const bands = [0xe85a5a, 0xf29a4a, 0xf2d04a, 0x6cc46a, 0x5a9ee8, 0x9a6ce0];
+    for (let y = 0; y < TILE; y++) {
+      const band = bands[Math.min(bands.length - 1, Math.floor(y / (TILE / bands.length)))];
+      for (let x = 0; x < TILE; x++) px(ctx, x, y, shade(band, (rand() - 0.5) * 0.06));
+    }
+  };
+}
+
+/** A puffy white cloud filling the block. */
+export function cloud(seed = 71) {
+  return (ctx) => {
+    const rand = makeRandom(seed);
+    for (let y = 0; y < TILE; y++) {
+      for (let x = 0; x < TILE; x++) {
+        const shadowed = y > 11 ? -0.08 : 0;
+        px(ctx, x, y, shade(0xf7f9ff, shadowed + (rand() - 0.5) * 0.03));
+      }
+    }
+    ctx.fillStyle = '#dfe6f5';
+    for (const [x, y, w] of [[1, 6, 5], [8, 3, 6], [3, 12, 7], [11, 10, 4]]) {
+      ctx.fillRect(x, y, w, 1);
+    }
+  };
+}
+
+/** Sparkles in every colour on a soft lilac base. Glows. */
+export function glitter(seed = 72) {
+  return (ctx) => {
+    const rand = makeRandom(seed);
+    for (let y = 0; y < TILE; y++) {
+      for (let x = 0; x < TILE; x++) px(ctx, x, y, shade(0xe9d8f7, (rand() - 0.5) * 0.08));
+    }
+    const colours = ['#ffffff', '#ffd1ea', '#c9f2ff', '#fff3a8', '#d8c2ff'];
+    for (let i = 0; i < 14; i++) {
+      const x = 1 + Math.floor(rand() * (TILE - 2));
+      const y = 1 + Math.floor(rand() * (TILE - 2));
+      ctx.fillStyle = colours[i % colours.length];
+      ctx.fillRect(x, y, 1, 1);
+      if (i % 3 === 0) {
+        ctx.fillRect(x - 1, y, 3, 1);
+        ctx.fillRect(x, y - 1, 1, 3);
+      }
+    }
+  };
+}
+
+/** Deep blue night sky full of stars. Glows a little. */
+export function starfield(seed = 73) {
+  return (ctx) => {
+    const rand = makeRandom(seed);
+    for (let y = 0; y < TILE; y++) {
+      for (let x = 0; x < TILE; x++) px(ctx, x, y, shade(0x1d2152, (rand() - 0.5) * 0.12));
+    }
+    for (let i = 0; i < 12; i++) {
+      const x = Math.floor(rand() * TILE);
+      const y = Math.floor(rand() * TILE);
+      px(ctx, x, y, rand() < 0.3 ? '#fff3b0' : '#ffffff');
+    }
+    // One bigger twinkle.
+    ctx.fillStyle = '#fff6c8';
+    ctx.fillRect(10, 4, 1, 3);
+    ctx.fillRect(9, 5, 3, 1);
+  };
+}
+
+/** Swirly banded planet surface. */
+export function planet(seed = 74) {
+  return (ctx) => {
+    const rand = makeRandom(seed);
+    const bands = [0xe9b07a, 0xf3dcb8, 0xd4895a, 0xf0c99a, 0xbf7550];
+    for (let y = 0; y < TILE; y++) {
+      for (let x = 0; x < TILE; x++) {
+        const wobble = Math.sin(x * 0.55 + y * 0.3) * 1.2;
+        const band = bands[Math.floor(((y + wobble + TILE) / 3.2)) % bands.length];
+        px(ctx, x, y, shade(band, (rand() - 0.5) * 0.06));
+      }
+    }
+    // A storm spot.
+    ctx.fillStyle = '#b9583e';
+    ctx.fillRect(9, 9, 4, 2);
+    ctx.fillStyle = '#d8775a';
+    ctx.fillRect(10, 9, 2, 1);
+  };
+}
+
+/** Riveted metal panels. */
+export function metalPanel(base, seed = 75) {
+  return (ctx) => {
+    const rand = makeRandom(seed);
+    for (let y = 0; y < TILE; y++) {
+      for (let x = 0; x < TILE; x++) {
+        const sheen = (x - y) / TILE * 0.12;
+        px(ctx, x, y, shade(base, sheen + (rand() - 0.5) * 0.04));
+      }
+    }
+    ctx.fillStyle = shade(base, -0.3);
+    ctx.fillRect(0, 0, TILE, 1);
+    ctx.fillRect(0, 0, 1, TILE);
+    ctx.fillRect(0, 8, TILE, 1);
+    ctx.fillStyle = shade(base, 0.3);
+    for (const [x, y] of [[2, 2], [13, 2], [2, 10], [13, 10], [2, 14], [13, 14]]) {
+      ctx.fillRect(x, y, 1, 1);
+    }
+  };
+}
+
+/** Big squared castle bricks. */
+export function castleBrick(base, seed = 76) {
+  return (ctx) => {
+    const rand = makeRandom(seed);
+    ctx.fillStyle = shade(base, -0.35);
+    ctx.fillRect(0, 0, TILE, TILE);
+    for (let row = 0; row < 3; row++) {
+      const y = row * 5 + (row === 2 ? 1 : 0);
+      const h = row === 2 ? 4 : 4;
+      const offset = row % 2 === 0 ? 0 : -4;
+      for (let x = offset; x < TILE; x += 8) {
+        ctx.fillStyle = shade(base, (rand() - 0.5) * 0.16);
+        ctx.fillRect(x + 1, y + 1, 7, h);
+        ctx.fillStyle = shade(base, 0.12);
+        ctx.fillRect(x + 1, y + 1, 7, 1);
+      }
+    }
+  };
+}
+
+/** Gold bars with a shine. */
+export function gold(seed = 77) {
+  return (ctx) => {
+    const rand = makeRandom(seed);
+    for (let y = 0; y < TILE; y++) {
+      for (let x = 0; x < TILE; x++) px(ctx, x, y, shade(0xe8b730, (rand() - 0.5) * 0.08));
+    }
+    ctx.fillStyle = shade(0xe8b730, -0.3);
+    ctx.fillRect(0, 7, TILE, 1);
+    ctx.fillRect(7, 0, 1, 7);
+    ctx.fillRect(3, 8, 1, 8);
+    ctx.fillRect(12, 8, 1, 8);
+    ctx.fillStyle = '#fff4c2';
+    ctx.fillRect(2, 2, 3, 1);
+    ctx.fillRect(2, 2, 1, 2);
+    ctx.fillRect(10, 2, 2, 1);
+    ctx.fillRect(6, 10, 3, 1);
+  };
+}
+
+/** A wall torch: a stick with a flame, transparent background. Glows. */
+export function torch(seed = 78) {
+  return (ctx) => {
+    ctx.clearRect(0, 0, TILE, TILE);
+    ctx.fillStyle = '#6b4a2e';
+    ctx.fillRect(7, 7, 2, 9);
+    ctx.fillStyle = '#4e3520';
+    ctx.fillRect(7, 15, 2, 1);
+    ctx.fillStyle = '#f08a2e';
+    ctx.fillRect(6, 3, 4, 4);
+    ctx.fillStyle = '#ffc94a';
+    ctx.fillRect(7, 2, 2, 4);
+    ctx.fillStyle = '#fff3c0';
+    ctx.fillRect(7, 4, 2, 2);
+  };
+}
+
 /** Turn a painter function into a nearest-filtered THREE texture. */
 export function makeTexture(painter) {
   const { canvas, ctx } = newTile();

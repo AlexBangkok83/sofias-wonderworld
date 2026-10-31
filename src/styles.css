@@ -586,3 +586,165 @@ canvas#scene {
   font-weight: 800;
   vertical-align: middle;
 }
+
+/* ---------- shop ---------- */
+
+/* No prices and no balance anywhere in here, on purpose — see
+   src/shop/piggybank.js. Each pack just says Buy, Not yet or Yours. */
+
+#shop .shop-card { width: min(940px, 100%); padding: 20px; }
+.shop-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.shop-head .sub { margin-bottom: 14px; }
+
+.packs {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 14px;
+}
+
+.pack-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: var(--cream-soft);
+  border: 3px solid var(--wood-dark);
+  border-radius: 16px;
+  padding: 10px;
+  box-shadow: 0 4px 0 rgba(93, 63, 40, 0.5);
+}
+.pack-card.owned { background: rgba(154, 217, 192, 0.25); }
+.pack-card.shake { animation: shake 0.42s ease; }
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-6px) rotate(-1deg); }
+  40% { transform: translateX(6px) rotate(1deg); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+}
+
+.pack-art, .reveal-art {
+  border-radius: 12px;
+  background:
+    radial-gradient(circle at 30% 25%, rgba(255, 255, 255, 0.55), transparent 55%),
+    var(--pack, var(--gold));
+  border: 3px solid var(--wood-dark);
+  display: grid;
+  place-items: center;
+  height: 96px;
+}
+.pack-emoji { font-size: 54px; line-height: 1; filter: drop-shadow(0 3px 0 rgba(0, 0, 0, 0.18)); }
+.pack-card.buy .pack-emoji { animation: bob 2.2s ease-in-out infinite; }
+
+.pack-body h3 { margin: 0 0 2px; color: var(--wood-dark); font-size: 18px; }
+.pack-body p { margin: 0 0 8px; color: var(--plum-soft); font-size: 13px; line-height: 1.4; }
+
+.pack-items { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.pack-block {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  border: 2px solid rgba(93, 63, 40, 0.85);
+  background-size: cover;
+  background-position: center;
+  image-rendering: pixelated;
+  flex: 0 0 auto;
+}
+.pack-look {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border: 2px solid var(--wood-dark);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--plum);
+  font-size: 12px;
+  font-weight: 800;
+  padding: 3px 9px;
+}
+.pack-dot { width: 12px; height: 12px; border-radius: 50%; border: 1px solid rgba(0, 0, 0, 0.3); }
+
+.pack-note {
+  min-height: 0;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--lilac);
+  text-align: center;
+}
+.pack-note:empty { display: none; }
+
+.pack-card .btn { width: 100%; margin-top: auto; }
+.pack-card .btn.not-yet { color: var(--plum-soft); }
+.pack-card .btn.owned {
+  background: linear-gradient(180deg, #c8eedd, var(--mint));
+  color: #1f4a3a;
+  cursor: default;
+  box-shadow: 0 3px 0 var(--wood-dark);
+}
+
+/* The moment after Buy. Sits over the shop, inside the same overlay. */
+.shop-reveal {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(24, 18, 30, 0.55);
+  padding: 16px;
+  overflow: hidden;
+}
+.shop-reveal[hidden] { display: none; }
+.reveal-card {
+  position: relative;
+  width: min(420px, 100%);
+  max-height: 100%;
+  overflow-y: auto;
+  padding: 22px;
+  text-align: center;
+  animation: reveal-pop 0.5s cubic-bezier(0.2, 1.6, 0.4, 1);
+}
+@keyframes reveal-pop {
+  from { transform: scale(0.4) rotate(-8deg); opacity: 0; }
+  to { transform: scale(1) rotate(0); opacity: 1; }
+}
+.reveal-art { height: 120px; margin-bottom: 12px; }
+.reveal-art .pack-emoji { font-size: 72px; animation: bob 1.4s ease-in-out infinite; }
+.reveal-card h2 { margin: 0; color: var(--wood-dark); font-size: 28px; }
+.reveal-name { font-weight: 800; color: var(--lilac); margin-bottom: 12px; }
+.pack-items.big { justify-content: center; gap: 8px; margin-bottom: 12px; }
+.pack-items.big .pack-item {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--plum);
+  width: 64px;
+}
+.pack-items.big .pack-block { width: 44px; height: 44px; }
+.reveal-where p { margin: 0 0 6px; font-size: 14px; color: var(--plum-soft); line-height: 1.4; }
+.reveal-card .btn { margin-top: 10px; min-width: 140px; }
+
+.confetti { position: absolute; inset: 0; pointer-events: none; }
+.confetti i {
+  position: absolute;
+  top: -20px;
+  width: 10px; height: 14px;
+  border-radius: 2px;
+  animation: confetti-fall 1.8s ease-in forwards;
+}
+@keyframes confetti-fall {
+  from { transform: translate(0, 0) rotate(0); opacity: 1; }
+  to { transform: translate(var(--drift, 0), 110vh) rotate(720deg); opacity: 0.6; }
+}
+
+/* The "more in the shop" tab at the end of the hotbar tabs. */
+.tab.shop-tab { background: linear-gradient(180deg, var(--gold), #e0a83f); color: #3b2a12; }
+
+@media (prefers-reduced-motion: reduce) {
+  .pack-card.buy .pack-emoji, .reveal-art .pack-emoji, .reveal-card, .pack-card.shake { animation: none; }
+  .confetti { display: none; }
+}
