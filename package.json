@@ -17,7 +17,8 @@
     "thai:test": "node scripts/check-thai.mjs && npm run build && node scripts/smoke-thai.mjs",
     "thai:audio": "node scripts/generate-thai-audio.mjs",
     "thai:photos": "node scripts/thai-photos.mjs",
-    "thai:deco": "node scripts/thai-deco.mjs"
+    "thai:deco": "node scripts/thai-deco.mjs",
+    "thai:pictures": "node scripts/thai-pictures.mjs"
   },
   "dependencies": {
     "@fontsource/mali": "^5.3.0",

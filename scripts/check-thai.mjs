@@ -61,7 +61,7 @@ for (const w of words) {
   if (!p) { photoMissing++; continue; }
   if (!(await exists(path.join(PUB, 'img', p.file)))) errors.push(`photo missing on disk: ${p.file}`);
 }
-if (photoMissing) warnings.push(`${photoMissing} words still need a photo (run npm run thai:photos)`);
+if (photoMissing) warnings.push(`${photoMissing} words still need a picture (run npm run thai:pictures -- import)`);
 
 // Decoration
 for (const emoji of new Set([...Object.values(ICONS), ...Object.values(CHAPTER_ICONS), ...STICKERS.map((s) => s[1]), ...SHINY_STICKERS.map((s) => s[1])])) {

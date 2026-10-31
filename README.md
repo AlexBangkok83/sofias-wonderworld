@@ -3,7 +3,7 @@
 Two apps in one repo:
 
 - **Sofia's Village** at `/`: a cozy blocky 3D roleplay sandbox (below).
-- **Learn Thai** at `/thai/`: a Thai vocabulary app with photos, a real Thai voice, games, points and stickers. See [thai/PLAN.md](thai/PLAN.md) and [thai/VOCABULARY.md](thai/VOCABULARY.md).
+- **Learn Thai** at `/thai/`: a Thai vocabulary app with pictures, a real Thai voice, games, points and stickers. See [thai/PLAN.md](thai/PLAN.md) and [thai/VOCABULARY.md](thai/VOCABULARY.md).
 
 ---
 
@@ -19,9 +19,9 @@ npm run thai:test  # data checks, build, phone-sized playthrough of every game
 | Command | What it does |
 |---|---|
 | `OPENAI_API_KEY=… npm run thai:audio -- --check --retry=3` | Renders new or changed lines with OpenAI TTS, transcribes them back, and retakes any that don't match |
-| `PEXELS_API_KEY=… npm run thai:photos -- search` | Finds 10 candidate photos per word |
-| `npm run thai:photos -- sheets` | Contact sheets in `shots/photos-<chapter>.png` for choosing (`thai/photos/picks.json`) |
-| `npm run thai:photos -- download` | Fetches the chosen photos, crops them to 480 px WebP, writes the credits |
+| `npm run thai:pictures -- import` | Downloads the generated pictures listed in `thai/photos/generated.json` and crops them to 480 px WebP |
+| `npm run thai:pictures -- sheets` | Contact sheets in `shots/pictures-<chapter>.png` for checking every picture by eye |
+| `npm run thai:photos -- …` | Alternative: stock photos from Pexels/Pixabay (needs an API key) |
 | `npm run thai:vocab` | Rewrites `thai/VOCABULARY.md` |
 | `npm run thai:check` | Fast data checks: ids, clips, photos, decorations |
 

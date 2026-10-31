@@ -168,8 +168,8 @@ function renderPanel(screen) {
     h('h2', null, 'Voice & pictures'),
     h('p', null, `${clipCount()} OpenAI voice clips installed.`,
       device ? ` Device Thai voice: ${device.name}.` : ' This device has no Thai voice of its own, so clips are needed.'),
-    h('p', null, `${photoCount()} photos installed.`, photoCount() ? '' : ' Words show a plain card until photos are added.'),
-    h('p', { class: 'hint' }, 'Photos provided by Pexels and Pixabay. Photographers are credited in thai/PHOTO-CREDITS.md.'));
+    h('p', null, `${photoCount()} pictures installed.`, photoCount() ? '' : ' Words show a plain card until pictures are added.'),
+    h('p', { class: 'hint' }, 'Pictures made with GPT Image 2.5 on Higgsfield, one for every word.'));
 
   // Danger zone
   const danger = h('section', { class: 'panel danger' },
