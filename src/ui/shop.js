@@ -17,6 +17,9 @@ import { sfx } from './sfx.js';
  * This screen is never told how much money there is or what anything costs —
  * only which of those three a pack is (shopView() in src/shop/piggybank.js).
  * So there's no number for it to show even by accident.
+ *
+ * On the owner's device (unlocked with the 🔒 password) the sign wears a
+ * crown.
  */
 
 const TAGS = { buy: 'Buy', 'not-yet': 'Not yet 🌙', owned: 'Yours ✓' };
@@ -105,9 +108,12 @@ export class ShopPanel {
     this.detailEl = el('div', { class: 'pack-detail', hidden: true });
     this.revealEl = el('div', { class: 'shop-reveal', hidden: true });
 
+    this.crown = el('span', { class: 'crown', hidden: true, 'aria-label': 'Owner' }, '👑');
+    this.sign = el('div', { class: 'shop-sign' }, this.crown, el('span', {}, '🛍'), 'Shop');
+
     this.root = el('div', { id: 'shop', hidden: true },
       el('div', { class: 'awning' }),
-      el('div', { class: 'shop-sign' }, el('span', {}, '🛍'), 'Shop'),
+      this.sign,
       el('button', {
         class: 'icon-btn shop-close', 'aria-label': 'Leave the shop', title: 'Leave the shop',
         onclick: () => this.onClose(),
@@ -122,6 +128,13 @@ export class ShopPanel {
   get isOpen() {
     return !this.root.hidden;
   }
+
+  /** Show the crown on the sign on the owner's device. */
+  setOwner(on) {
+    this.crown.hidden = !on;
+    this.root.classList.toggle('owner', on);
+  }
+
 
   get revealOpen() {
     return !this.revealEl.hidden;

@@ -115,6 +115,7 @@ html, body {
 .menu-card .sub { margin: 0 0 18px; color: var(--plum-soft); font-size: 14px; }
 .menu-rows { display: flex; flex-direction: column; gap: 10px; }
 .menu-rows .btn { width: 100%; }
+.menu-rows .setting .btn { width: auto; min-width: 76px; flex: 0 0 auto; }
 .row-split { display: flex; gap: 10px; }
 .row-split .btn { flex: 1; }
 
@@ -318,6 +319,14 @@ html, body {
   font-weight: 900;
   color: var(--wood-dark);
   letter-spacing: 0.5px;
+}
+.shop-sign .crown {
+  position: absolute;
+  top: -26px;
+  left: -14px;
+  font-size: 34px;
+  transform: rotate(-18deg);
+  filter: drop-shadow(0 3px 0 rgba(93, 63, 40, 0.4));
 }
 .shop-close {
   position: absolute;
@@ -978,3 +987,63 @@ html, body {
 
 /* The shop button stands out from the others: it's the way to new things. */
 #shop-btn { background: linear-gradient(180deg, #ffe7a3, var(--gold)); }
+
+/* ---------- the owner's lock and commands ---------- */
+
+/* The safe: a heavy dark door with a dial, asking for the password. */
+#lock { z-index: 70; }
+.safe {
+  --safe: #4a4058;
+  --safe-edge: #2e2433;
+  width: min(380px, 100%);
+  padding: 24px 22px 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+  background:
+    radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.12), transparent 50%),
+    linear-gradient(180deg, #5d5170, var(--safe));
+  border: 5px solid var(--safe-edge);
+  box-shadow: 0 8px 0 var(--safe-edge), inset 0 0 0 6px rgba(255, 255, 255, 0.06);
+  color: var(--cream);
+}
+.safe.shake { animation: shake 0.42s ease; }
+.safe h2 { margin: 0; font-size: 24px; color: var(--cream); }
+.safe-dial {
+  width: 84px; height: 84px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 40px;
+  background: radial-gradient(circle, #d7dbe6 0 46%, #a4a4ad 47% 52%, #d7dbe6 53%);
+  border: 5px solid var(--safe-edge);
+  box-shadow: 0 4px 0 var(--safe-edge);
+}
+.lock-form { display: flex; gap: 8px; width: 100%; }
+.lock-form input {
+  flex: 1;
+  min-width: 0;
+  font: inherit;
+  font-weight: 900;
+  font-size: 20px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 10px 14px;
+  border-radius: 13px;
+  border: 3px solid var(--safe-edge);
+  background: var(--cream-soft);
+  color: var(--plum);
+}
+.lock-form input:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+.lock-note { margin: 0; min-height: 0; font-weight: 800; color: #ffd4de; }
+.lock-note:empty { display: none; }
+
+/* The 👑 button and its panel. */
+#owner-btn { background: linear-gradient(180deg, #fff3c4, #f6d77a); }
+#owner { z-index: 65; }
+.owner-card { position: relative; }
+.owner-crown { font-size: 42px; line-height: 1; margin: -6px 0 4px; }
+.owner-group { display: flex; flex-direction: column; gap: 6px; }
+.place-chip.active { background: linear-gradient(180deg, var(--lilac-bright), var(--lilac)); color: #fff; }

@@ -5,7 +5,9 @@ import {
 import { THINGS } from '../art/things.js';
 import { isUnlocked, getPack } from '../shop/packs.js';
 import { ShopPanel } from './shop.js';
-import { el, thingThumb, personThumb } from './dom.js';
+import { OwnerPanel } from './owner.js';
+import { LockPanel } from './lock.js';
+import { el, thingThumb, personThumb, twoTapButton } from './dom.js';
 
 /**
  * Everything that isn't the dollhouse itself: the buttons along the top, the
@@ -51,7 +53,17 @@ export class UI {
       id: 'shop-btn', class: 'icon-btn', title: 'Shop', 'aria-label': 'Shop', onclick: () => this.emit('openShop'),
     }, '🛍');
     this.placeName = el('div', { id: 'place-name' }, '');
-    this.topBar = el('div', { id: 'top-bar' }, this.menuBtn, this.townBtn, this.shopBtn, this.placeName);
+    // 🔒 asks for the owner's password; once it's right, 👑 is there instead.
+    this.lockBtn = el('button', {
+      id: 'lock-btn', class: 'icon-btn', title: 'Lock', 'aria-label': 'Lock',
+      onclick: () => this.emit('openLock'),
+    }, '🔒');
+    this.ownerBtn = el('button', {
+      id: 'owner-btn', class: 'icon-btn', title: 'Owner commands', 'aria-label': 'Owner commands', hidden: true,
+      onclick: () => this.emit('openOwner'),
+    }, '👑');
+    this.topBar = el('div', { id: 'top-bar' },
+      this.menuBtn, this.townBtn, this.shopBtn, this.lockBtn, this.ownerBtn, this.placeName);
     this.toasts = el('div', { id: 'toasts' });
 
     // --- the toy box ---
@@ -77,11 +89,19 @@ export class UI {
       onBuy: (id) => this.emit('buyPack', id),
       onClose: () => this.emit('closeShop'),
     });
+    this.lock = new LockPanel({
+      onTry: (word) => this.emit('tryPassword', word),
+      onClose: () => this.lock.close(),
+    });
+    this.owner = new OwnerPanel({
+      onCommand: (name, arg) => this.emit('ownerCommand', name, arg),
+      onClose: () => this.owner.close(),
+    });
     this.loading = el('div', { id: 'loading' },
       el('span', { class: 'moon' }, '🏡'), el('div', {}, 'Opening the dollhouse…'));
 
     this.root.append(this.viewport, this.hud, this.titleScreen, this.pauseMenu, this.helpMenu,
-      this.creator, this.shop.root, this.loading);
+      this.creator, this.shop.root, this.owner.root, this.lock.root, this.loading);
   }
 
   // ------------------------------------------------------------------
@@ -139,33 +159,18 @@ export class UI {
           toggle('Villager voices', 'voice'),
           toggle('Sounds', 'sounds'),
           el('button', { class: 'btn secondary', onclick: () => this.emit('save') }, 'Save now'),
-          this._startOverButton())));
+          twoTapButton({
+            id: 'start-over', label: 'Start over',
+            armedLabel: 'Tap again to put everything back to how it was',
+            onConfirm: () => this.emit('reset'),
+          }))));
   }
 
-  /**
-   * Starting over asks twice, inside the page: the first tap says what will
-   * happen, the second does it. (Browser confirm() pop-ups don't show
-   * everywhere this runs — on claude.ai they're silently refused.)
-   */
-  _startOverButton() {
-    let timer = null;
-    const btn = el('button', {
-      id: 'start-over', class: 'btn danger small',
-      onclick: () => {
-        if (btn.dataset.armed === 'true') {
-          clearTimeout(timer);
-          this.emit('reset');
-          return;
-        }
-        btn.dataset.armed = 'true';
-        btn.textContent = 'Tap again to put everything back to how it was';
-        timer = setTimeout(() => {
-          btn.dataset.armed = 'false';
-          btn.textContent = 'Start over';
-        }, 4000);
-      },
-    }, 'Start over');
-    return btn;
+  /** The owner's device: the 👑 button and the crown on the shop sign. */
+  setOwner(on) {
+    this.ownerBtn.hidden = !on;
+    this.lockBtn.hidden = on;
+    this.shop.setOwner(on);
   }
 
   _buildHelp() {
@@ -203,7 +208,7 @@ export class UI {
 
   get anyMenuOpen() {
     return !this.pauseMenu.hidden || !this.helpMenu.hidden || !this.creator.hidden
-      || !this.titleScreen.hidden || this.shop.isOpen;
+      || !this.titleScreen.hidden || this.shop.isOpen || this.owner.isOpen || this.lock.isOpen;
   }
 
   setSettingValue(key, value) {

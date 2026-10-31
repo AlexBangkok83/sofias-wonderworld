@@ -34,6 +34,8 @@ export function emptySave() {
     piggyBank: null,
     // Ids of the shop packs she's bought.
     packs: [],
+    // The owner's device: owner commands (👑) are switched on here.
+    owner: false,
   };
 }
 
@@ -122,6 +124,7 @@ export class SaveStore {
     if (!merged.discovered || typeof merged.discovered !== 'object') merged.discovered = {};
     // Saves from before the shop existed have neither of these.
     merged.piggyBank = merged.piggyBank ? cleanBank(merged.piggyBank) : null;
+    merged.owner = merged.owner === true;
     merged.packs = Array.isArray(merged.packs)
       ? [...new Set(merged.packs.filter((id) => typeof id === 'string'))]
       : [];

@@ -27,6 +27,12 @@ export const MAX_DAYS_BANKED = 7;
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
+/**
+ * Infinite money — one of the owner's commands (see src/ui/owner.js). Every
+ * pack can be bought and buying costs nothing. The everyday money is left
+ * alone and keeps arriving underneath, so switching it off puts it all back.
+ */
+
 /** The local calendar day, as "YYYY-MM-DD". A new day starts at her midnight. */
 export function dayKey(date = new Date()) {
   const y = date.getFullYear();
@@ -44,7 +50,7 @@ function dayNumber(key) {
 }
 
 export function emptyBank() {
-  return { coins: 0, paidThrough: null };
+  return { coins: 0, paidThrough: null, infinite: false };
 }
 
 /** Repair whatever came out of a save file into a usable bank. */
@@ -55,8 +61,16 @@ export function cleanBank(raw) {
     if (typeof raw.paidThrough === 'string' && DAY_PATTERN.test(raw.paidThrough)) {
       bank.paidThrough = raw.paidThrough;
     }
+    bank.infinite = raw.infinite === true;
   }
   return bank;
+}
+
+/** Switch infinite money on or off. Returns true if anything changed. */
+export function setInfinite(bank, on) {
+  if (!!bank.infinite === on) return false;
+  bank.infinite = on;
+  return true;
 }
 
 /**
@@ -87,7 +101,7 @@ export function payAllowance(bank, today = dayKey()) {
 }
 
 export function canAfford(bank, pack) {
-  return bank.coins >= pack.price;
+  return !!bank.infinite || bank.coins >= pack.price;
 }
 
 /**
@@ -99,7 +113,8 @@ export function buyPack(bank, owned, packId) {
   if (!pack) return { ok: false, reason: 'unknown' };
   if (owned.has(pack.id)) return { ok: false, reason: 'owned' };
   if (!canAfford(bank, pack)) return { ok: false, reason: 'not-yet' };
-  bank.coins -= pack.price;
+  // Infinite money never goes down.
+  if (!bank.infinite) bank.coins -= pack.price;
   owned.add(pack.id);
   return { ok: true, pack };
 }
@@ -111,6 +126,6 @@ export function buyPack(bank, owned, packId) {
 export function shopView(bank, owned) {
   return PACKS.map(({ price, ...pack }) => ({
     pack,
-    status: owned.has(pack.id) ? 'owned' : bank.coins >= price ? 'buy' : 'not-yet',
+    status: owned.has(pack.id) ? 'owned' : canAfford(bank, { price }) ? 'buy' : 'not-yet',
   }));
 }

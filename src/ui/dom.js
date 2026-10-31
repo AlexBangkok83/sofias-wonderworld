@@ -40,3 +40,31 @@ export function personThumb(cfg) {
   node.innerHTML = drawPerson(cfg).replace(/viewBox="[^"]*"/, 'viewBox="-62 -200 124 210"');
   return node;
 }
+
+/**
+ * A button for something that can't be undone: the first tap says what will
+ * happen, a second tap within a few seconds does it. (Browser confirm()
+ * pop-ups don't show everywhere this runs — on claude.ai they're refused.)
+ */
+export function twoTapButton({ id, cls = 'btn danger small', label, armedLabel, onConfirm }) {
+  let timer = null;
+  const btn = el('button', {
+    id, class: cls,
+    onclick: () => {
+      if (btn.dataset.armed === 'true') {
+        clearTimeout(timer);
+        btn.dataset.armed = 'false';
+        btn.textContent = label;
+        onConfirm();
+        return;
+      }
+      btn.dataset.armed = 'true';
+      btn.textContent = armedLabel;
+      timer = setTimeout(() => {
+        btn.dataset.armed = 'false';
+        btn.textContent = label;
+      }, 4000);
+    },
+  }, label);
+  return btn;
+}

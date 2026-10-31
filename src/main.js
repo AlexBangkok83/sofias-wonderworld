@@ -1,6 +1,7 @@
 import './styles.css';
 
 import { UI } from './ui/ui.js';
+import { installTapFallback } from './ui/taps.js';
 import { sfx, setSoundsEnabled } from './ui/sfx.js';
 import { SaveStore } from './core/save.js';
 import { Stage } from './world/stage.js';
@@ -14,11 +15,14 @@ import { DEFAULT_CHARACTER } from './art/person.js';
 import { VILLAGERS, getVillager } from './npc/dialogue.js';
 import { Voice } from './npc/voice.js';
 import {
-  emptyBank, payAllowance, buyPack, shopView, dayKey,
+  emptyBank, payAllowance, buyPack, shopView, dayKey, setInfinite,
 } from './shop/piggybank.js';
+import { PACKS } from './shop/packs.js';
+import { isOwnerPassword } from './core/owner.js';
 
 const root = document.getElementById('app');
 const ui = new UI(root);
+installTapFallback();
 const store = new SaveStore();
 const voice = new Voice();
 
@@ -237,6 +241,108 @@ function closeEverything() {
   ui.closeCreator();
   ui.hideTitle();
   ui.toggleDrawer(false);
+  ui.owner.close();
+  ui.lock.close();
+}
+
+// ---------------------------------------------------------------------------
+// Owner commands
+//
+// The 🔒 button asks for the owner's password (src/core/owner.js). The right
+// word makes this device the owner's: the 👑 button appears, with infinite
+// money and the commands in src/ui/owner.js.
+// ---------------------------------------------------------------------------
+
+function becomeOwner(on) {
+  state.save.owner = on;
+  // Infinite money comes with being the owner, and goes when it's locked
+  // again, so whoever plays next is back on everyday money.
+  setInfinite(state.save.piggyBank, on);
+  ui.setOwner(on);
+  if (ui.shopOpen) ui.shop.refresh(currentShopView());
+  saveNow();
+}
+
+function openOwner() {
+  if (!state.save.owner) return;
+  closeEverything();
+  ui.owner.open({ infinite: !!state.save.piggyBank.infinite, place: state.stage.place.id });
+}
+
+/** Put the place you're in back how it started. People stay, standing up. */
+function tidyPlace() {
+  const stage = state.stage;
+  const place = stage.place;
+  const world = state.save.world;
+  const spots = Object.fromEntries(stage.peopleHere().map((key) => [key, stage.personSpot(key)]));
+  world.things[place.id] = seedThings(place);
+  const things = world.things[place.id];
+  for (const [key, spot] of Object.entries(spots)) {
+    const person = world.people[key];
+    person.seat = null;
+    if (place.people[key] !== undefined) {
+      Object.assign(person, seedPerson(place, things, place.people[key]));
+    } else {
+      person.x = spot.x;
+      person.y = landingY(place, things, { x: spot.x, y: spot.y - 20 });
+    }
+  }
+  stage.show(place.id);
+}
+
+function ownerCommand(name, arg) {
+  if (!state.save.owner) return;
+  switch (name) {
+    case 'money':
+      collectAllowance();
+      setInfinite(state.save.piggyBank, arg);
+      ui.owner.setInfinite(arg);
+      ui.toast(arg ? '💰 Infinite money is on' : '💰 Infinite money is off — back to everyday money', 2600);
+      break;
+    case 'packs': {
+      const owned = ownedPacks();
+      const fresh = PACKS.filter((p) => !owned.has(p.id));
+      state.save.packs = PACKS.map((p) => p.id);
+      ui.setOwnedPacks(ownedPacks());
+      ui.owner.close();
+      if (fresh.length) {
+        sfx('tada');
+        ui.toast('🎁 Every pack is yours!', 2600);
+        ui.showDrawerTab('stuff', fresh[fresh.length - 1].id);
+      } else {
+        ui.toast('🎁 You already have every pack', 2200);
+      }
+      break;
+    }
+    case 'go':
+      ui.owner.close();
+      sfx('whoosh');
+      go(arg);
+      break;
+    case 'gather': {
+      ui.owner.close();
+      const keys = [...state.save.characters.map((c) => c.id), ...Object.keys(VILLAGERS)];
+      const came = state.stage.gather(keys);
+      ui.setPeople(peopleList());
+      sfx('whoosh');
+      ui.toast(came ? '👫 Everyone’s here!' : '👫 Everyone was already here', 2400);
+      break;
+    }
+    case 'tidy':
+      ui.owner.close();
+      tidyPlace();
+      sfx('sparkle');
+      ui.toast('🧹 All tidy!', 2200);
+      break;
+    case 'lock':
+      ui.owner.close();
+      becomeOwner(false);
+      ui.toast('🔒 Locked. The password opens it again.', 3000);
+      break;
+    default:
+      return;
+  }
+  autosave();
 }
 
 function pause() {
@@ -270,6 +376,27 @@ ui.on('play', () => resume())
   .on('openShop', () => openShop())
   .on('closeShop', () => closeShop())
   .on('buyPack', (id) => buy(id))
+  .on('openLock', () => {
+    closeEverything();
+    ui.lock.open();
+  })
+  .on('tryPassword', (word) => {
+    if (!isOwnerPassword(word)) {
+      ui.lock.wrong();
+      sfx('tick');
+      return;
+    }
+    ui.lock.opened();
+    sfx('tada');
+    setTimeout(() => {
+      ui.lock.close();
+      becomeOwner(true);
+      ui.toast('🔓 Unlocked! Hello, owner 👑 — you have infinite money.', 4200);
+      openOwner();
+    }, 600);
+  })
+  .on('openOwner', () => openOwner())
+  .on('ownerCommand', (name, arg) => ownerCommand(name, arg))
   .on('spawn', (spec, e) => {
     if (spec.thing) state.stage.spawnThing(spec.thing, e);
     else state.stage.spawnPerson(spec.person, e);
@@ -326,7 +453,11 @@ ui.on('play', () => resume())
 
 window.addEventListener('keydown', (e) => {
   if (e.code !== 'Escape') return;
-  if (ui.shopOpen) {
+  if (ui.lock.isOpen) {
+    ui.lock.close();
+  } else if (ui.owner.isOpen) {
+    ui.owner.close();
+  } else if (ui.shopOpen) {
     if (!ui.shop.back()) closeShop();
   } else if (!ui.creator.hidden) {
     ui.closeCreator();
@@ -415,6 +546,14 @@ function installTestHooks() {
       if (ui.shopOpen) ui.shop.refresh(currentShopView());
     },
     saveNow,
+    /**
+     * What the right password does, for the smoke test when it isn't given
+     * the real word (which is never written in this repo).
+     */
+    becomeOwnerForTest: () => {
+      becomeOwner(true);
+      openOwner();
+    },
   };
 }
 
@@ -439,6 +578,7 @@ async function boot() {
   // Today's money, if it hasn't arrived yet, and whatever she's bought before.
   collectAllowance();
   ui.setOwnedPacks(ownedPacks());
+  ui.setOwner(!!state.save.owner);
 
   state.stage = new Stage(ui.viewport, state.save.world, {
     personConfig,

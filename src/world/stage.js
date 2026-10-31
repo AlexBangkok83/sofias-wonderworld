@@ -830,6 +830,21 @@ export class Stage {
     this.hooks.onChange?.();
   }
 
+  /** Bring everyone in `keys` who isn't here yet, spread out across the view. Returns how many came. */
+  gather(keys) {
+    const c = this.viewCenter();
+    const coming = keys.filter((key) => this.world.people[key] && this.world.people[key].place !== this.place.id);
+    coming.forEach((key, i) => {
+      const x = clampX(this.place, c.x + (i - (coming.length - 1) / 2) * 75, 60);
+      this.bringPerson(key, x, c.y);
+      const p = this.world.people[key];
+      p.y = landingY(this.place, this.things, { x: p.x, y: p.y });
+      this._renderPerson(key);
+    });
+    if (coming.length) this.hooks.onChange?.();
+    return coming.length;
+  }
+
   bringPerson(key, x, y) {
     const p = this.world.people[key];
     const from = p.place;

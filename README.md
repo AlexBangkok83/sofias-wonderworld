@@ -128,7 +128,8 @@ a wooden shelf of pack boxes that slides sideways.
   only show what she has. The shop shows what's in each pack before buying.
 
 Open it from the gold 🛍 button at the top, the pause menu, or the title
-screen. Esc (or ‹ Back) steps back out one screen at a time.
+screen. Esc (or ‹ Back) steps back out one screen at a time. On the owner's
+device the sign wears a crown (see below).
 
 | Pack | Costs | What's in it |
 |---|---|---|
@@ -155,6 +156,38 @@ points at a pack that doesn't exist.
 
 "Start over" in the pause menu empties the piggy bank and the packs along
 with everything else.
+
+---
+
+## The owner's lock 🔒
+
+The game's owner has a password. Everyone sees the 🔒 button at the top; tap
+it and a safe asks **"What's the password?"** The right word opens it on that
+device, and the 🔒 becomes a 👑 with the owner commands:
+
+- 💰 **Infinite money** (on as soon as it's unlocked): every pack can be
+  bought and buying costs nothing. Still no number anywhere. The everyday
+  money keeps arriving underneath, so switching it off goes back to that.
+- 🎁 **Get every pack**, all at once.
+- 🗺 **Go anywhere**: straight to any place, the Moon House included.
+- 👫 **Bring everyone here**: every person in the village comes to you.
+- 🧹 **Tidy up this place**: puts it back how it started (asks twice).
+- 🔒 **Lock owner commands**: for when someone else plays on the device.
+  Infinite money goes off too; the password opens it again.
+
+A wrong word just makes the safe wobble and say to try again. Capitals and
+spaces don't matter.
+
+**The password is not written anywhere in this repo.** The game only keeps a
+scrambled fingerprint of it (`src/core/owner.js`), because the built game is a
+public web page; ask the owner. To change it, run the one-liner in that
+file's comment and paste the result in. It keeps owner commands away from
+other children on the same device — it isn't meant to stop someone who goes
+digging, and there's nothing else it guards.
+
+To test the real word end to end: `OWNER_PASSWORD=... npm test` (without it,
+the tests check wrong words get refused and use the same code the right word
+runs).
 
 ---
 
@@ -255,9 +288,13 @@ checks all five things jump out, checks there's no number on screen, that the
 next pack says "Not yet", that Esc steps back to the shelf, and that it can be
 bought the next day), finds the new things in the toy box and the new ears in
 the creator, makes a character, reloads to confirm everything was saved, then
-on a phone drags with a finger, swipes the street, moves two things with two
-fingers at once, and buys from the 🛍 button (checking the Buy button fits on
-a phone held sideways, and that "Play with them!" goes to the new things). It fails on any console error. Screenshots land in `shots/`.
+opens the 🔒 safe (a wrong word is refused; the right one turns on the 👑),
+uses every owner command — infinite money on and off, bring everyone here, go
+to the Moon House, tidy up (the eaten apple comes back), get every pack —
+checks owner mode survives a reload, locks it again, then on a phone drags
+with a finger, swipes the street, moves two things with two fingers at once,
+and buys from the 🛍 button (checking the Buy button fits on a phone held
+sideways, and that "Play with them!" goes to the new things). It fails on any console error. Screenshots land in `shots/`.
 
 On a machine where Playwright's own browser isn't installed, pass one:
 `CHROMIUM_PATH=/path/to/chrome node scripts/smoke-test.mjs`.

@@ -11,8 +11,9 @@
 
 import { PACKS, getPack, isUnlocked } from '../src/shop/packs.js';
 import {
-  DAILY_ALLOWANCE, MAX_DAYS_BANKED, emptyBank, cleanBank, payAllowance, buyPack, shopView,
+  DAILY_ALLOWANCE, MAX_DAYS_BANKED, emptyBank, cleanBank, payAllowance, buyPack, shopView, setInfinite,
 } from '../src/shop/piggybank.js';
+import { isOwnerPassword, fingerprint } from '../src/core/owner.js';
 import { THINGS, packThings } from '../src/art/things.js';
 import {
   HAIR_STYLES, HAIR_COLORS, ACCESSORIES, SKIN_TONES, CLOTH_COLORS, BODY_TYPES, OUTFITS,
@@ -143,6 +144,43 @@ for (let i = 0; i < 400; i++) {
   expect(view[0].status === 'owned', 'an owned pack was not shown as owned');
   expect(view.some((v) => v.status === 'buy'), 'nothing was buyable with a day of money');
   expect(view.some((v) => v.status === 'not-yet'), 'the dear packs were buyable on day one');
+}
+
+// --- Infinite money (an owner command) ---
+
+{
+  const bank = emptyBank();
+  const owned = new Set();
+  payAllowance(bank, '2026-11-01');
+  expect(setInfinite(bank, true), 'switching infinite money on changed nothing');
+  expect(shopView(bank, owned).every((v) => v.status === 'buy'), 'with infinite money, not every pack can be bought');
+  for (const pack of PACKS) expect(buyPack(bank, owned, pack.id).ok, `infinite money could not buy ${pack.id}`);
+  expect(bank.coins === DAILY_ALLOWANCE, 'buying with infinite money took away the everyday money');
+  payAllowance(bank, '2026-11-02');
+  expect(bank.coins === DAILY_ALLOWANCE * 2, 'the everyday money stopped arriving under infinite money');
+  setInfinite(bank, false);
+  const after = shopView(bank, new Set());
+  expect(after.some((v) => v.status === 'not-yet'), 'switching infinite money off left everything buyable');
+  expect(!JSON.stringify(shopView(bank, owned)).match(/coins|price|infinite/i), 'shopView() leaks the money');
+  expect(cleanBank({ coins: 5, infinite: true }).infinite === true, 'infinite money was forgotten by the save');
+  expect(cleanBank({ coins: 5, infinite: 'yes' }).infinite === false, 'a broken save switched infinite money on');
+}
+
+// --- The owner's password ---
+//
+// The real word is never written in this repo; the game keeps only its
+// fingerprint. To check the real word too: OWNER_PASSWORD=... npm run check
+
+expect(!isOwnerPassword(''), 'an empty password opened the lock');
+expect(!isOwnerPassword('password'), '"password" opened the lock');
+expect(!isOwnerPassword('1234'), '"1234" opened the lock');
+expect(/^[0-9a-f]{8}$/.test(fingerprint('anything')), 'the password fingerprint is the wrong shape');
+expect(fingerprint('Hello There!') === fingerprint('HELLOTHERE'), 'capitals and spaces should not matter in the password');
+if (process.env.OWNER_PASSWORD) {
+  const word = process.env.OWNER_PASSWORD;
+  expect(isOwnerPassword(word), 'the owner\'s password did not open the lock');
+  expect(isOwnerPassword(word.toLowerCase()), 'the owner\'s password in small letters did not open the lock');
+  expect(!isOwnerPassword(`${word}x`), 'the owner\'s password with an extra letter opened the lock');
 }
 
 // --- Whatever a save file contains, the bank comes out usable ---

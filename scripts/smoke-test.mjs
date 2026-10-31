@@ -440,6 +440,123 @@ async function main() {
     .filter((id) => window.__game.packStatus(id) === 'buy'));
   check(!buyable.length, `reloading paid the day's money again (buyable: ${buyable})`);
 
+  // --- The owner's lock and owner commands ---
+  //
+  // The real password is never written in this repo. With OWNER_PASSWORD set,
+  // this types it into the safe like a person would; without it, it uses the
+  // same code the right password runs.
+  console.log('  Owner lock…');
+  await page.click('#title .btn');   // still on the title screen after the reload
+  await settle(page, 200);
+  const visible = (sel) => page.evaluate((q) => !document.querySelector(q).hidden, sel);
+  check(await visible('#lock-btn') && !(await visible('#owner-btn')), 'the 🔒 button should show and the 👑 should not, before unlocking');
+  await page.click('#lock-btn');
+  await settle(page, 150);
+  check(await visible('#lock'), 'the 🔒 button did not open the safe');
+  await page.fill('#lock-password', 'banana');
+  await page.click('#lock-open');
+  await settle(page, 250);
+  const wrongNote = await page.textContent('#lock .lock-note');
+  console.log(`    wrong password: "${wrongNote}"`);
+  check(/not it/i.test(wrongNote || ''), 'a wrong password did not say to try again');
+  check(!(await game(page, () => window.__game.state.save.owner)), 'a wrong password unlocked owner commands');
+  await shot(page, '17-lock');
+  if (process.env.OWNER_PASSWORD) {
+    await page.fill('#lock-password', process.env.OWNER_PASSWORD.toLowerCase());
+    await page.press('#lock-password', 'Enter');
+    await settle(page, 900);
+  } else {
+    await page.click('#lock .btn.secondary');
+    await game(page, () => window.__game.becomeOwnerForTest());
+    await settle(page, 200);
+  }
+  const unlocked = {
+    owner: await game(page, () => window.__game.state.save.owner),
+    crown: await visible('#owner-btn'),
+    lock: await visible('#lock-btn'),
+    panel: await visible('#owner'),
+  };
+  console.log(`    unlocked (${process.env.OWNER_PASSWORD ? 'typed the real password' : 'test hook'}): ${JSON.stringify(unlocked)}`);
+  check(unlocked.owner && unlocked.crown && !unlocked.lock && unlocked.panel, 'unlocking did not turn on owner commands');
+  await shot(page, '18-owner-commands');
+
+  // Infinite money: every pack can be bought, and still no numbers anywhere.
+  check((await status('ocean')) === 'buy', 'infinite money did not make every pack buyable');
+  await page.click('#cmd-money');
+  check((await status('ocean')) === 'not-yet', 'switching infinite money off did not go back to everyday money');
+  await page.click('#cmd-money');
+  check((await status('ocean')) === 'buy', 'switching infinite money back on did not work');
+  await page.click('#owner .btn.secondary:last-child');
+  await page.click('#shop-btn');
+  await settle(page, 300);
+  const shelf = await page.evaluate(() => [...document.querySelectorAll('#shop .pack-box')].map((b) => b.dataset.status));
+  console.log(`    shelf with infinite money: ${shelf.join(', ')}`);
+  check(shelf.every((st) => st !== 'not-yet'), 'with infinite money, some boxes still say Not yet');
+  check(await visible('#shop .crown'), 'the shop sign has no crown on the owner\'s device');
+  await noNumbers('with infinite money');
+  await page.keyboard.press('Escape');
+  await settle(page, 200);
+
+  // Bring everyone here.
+  await page.click('#owner-btn');
+  await page.click('#cmd-gather');
+  await settle(page, 300);
+  const everyone = await game(page, () => window.__game.peopleHere().length);
+  const total = await game(page, () => window.__game.characterCount() + 8);
+  console.log(`    brought everyone: ${everyone} of ${total} here`);
+  check(everyone === total, `"Bring everyone here" brought ${everyone} of ${total}`);
+  await shot(page, '19-everyone');
+
+  // Go anywhere — even the Moon House, straight away.
+  await page.click('#owner-btn');
+  await page.click('#owner .place-chip[data-place="moon"]');
+  await settle(page, 300);
+  check((await game(page, () => window.__game.placeId())) === 'moon', '"Go anywhere" did not go to the Moon House');
+  await page.click('#owner-btn');
+  await page.click('#owner .place-chip[data-place="cottage"]');
+  await settle(page, 300);
+
+  // Tidy up: the eaten apple comes back, and the table goes back under the cookie.
+  const appleBefore = await game(page, () => window.__game.things().some((t) => t.kind === 'apple'));
+  await page.click('#owner-btn');
+  await page.click('#cmd-tidy');
+  const armedTidy = await page.textContent('#cmd-tidy');
+  check(/again/i.test(armedTidy || ''), 'one tap on Tidy up should ask to tap again');
+  await page.click('#cmd-tidy');
+  await settle(page, 300);
+  const appleAfter = await game(page, () => window.__game.things().some((t) => t.kind === 'apple'));
+  const tidyCookie = await game(page, () => window.__game.things().find((t) => t.kind === 'cookie')?.y);
+  console.log(`    tidy up: apple ${appleBefore ? 'there' : 'gone'} → ${appleAfter ? 'back' : 'still gone'}, cookie on the table: ${tidyCookie < 760}`);
+  check(!appleBefore && appleAfter, '"Tidy up" did not put the eaten apple back');
+  check(tidyCookie < 760, '"Tidy up" did not put the cookie back on its table');
+
+  // Get every pack.
+  await page.click('#owner-btn');
+  await page.click('#cmd-packs');
+  await settle(page, 300);
+  const allPacks = await game(page, () => window.__game.ownedPacks().length);
+  console.log(`    get every pack: ${allPacks} owned`);
+  check(allPacks === 7, `"Get every pack" left ${allPacks} packs owned`);
+  await page.keyboard.press('Escape');
+
+  // Owner stays owner after a reload, then locks.
+  await game(page, () => window.__game.saveNow());
+  await page.reload({ waitUntil: 'load' });
+  await page.waitForFunction(() => !!window.__game, null, { timeout: 30000 });
+  await page.click('#title .btn');
+  check(await visible('#owner-btn'), 'owner commands were forgotten after a reload');
+  await page.click('#owner-btn');
+  await page.click('#cmd-lock');
+  await settle(page, 200);
+  const locked = {
+    owner: await game(page, () => window.__game.state.save.owner),
+    infinite: await game(page, () => window.__game.state.save.piggyBank.infinite),
+    lock: await visible('#lock-btn'),
+    crown: await visible('#owner-btn'),
+  };
+  console.log(`    locked again: ${JSON.stringify(locked)}`);
+  check(!locked.owner && !locked.infinite && locked.lock && !locked.crown, 'locking did not switch owner commands and infinite money off');
+
   // --- On a phone, with real touches ---
   console.log('  Phone…');
   const phone = await browser.newPage({
@@ -509,9 +626,11 @@ async function main() {
   console.log(`    two fingers: lamp moved ${Math.round(a0.x - a1.x)}, plant moved ${Math.round(b0.x - b1.x)}`);
   check(a0.x - a1.x > 40 && b0.x - b1.x > 40, 'two fingers could not move two things at once');
 
-  // The shop from the 🛍 button, at phone size.
+  // The shop from the 🛍 button, at phone size. (Taps after a drag can need
+  // the tap safety net in src/ui/taps.js, which waits briefly for the
+  // browser's own click first — hence the longer waits.)
   await phone.tap('#shop-btn');
-  await settle(phone, 200);
+  await settle(phone, 700);
   check(await phone.evaluate(() => !document.getElementById('shop').hidden), 'the 🛍 button did not open the shop on a phone');
   // The shelf slides sideways; the page itself must not.
   const overflow = await phone.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);
@@ -519,7 +638,7 @@ async function main() {
   await phone.screenshot({ path: path.join(SHOTS, '17-phone-shop.png') });
   const firstBox = phone.locator('#shop .pack-box[data-status="buy"]').first();
   await firstBox.tap({ force: true });
-  await settle(phone, 300);
+  await settle(phone, 700);
   // Held sideways, the pack page has to fit with its button on screen.
   const buyBtn = phone.locator('#shop .pack-detail .btn.buy');
   const btnBox = await buyBtn.boundingBox();
@@ -531,7 +650,7 @@ async function main() {
   check(phonePacks === 1, `tapping Buy on a phone left ${phonePacks} packs owned`);
   // "Play with them!" goes straight to the new things.
   await phone.tap('#shop .reveal-actions .play');
-  await settle(phone, 300);
+  await settle(phone, 700);
   const afterPlay = await phone.evaluate(() => ({
     shop: !document.getElementById('shop').hidden,
     drawer: !document.getElementById('drawer').hidden,
