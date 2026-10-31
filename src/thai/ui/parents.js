@@ -139,6 +139,21 @@ function renderPanel(screen) {
     toggle('Unlock every chapter', 'unlockAll', 'Normally a chapter opens after 2 stars in the one before.'),
     h('label', { class: 'field' }, h('span', null, "Learner's name"), nameInput));
 
+  // Talk with Khru Mali
+  const passcode = h('input', { type: 'password', value: st.chatPasscode || '', autocomplete: 'off', placeholder: 'Same as CHAT_PASSCODE on the server' });
+  passcode.addEventListener('change', () => setSetting('chatPasscode', passcode.value.trim()));
+  const helpSelect = h('select', null, ['little', 'some', 'lots'].map((v) => h('option', { value: v, selected: st.englishHelp === v ? true : null },
+    { little: 'A little (mostly Thai)', some: 'Some (default)', lots: 'Lots (beginner)' }[v])));
+  helpSelect.addEventListener('change', () => setSetting('englishHelp', helpSelect.value));
+  const talkUsed = Math.round((s.history[dateKey()]?.chatSeconds || 0) / 60);
+  const talk = h('section', { class: 'panel' },
+    h('h2', null, 'Talk with Khru Mali'),
+    h('p', { class: 'hint' }, 'A live voice conversation in Thai using OpenAI Realtime. The OpenAI key stays on the server; this passcode just unlocks it. Nothing is recorded or stored by the app.'),
+    toggle('Allow talking', 'chatEnabled'),
+    h('label', { class: 'field' }, h('span', null, 'Family passcode'), passcode),
+    numberField('Minutes of talking per day', 'chatMinutes', { min: 0, max: 60, hint: `${talkUsed} min used today.` }),
+    h('label', { class: 'field' }, h('span', null, 'English help from Khru Mali'), helpSelect));
+
   // Progress
   const days = Object.entries(s.history).sort(([a], [b]) => b.localeCompare(a)).slice(0, 7);
   const progress = h('section', { class: 'panel' },
@@ -190,7 +205,7 @@ function renderPanel(screen) {
       h('div', { class: 'row spread' },
         h('h1', null, 'Grown-ups'),
         h('button', { class: 'btn secondary small', onClick: () => { unlockedUntil = 0; go('/'); } }, 'Lock')),
-      swaps, points, learning, progress, media, danger),
+      swaps, points, learning, talk, progress, media, danger),
     bottomNav('/parents'),
   );
 }

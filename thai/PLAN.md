@@ -301,9 +301,9 @@ scripts/
 
 **Phase 2: talk and tones**
 
-- AI conversation with Khru Mali (Realtime), the role-play scenes, the passcode and time limits
-- Tone Twins, Say It, Feed the Elephant
-- Profiles, so Dad can learn too (ครับ versions of the phrases)
+- ✅ AI conversation with Khru Mali (OpenAI Realtime `gpt-realtime-2.1`, voice marin, WebRTC), six conversation games, family passcode, daily minutes, English-help level
+- ✅ Tone Twins (10 sound-alike pairs), Say It (record yourself and compare)
+- ⏳ Feed the Elephant, profiles so Dad can learn too (ครับ versions of the phrases)
 
 **Phase 3: read and grow**
 
@@ -317,7 +317,7 @@ scripts/
 
 1. ~~Allow the OpenAI and photo domains in the cloud environment.~~ Done.
 2. ~~A Pexels API key.~~ Not needed: pictures are generated on Higgsfield instead.
-3. **For the AI conversation:** in Vercel, add `OPENAI_API_KEY` and a family passcode `CHAT_PASSCODE` as environment variables.
+3. **For the AI conversation:** in Vercel, add `OPENAI_API_KEY` and a family passcode `CHAT_PASSCODE` as environment variables, then type the same passcode in Grown-ups → Talk with Khru Mali.
 4. **A Thai speaker for a 20-minute listen-through** once the audio exists.
 5. **Rotate the OpenAI key when we're done.** It's in this chat's transcript.
 

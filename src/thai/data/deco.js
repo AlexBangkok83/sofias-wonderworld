@@ -34,6 +34,11 @@ export const ICONS = {
   lesson: '🎒',
   practice: '🔁',
   camera: '📷',
+  talk: '🎙️',
+  tones: '🎵',
+  sayit: '🎤',
+  bulb: '💡',
+  phone: '📞',
 };
 
 /** One badge per chapter, shown on the home path. */

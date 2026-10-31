@@ -13,6 +13,8 @@ import { fileURLToPath } from 'node:url';
 import { CHAPTERS, LANDS, PRAISE, TRY_AGAIN, allWords } from '../src/thai/data/chapters.js';
 import { GREETINGS } from '../src/thai/data/greetings.js';
 import { ICONS, CHAPTER_ICONS, STICKERS, SHINY_STICKERS, decoFile } from '../src/thai/data/deco.js';
+import { TONE_PAIRS } from '../src/thai/data/tone-pairs.js';
+import { SCENES } from '../src/thai/data/scenes.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PUB = path.join(__dirname, '..', 'public', 'thai');
@@ -40,6 +42,14 @@ for (const c of CHAPTERS) {
   const th = c.words.map((w) => w.th);
   const dup = th.filter((t, i) => th.indexOf(t) !== i);
   if (dup.length) errors.push(`chapter ${c.id} repeats ${dup.join(', ')}`);
+}
+
+// Tone Twins and conversations point at real words and chapters.
+for (const [a, b] of TONE_PAIRS) for (const id of [a, b]) if (!ids.has(id)) errors.push(`tone pair uses unknown word ${id}`);
+const chapterIds = new Set(CHAPTERS.map((c) => c.id));
+for (const s of SCENES) {
+  for (const id of [s.needs, ...s.chapters]) if (!chapterIds.has(id)) errors.push(`scene ${s.id} uses unknown chapter ${id}`);
+  if (!(await exists(path.join(PUB, 'deco', decoFile(s.icon))))) errors.push(`scene ${s.id} icon ${s.icon} missing (add it to deco.js)`);
 }
 
 // Voice clips

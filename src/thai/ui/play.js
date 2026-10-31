@@ -4,7 +4,7 @@
  */
 
 import { CHAPTERS } from '../data/chapters.js';
-import { gameById, GAMES } from '../games/index.js';
+import { gameById, QUIZ_GAMES } from '../games/index.js';
 import { gameFrame, starsFor, finishBonus } from '../games/shell.js';
 import { chapterWords, pick, practicePool } from '../core/srs.js';
 import { unlockedChapters, isUnlocked } from '../core/progress.js';
@@ -36,7 +36,7 @@ export function runGame(screen, opts) {
     stop();
     const total = extra.total ?? words.length;
     const stars = extra.stars ?? starsFor(frame.tally, total);
-    const perfect = stars === 3 && frame.tally.wrong === 0;
+    const perfect = extra.perfect ?? (stars === 3 && frame.tally.wrong === 0);
     const repeats = chapterId ? playsToday(chapterId, game.id) : 0;
     const bonus = earn(finishBonus(perfect ? 3 : stars, repeats));
     recordRound(frame.tally);
@@ -77,7 +77,7 @@ export function chapterGameRoute(screen, chapterId, gameId) {
   const own = chapterWords(chapter.id);
   let words;
   let pool = own;
-  if (game.id === 'memory') {
+  if (game.id === 'memory' || game.id === 'sayit') {
     words = pick(own, game.rounds);
   } else {
     // Slip in up to two words due for review from earlier chapters.
@@ -102,8 +102,7 @@ export function practiceRoute(screen) {
     go('/');
     return null;
   }
-  const choices = GAMES.filter((g) => g.id !== 'memory');
-  const game = choices[Math.floor(Math.random() * choices.length)];
+  const game = QUIZ_GAMES[Math.floor(Math.random() * QUIZ_GAMES.length)];
   return runGame(screen, {
     game,
     words: pick(pool, Math.min(game.rounds, pool.length)),

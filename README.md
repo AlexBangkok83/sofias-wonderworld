@@ -28,6 +28,25 @@ npm run thai:test  # data checks, build, phone-sized playthrough of every game
 Points can be swapped for Robux: Sofia asks in the app, a grown-up approves in the
 Grown-ups area (PIN-protected), where the swap rate and the wrong-answer penalty are set.
 
+### Talk with Khru Mali (live AI conversation)
+
+A voice conversation in Thai using the OpenAI Realtime API (`gpt-realtime-2.1`, voice
+marin). The browser asks `/api/realtime-token` for a two-minute session; the OpenAI key
+never leaves the server. The tutor's instructions, including the words Sofia already
+knows, are written server-side in `server/realtime.js`, and the conversation games are in
+`src/thai/data/scenes.js`.
+
+To turn it on:
+
+1. **Vercel:** Project Settings → Environment Variables → add `OPENAI_API_KEY` and
+   `CHAT_PASSCODE` (any code you choose), then redeploy. `api/realtime-token.js` is picked
+   up automatically.
+2. **In the app:** Grown-ups → Talk with Khru Mali → type the same passcode. Set the daily
+   minutes (default 10) and how much English help she gives.
+3. **Locally:** copy `.env.example` to `.env.local`, fill it in, and run `npm run dev`. The
+   microphone only works on `https://` or `localhost`, so test talking on the laptop, or on
+   the phone through the Vercel URL.
+
 ---
 
 # Sofia's Village

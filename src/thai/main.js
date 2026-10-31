@@ -23,6 +23,8 @@ import { chapterGameRoute, practiceRoute } from './ui/play.js';
 import { stickersRoute } from './ui/stickers.js';
 import { swapRoute } from './ui/swap.js';
 import { parentsRoute } from './ui/parents.js';
+import { talkListRoute, talkCallRoute } from './ui/talk.js';
+import { tonesRoute } from './ui/tones.js';
 
 // Relative URLs (audio/, img/) need the trailing slash: /thai → /thai/
 if (!location.pathname.endsWith('/') && !location.pathname.endsWith('.html')) {
@@ -58,6 +60,9 @@ async function boot() {
   route('/stickers', stickersRoute);
   route('/swap', swapRoute);
   route('/parents', parentsRoute);
+  route('/talk', talkListRoute);
+  route('/talk/:scene', talkCallRoute);
+  route('/tones', tonesRoute);
   startRouter(document.getElementById('app'));
   document.body.classList.add('ready');
 }

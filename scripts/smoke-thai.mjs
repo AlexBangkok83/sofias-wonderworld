@@ -57,7 +57,7 @@ async function main() {
   const server = await serve();
   const browser = await chromium.launch({
     ...(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {}),
-    args: ['--autoplay-policy=no-user-gesture-required'],
+    args: ['--autoplay-policy=no-user-gesture-required', '--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream'],
   });
   const context = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, hasTouch: true, isMobile: true });
   const page = await context.newPage();
@@ -65,7 +65,8 @@ async function main() {
     // 404s are reported with their URL by the response handler below.
     if (m.type() === 'error' && !m.text().startsWith('Failed to load resource')) problems.push(`console: ${m.text()}`);
   });
-  page.on('response', (r) => { if (r.status() >= 400) problems.push(`HTTP ${r.status()}: ${r.url()}`); });
+  // The talk endpoint is mocked to fail on purpose below.
+  page.on('response', (r) => { if (r.status() >= 400 && !r.url().includes('/api/realtime-token')) problems.push(`HTTP ${r.status()}: ${r.url()}`); });
   page.on('pageerror', (e) => problems.push(`page error: ${e.message}`));
 
   const shot = async (name) => {
@@ -195,6 +196,37 @@ async function main() {
   }
   await waitResults();
 
+  // ── Say It: record yourself (fake microphone) ──
+  await go('#/play/hello/sayit');
+  for (let r = 0; r < 6; r++) {
+    await page.waitForSelector('.record-btn:not([hidden]):not([disabled])');
+    if (r === 0) await shot('12b-sayit');
+    const w0 = await wallet();
+    await page.click('.record-btn');
+    await page.waitForTimeout(900);
+    await page.click('.record-btn');
+    await page.waitForSelector('.sayit-actions .btn.primary:not([hidden])', { timeout: 20000 });
+    if (r === 0) check((await wallet()) === w0 + 3, 'recording a word earns 3 points');
+    await page.click('.sayit-actions .btn.primary');
+  }
+  await waitResults();
+
+  // ── Tone Twins ──
+  await go('#/');
+  await page.waitForSelector('.big-action.tones');
+  check(await page.locator('.big-action.talk').count() === 1, 'home has Talk with Khru Mali');
+  await go('#/tones');
+  for (let r = 0; r < 10; r++) {
+    await page.waitForFunction(() => document.querySelectorAll('.twin').length === 2 && !document.querySelector('.twin.correct, .twin.wrong'));
+    const target = await answer();
+    if (r === 0) await shot('12c-tone-twins');
+    await page.locator(`.twin[data-test-id="${target}"]`).click();
+    await page.waitForSelector('.twin-next:not([hidden])', { timeout: 20000 });
+    if (r === 0) await shot('12d-tone-twins-answer');
+    await page.click('.twin-next');
+  }
+  await waitResults();
+
   // ── Grown-ups: set a PIN and a swap rate ──
   await go('#/parents');
   await page.waitForSelector('.pin-key');
@@ -208,7 +240,25 @@ async function main() {
   const rate = page.locator('.rate-row input[type=number]');
   await rate.nth(0).fill('100'); await rate.nth(0).dispatchEvent('change');
   await rate.nth(1).fill('10'); await rate.nth(1).dispatchEvent('change');
+  check(await page.locator('.panel h2', { hasText: 'Talk with Khru Mali' }).count() === 1, 'grown-ups can set up talking');
+  await page.locator('input[type=password]').fill('mango7');
+  await page.locator('input[type=password]').dispatchEvent('change');
   await shot('13-parents');
+
+  // ── Talk: the scene list, and a wrong passcode handled kindly ──
+  await page.route('**/api/realtime-token', (route) => route.fulfill({
+    status: 401, contentType: 'application/json', body: JSON.stringify({ error: 'passcode', message: 'wrong' }),
+  }));
+  await go('#/talk');
+  await page.waitForSelector('.scene-card');
+  check(await page.locator('.scene-card:not(.locked)').count() >= 1, 'a conversation is open after chapter 1');
+  await shot('13b-talk-list');
+  await page.locator('.scene-card:not(.locked)').first().click();
+  await page.waitForSelector('.start-call');
+  await page.click('.start-call');
+  await page.waitForSelector('.call-error:not([hidden])');
+  check((await page.locator('.call-error').textContent()).includes('passcode'), 'a wrong passcode shows a clear message');
+  await shot('13c-talk-error');
 
   // ── Swap 100 points for 10 Robux, approve it ──
   await go('#/swap');

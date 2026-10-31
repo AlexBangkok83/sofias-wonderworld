@@ -14,6 +14,7 @@ import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
 import sharp from 'sharp';
 import { ICONS, CHAPTER_ICONS, STICKERS, SHINY_STICKERS, codepoints, decoFile } from '../src/thai/data/deco.js';
+import { SCENES } from '../src/thai/data/scenes.js';
 
 const require = createRequire(import.meta.url);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -33,7 +34,7 @@ async function source(emoji) {
 }
 
 await mkdir(OUT, { recursive: true });
-const all = [...Object.values(ICONS), ...Object.values(CHAPTER_ICONS), ...STICKERS.map((s) => s[1]), ...SHINY_STICKERS.map((s) => s[1])];
+const all = [...Object.values(ICONS), ...Object.values(CHAPTER_ICONS), ...SCENES.map((s) => s.icon), ...STICKERS.map((s) => s[1]), ...SHINY_STICKERS.map((s) => s[1])];
 const missing = [];
 for (const emoji of new Set(all)) {
   const src = await source(emoji);

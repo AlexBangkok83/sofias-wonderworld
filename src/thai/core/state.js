@@ -19,7 +19,7 @@ function defaults() {
     version: 1,
     wallet: 0,
     lifetime: 0,
-    history: {},   // 'YYYY-MM-DD' → { earned, lost, right, wrong, rounds, lesson }
+    history: {},   // 'YYYY-MM-DD' → { earned, lost, right, wrong, rounds, lesson, chatSeconds }
     words: {},     // wordId → { box, due, seen, right, wrong }
     chapters: {},  // chapterId → { learned, games: { gameId: bestStars }, plays: { 'game:date': n } }
     stickers: [],  // sticker ids, in the order earned
@@ -36,6 +36,10 @@ function defaults() {
       ratePoints: 0,      // ratePoints points = rateReward Robux; 0 = not set yet
       rateReward: 0,
       pin: null,
+      chatEnabled: true,  // Talk with Khru Mali (OpenAI Realtime)
+      chatPasscode: '',   // must match CHAT_PASSCODE on the server
+      chatMinutes: 10,    // per day
+      englishHelp: 'some', // little | some | lots
     },
   };
 }
@@ -85,7 +89,7 @@ export function dateKey(d = new Date()) {
 }
 
 export function today() {
-  return (state.history[dateKey()] ||= { earned: 0, lost: 0, right: 0, wrong: 0, rounds: 0, lesson: false });
+  return (state.history[dateKey()] ||= { earned: 0, lost: 0, right: 0, wrong: 0, rounds: 0, lesson: false, chatSeconds: 0 });
 }
 
 /** Days played this week (Monday to Sunday). Nothing is ever "lost". */
@@ -237,3 +241,15 @@ export function settleSwap(id, approve) {
 }
 
 export const pendingSwaps = () => state.swaps.filter((s) => s.status === 'pending');
+
+// ─────────────────────────── talking time ───────────────────────────
+
+export function chatSecondsLeft() {
+  return Math.max(0, settings().chatMinutes * 60 - (today().chatSeconds || 0));
+}
+
+export function addChatSeconds(n) {
+  const day = today();
+  day.chatSeconds = (day.chatSeconds || 0) + n;
+  save();
+}

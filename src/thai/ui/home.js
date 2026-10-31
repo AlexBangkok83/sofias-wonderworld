@@ -52,7 +52,13 @@ export function homeRoute(screen) {
       deco(ICONS.practice, 'ba-icon'),
       h('div', null,
         h('b', null, 'Practice'),
-        h('small', null, due ? `${due} words ready to review` : 'Mix of everything you know'))));
+        h('small', null, due ? `${due} words ready to review` : 'Mix of everything you know'))),
+    h('button', { class: 'big-action talk', onClick: () => go('/talk') },
+      deco(ICONS.talk, 'ba-icon'),
+      h('div', null, h('b', null, 'Talk with Khru Mali'), h('small', null, 'Speak Thai out loud'))),
+    h('button', { class: 'big-action tones', onClick: () => go('/tones') },
+      deco(ICONS.tones, 'ba-icon'),
+      h('div', null, h('b', null, 'Tone Twins'), h('small', null, 'หมา or ม้า? Train your ears'))));
 
   const path = [];
   let k = 0;
