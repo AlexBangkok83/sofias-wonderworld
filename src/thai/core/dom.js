@@ -1,6 +1,7 @@
 /** Tiny DOM helpers. No framework: screens are rebuilt on navigation. */
 
 import { decoFile } from '../data/deco.js';
+import { assetUrl } from './assets.js';
 
 /**
  * h('button', { class: 'btn', onClick: fn }, 'Label', childNode)
@@ -31,7 +32,7 @@ export function h(tag, props, ...children) {
 
 /** A Fluent 3D emoji from public/thai/deco/, for decoration only. */
 export function deco(emoji, cls = '') {
-  return h('img', { class: `deco ${cls}`, src: `deco/${decoFile(emoji)}`, alt: '', draggable: 'false' });
+  return h('img', { class: `deco ${cls}`, src: assetUrl(`deco/${decoFile(emoji)}`), alt: '', draggable: 'false' });
 }
 
 export const sleep = (ms) => new Promise((r) => setTimeout(r, ms));

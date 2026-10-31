@@ -13,6 +13,7 @@
 import { settings } from './state.js';
 import { pickOne } from './dom.js';
 import { PRAISE, TRY_AGAIN } from '../data/chapters.js';
+import { assetUrl, loadJson } from './assets.js';
 
 let clips = {};
 let player = null;
@@ -22,10 +23,7 @@ let unlocked = false;
 export async function loadAudio() {
   player = new Audio();
   player.preload = 'auto';
-  try {
-    const res = await fetch('audio/manifest.json', { cache: 'no-cache' });
-    if (res.ok) clips = (await res.json()).clips || {};
-  } catch { /* no clips yet: device voice only */ }
+  clips = (await loadJson('audio/manifest.json'))?.clips || {}; // none yet: device voice only
   if ('speechSynthesis' in window) speechSynthesis.getVoices();
 }
 
@@ -66,7 +64,7 @@ export function say(th, { slow = false } = {}) {
       // Never let a game wait forever on audio that stalls or is blocked.
       const safety = setTimeout(resolve, 6000);
       const finish = () => { clearTimeout(safety); resolve(); };
-      player.src = `audio/${clip.file}`;
+      player.src = assetUrl(`audio/${clip.file}`);
       player.playbackRate = slow ? 0.7 : 1;
       player.preservesPitch = true;
       player.onended = finish;

@@ -11,14 +11,12 @@
 
 import { h } from './dom.js';
 import { settings } from './state.js';
+import { assetUrl, loadJson } from './assets.js';
 
 let photos = {};
 
 export async function loadPictures() {
-  try {
-    const res = await fetch('img/manifest.json', { cache: 'no-cache' });
-    if (res.ok) photos = (await res.json()).photos || {};
-  } catch { /* no photos yet */ }
+  photos = (await loadJson('img/manifest.json'))?.photos || {};
 }
 
 export const photoCount = () => Object.keys(photos).length;
@@ -41,7 +39,7 @@ export function picture(word) {
   const photo = photos[word.id];
   if (photo) {
     return h('div', { class: 'pic pic-photo' },
-      h('img', { src: `img/${photo.file}`, alt: word.en, loading: 'lazy', draggable: 'false' }));
+      h('img', { src: assetUrl(`img/${photo.file}`), alt: word.en, loading: 'lazy', draggable: 'false' }));
   }
   return h('div', { class: 'pic pic-placeholder' }, h('span', null, word.en));
 }

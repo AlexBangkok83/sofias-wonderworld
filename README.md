@@ -17,10 +17,10 @@ cd sofias-wonderworld
 git checkout ccr-eb9708e9-feko08      # until it's merged
 npm install
 cp .env.example .env.local            # then put your OpenAI key and a passcode in it
-npm run dev
+npm start                             # opens http://localhost:5173/thai/
 ```
 
-Open **http://localhost:5173/thai/** in Chrome or Safari. Everything works there,
+`npm start` opens **http://localhost:5173/thai/** in your browser (`npm run dev` does the same without opening it). Everything works there,
 including talking to Khru Mali (in the app: Grown-ups → choose a PIN → Talk with Khru
 Mali → type the same passcode as `CHAT_PASSCODE` in `.env.local`).
 
@@ -38,6 +38,11 @@ Mali → type the same passcode as `CHAT_PASSCODE` in `.env.local`).
 ```bash
 npm run thai:test  # data checks, build, phone-sized playthrough of every game
 ```
+
+**Single-page test copy:** `npm run build && npm run thai:artifact` packs the app into
+`dist/thai-artifact/` (one page, the app script and four data scripts with every picture
+and voice clip embedded) for hosts that only take one page, such as a private claude.ai
+page. Talking with Khru Mali is switched off there because it needs the token server.
 
 29 chapters and 353 words and phrases, all in `src/thai/data/chapters.js`. Edit a word there, then:
 

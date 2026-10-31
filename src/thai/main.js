@@ -25,9 +25,10 @@ import { swapRoute } from './ui/swap.js';
 import { parentsRoute } from './ui/parents.js';
 import { talkListRoute, talkCallRoute } from './ui/talk.js';
 import { tonesRoute } from './ui/tones.js';
+import { isBundled } from './core/assets.js';
 
 // Relative URLs (audio/, img/) need the trailing slash: /thai → /thai/
-if (!location.pathname.endsWith('/') && !location.pathname.endsWith('.html')) {
+if (!isBundled() && !location.pathname.endsWith('/') && !location.pathname.endsWith('.html')) {
   location.replace(`${location.pathname}/${location.search}${location.hash}`);
 }
 
@@ -47,7 +48,7 @@ function installable() {
 }
 
 async function boot() {
-  installable();
+  if (!isBundled()) installable(); // the single-page copy can't install or work offline
   await Promise.all([loadAudio(), loadPictures()]);
   window.addEventListener('pointerdown', unlock, { once: true, capture: true });
 

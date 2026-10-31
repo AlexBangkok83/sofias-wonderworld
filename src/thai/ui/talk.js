@@ -12,6 +12,7 @@ import { isSeen } from '../core/srs.js';
 import { startCall } from '../core/realtime.js';
 import { stop as stopAudio } from '../core/audio.js';
 import { go } from '../core/router.js';
+import { isBundled } from '../core/assets.js';
 import { statusBar, bottomNav, subHeader } from './common.js';
 import { showResults } from './results.js';
 
@@ -26,6 +27,7 @@ const clock = (s) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStar
 /** Why talking can't start right now, or null if it can. */
 function blocker() {
   const st = settings();
+  if (isBundled()) return 'Talking with Khru Mali needs the full app on its own server (npm run dev, or the Vercel link). This test copy has everything else.';
   if (!st.chatEnabled) return 'A grown-up has turned talking off.';
   if (!st.chatPasscode) return 'A grown-up needs to set up talking first (Grown-ups → Talk with Khru Mali).';
   if (chatSecondsLeft() <= 0) return "That's all the talking for today. Come back tomorrow!";
