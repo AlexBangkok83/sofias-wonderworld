@@ -6,6 +6,7 @@
   "description": "Sofia's Village (a cozy blocky 3D roleplay sandbox) and Learn Thai",
   "scripts": {
     "dev": "vite",
+    "dev:phone": "vite --mode phone",
     "build": "vite build",
     "preview": "vite preview",
     "voices": "node scripts/generate-voices.mjs",
@@ -27,6 +28,7 @@
   },
   "devDependencies": {
     "@lobehub/fluent-emoji-3d": "^1.1.0",
+    "@vitejs/plugin-basic-ssl": "^2.3.0",
     "playwright": "^1.62.1",
     "sharp": "^0.35.5",
     "vite": "^8.2.0"

@@ -1,4 +1,5 @@
 import { defineConfig, loadEnv } from 'vite';
+import basicSsl from '@vitejs/plugin-basic-ssl';
 import { fileURLToPath } from 'node:url';
 
 const page = (p) => fileURLToPath(new URL(p, import.meta.url));
@@ -33,9 +34,11 @@ function realtimeTokenApi() {
   };
 }
 
-export default defineConfig({
+// `npm run dev:phone` serves over https (a self-signed certificate), because
+// phones only allow the microphone on https pages: talking and Say It need it.
+export default defineConfig(({ mode }) => ({
   base: './',
-  plugins: [realtimeTokenApi()],
+  plugins: [realtimeTokenApi(), ...(mode === 'phone' ? [basicSsl()] : [])],
   server: {
     host: true,   // so Sofia can open it on her phone over the local network
     port: 5173,
@@ -55,4 +58,4 @@ export default defineConfig({
       },
     },
   },
-});
+}));

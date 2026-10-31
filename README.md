@@ -9,8 +9,33 @@ Two apps in one repo:
 
 ## Learn Thai
 
+### Try it on your computer
+
 ```bash
-npm run dev        # then open the printed URL + /thai/
+git clone https://github.com/AlexBangkok83/sofias-wonderworld.git
+cd sofias-wonderworld
+git checkout ccr-eb9708e9-feko08      # until it's merged
+npm install
+cp .env.example .env.local            # then put your OpenAI key and a passcode in it
+npm run dev
+```
+
+Open **http://localhost:5173/thai/** in Chrome or Safari. Everything works there,
+including talking to Khru Mali (in the app: Grown-ups → choose a PIN → Talk with Khru
+Mali → type the same passcode as `CHAT_PASSCODE` in `.env.local`).
+
+### Try it on a phone
+
+- **Same wifi, quick look:** `npm run dev` prints a Network address like
+  `http://192.168.1.20:5173/`. Open that + `/thai/` on the phone. Everything works except
+  the microphone (Talk and Say It), because phones only allow the microphone on https.
+- **Same wifi, with the microphone:** `npm run dev:phone` serves over https with a
+  self-signed certificate. Open `https://192.168.1.20:5173/thai/`, accept the warning
+  once ("Advanced → Proceed" on Android, "Show details → visit this website" on iPhone).
+- **Anywhere:** deploy to Vercel (below). Vercel also gives every pushed branch its own
+  preview link.
+
+```bash
 npm run thai:test  # data checks, build, phone-sized playthrough of every game
 ```
 
