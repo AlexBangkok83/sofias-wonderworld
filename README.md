@@ -1,3 +1,35 @@
+# Sofia's Wonderworld
+
+Two apps in one repo:
+
+- **Sofia's Village** at `/`: a cozy blocky 3D roleplay sandbox (below).
+- **Learn Thai** at `/thai/`: a Thai vocabulary app with photos, a real Thai voice, games, points and stickers. See [thai/PLAN.md](thai/PLAN.md) and [thai/VOCABULARY.md](thai/VOCABULARY.md).
+
+---
+
+## Learn Thai
+
+```bash
+npm run dev        # then open the printed URL + /thai/
+npm run thai:test  # data checks, build, phone-sized playthrough of every game
+```
+
+29 chapters and 353 words and phrases, all in `src/thai/data/chapters.js`. Edit a word there, then:
+
+| Command | What it does |
+|---|---|
+| `OPENAI_API_KEY=… npm run thai:audio -- --check --retry=3` | Renders new or changed lines with OpenAI TTS, transcribes them back, and retakes any that don't match |
+| `PEXELS_API_KEY=… npm run thai:photos -- search` | Finds 10 candidate photos per word |
+| `npm run thai:photos -- sheets` | Contact sheets in `shots/photos-<chapter>.png` for choosing (`thai/photos/picks.json`) |
+| `npm run thai:photos -- download` | Fetches the chosen photos, crops them to 480 px WebP, writes the credits |
+| `npm run thai:vocab` | Rewrites `thai/VOCABULARY.md` |
+| `npm run thai:check` | Fast data checks: ids, clips, photos, decorations |
+
+Points can be swapped for Robux: Sofia asks in the app, a grown-up approves in the
+Grown-ups area (PIN-protected), where the swap rate and the wrong-answer penalty are set.
+
+---
+
 # Sofia's Village
 
 A cozy 3D roleplay sandbox. Blocky Minecraft-style visuals, Toca Boca-style

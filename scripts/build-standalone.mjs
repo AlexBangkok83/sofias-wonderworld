@@ -33,8 +33,9 @@ function escapeForScriptTag(code) {
 
 async function main() {
   const assets = await readdir(path.join(DIST, 'assets'));
-  const jsName = assets.find((f) => f.endsWith('.js'));
-  const cssName = assets.find((f) => f.endsWith('.css'));
+  // The build also holds the Learn Thai app (thai-*); take the village's own entry.
+  const jsName = assets.find((f) => f.startsWith('index-') && f.endsWith('.js'));
+  const cssName = assets.find((f) => f.startsWith('index-') && f.endsWith('.css'));
   if (!jsName || !cssName) throw new Error('No built assets — run `npm run build` first.');
 
   const js = stripSourcemap(await readFile(path.join(DIST, 'assets', jsName), 'utf8'));

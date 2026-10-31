@@ -17,7 +17,7 @@ Sources are linked. Where something is my own reading rather than a finding, it 
 |---|---|
 | Picture + sound + word together helps 8-year-olds remember foreign words, up to 6 months later ([Springer 2020](https://link.springer.com/article/10.1007/s10648-020-09527-z)). | Every word has a photo, Thai script, pronunciation and English. Every tap plays the voice. |
 | Spaced practice beat massed practice in Grade 3 ([EUR](https://repub.eur.nl/pub/67956)). Recalling a word beats recognising it ([Frontiers 2023](https://www.frontiersin.org/journals/developmental-psychology/articles/10.3389/fdpys.2023.1270938/full)). | A spaced-repetition queue sits behind every game, and the games move from recognising a word to producing it. |
-| 8–9-year-olds learn much worse from negative feedback than from positive feedback ([J Neurosci 2008](https://doi.org/10.1523/JNEUROSCI.1485-08.2008)). Duolingo dropped hearts partly because beginners ran out mid-lesson. | **No lives, no hearts, no losing.** A wrong answer greys out, plays the right word, and she tries again. Fewer points, never zero. |
+| 8–9-year-olds learn much worse from negative feedback than from positive feedback ([J Neurosci 2008](https://doi.org/10.1523/JNEUROSCI.1485-08.2008)). Duolingo dropped hearts partly because beginners ran out mid-lesson. | **No lives, no hearts, no game over.** A wrong answer greys out, plays the right word, and she tries again. It costs a couple of points (a parent decision, so guessing never pays), but the wallet never goes below zero, and stickers and levels never go down. |
 | Expected, tangible rewards can undermine a child's own motivation. Unexpected rewards and positive feedback do not ([Deci, Koestner & Ryan meta-analysis](https://home.ubalt.edu/ntygmitc/642/Articles%20syllabus/Deci%20Koestner%20Ryan%20meta%20IM%20psy%20bull%2099.pdf)). | Points show progress. Some stickers drop as **surprises**. Praise is specific ("You heard the tone!"). |
 | Streaks have no controlled research with children, only reports of kids getting upset. | A **forgiving streak**: it counts days learned this week, nothing is ever "lost", and nothing nags. |
 | Kids' apps all land on 5–7 minute sessions (Monkey Junior, Drops). | **Today's Lesson** takes about 6 minutes and ends at a clear stopping point. Free play stays open. |
@@ -111,7 +111,8 @@ Never for a word.
 ## 4. The Thai voice: OpenAI
 
 - **Every word, phrase and praise line is pre-rendered once** with OpenAI text-to-speech (`gpt-4o-mini-tts`, a warm female voice, told to speak slowly and clearly for a child). The mp3s are committed. No API key in the browser, no wait mid-game, no cost per play. The village's voices work the same way.
-- **About 370 clips, which costs well under a dollar.** Re-running only renders lines whose text changed.
+- **Done: 362 clips, voice `marin`.** Picked by testing four voices on tone pairs (หมา/ม้า, เสือ/เสื้อ, ไก่/ไข่…): marin 17/18, nova 16, sage 15, coral 13. Re-running only renders lines whose text changed.
+- **Check results:** 359 of 362 transcribe back to the right word (failed clips are re-rendered up to 3 more times automatically). Three still want a human listen: นางเงือก, แม่มด, ว่าว.
 - **🐢 Slow button:** plays the same clip at 70% speed with the pitch kept.
 - **Automatic check:** each clip is transcribed back (OpenAI speech-to-text, Thai) and compared to the expected word. Mismatches are flagged for re-rendering.
 - **Human check:** research says to have a native speaker spot-check tones and ค่ะ/คะ. A Thai teacher or nanny listening for 20 minutes would catch what the machine check can't.
@@ -148,13 +149,25 @@ Each chapter has a **Learn** deck and six games. Each game trains something diff
 
 | Action | Points |
 |---|---|
-| Right first time | +10 |
-| Right on a retry | +5 |
+| Right first time | +10 (+4 if the word is already mastered and not due for review) |
+| Right on a retry | +3 |
+| **Wrong answer** | **−2** (grown-up setting, 0–10) |
 | 5 in a row | +10 combo bonus |
-| Memory pair | +10, with a bonus for few flips |
-| New card in Learn | +2 |
-| Finishing a game | +20, or +30 and a 👑 when perfect |
-| A turn in the AI conversation | +5 |
+| Memory pair | +5 (Memory never subtracts: wrong flips are how the game is played) |
+| New card in Learn | +2, and +10 for finishing a chapter's deck the first time |
+| Finishing a game | +20, or +30 when perfect, halved for each repeat of the same game that day |
+| Today's Lesson | +20 once a day |
+| A turn in the AI conversation | +5 (phase 2) |
+
+### Swapping points for Robux
+
+Points are a real currency, so the rules are built to resist farming:
+
+- **Two totals.** The *wallet* goes up with right answers, down a little with wrong ones, and down when she swaps. *All-time points* never go down and drive stickers and levels, so a bad round never takes a sticker away.
+- **Replays pay less:** mastered words pay 4 instead of 10, and round bonuses halve with each repeat on the same day. There's an optional **daily cap**.
+- **The rate is yours to set** in the Grown-ups area: "X points = Y Robux". The reward name can be changed too. Until it's set, she sees "not set yet, keep collecting".
+- **Sofia asks, a grown-up approves.** She taps "10 Robux for 100 points". The points are set aside and the request waits in the Grown-ups area (with a badge on the tab). Approve to confirm; decline gives the points back. The app only keeps the ledger. Buying the Robux is up to you.
+- The Grown-ups area is behind a **4-digit PIN**, chosen on first visit.
 
 **Chapter stars (0–3):**
 
@@ -185,8 +198,9 @@ Every word sits in a Leitner box from 0 to 5. Each box is reviewed after a longe
 
 ## 7. Talking with AI (OpenAI Realtime)
 
-The "low-lag" OpenAI feature is the **Realtime API** (model `gpt-realtime`): live speech-to-speech
-with natural turn-taking, and it speaks Thai well.
+The "low-lag" OpenAI feature is the **Realtime API**: live speech-to-speech with natural
+turn-taking. Your key has `gpt-realtime-2.1` (the newest) and a cheaper `gpt-realtime-2.1-mini`.
+We'll try both on Thai and pick by ear.
 
 **How it works, keeping the key safe:**
 
@@ -220,12 +234,14 @@ with natural turn-taking, and it speaks Thai well.
 
 ## 8. Parent area
 
-Behind a grown-up question, such as "what's 7 × 6?":
+Behind a 4-digit PIN:
 
-- **Settings:** show/hide romanisation, show/hide English, slow voice, sound, unlock all chapters, the AI conversation on/off and its daily minutes.
-- **Progress:** points per day, words learned and mastered per chapter, words she finds hardest.
-- **Voice status:** "352 of 370 clips are OpenAI recordings" and which ones failed the check.
-- **Reset progress.**
+- **Swap requests** to approve or decline.
+- **Points & swap rate:** the rate, the reward name, the wrong-answer penalty, an optional daily cap.
+- **Learning:** show/hide pronunciation (on by default), show/hide English, sound, unlock every chapter, the learner's name.
+- **Progress:** points earned and lost per day, right/wrong counts, words seen and mastered per chapter.
+- **Voice & pictures:** how many clips and photos are installed.
+- **Reset:** change PIN, erase progress (settings stay).
 
 ---
 
@@ -261,11 +277,12 @@ scripts/
 
 **Phase 1: the learning app**
 
-- App shell, home path, chapter screens, all 29 chapters
-- The six games, points, stars, stickers, daily goal, spaced repetition
-- Curated photos for every word
-- OpenAI voice for every word, plus the transcription check
-- Parent area, PWA, tests, deployed at `/thai/`
+- ✅ App shell, home path, chapter screens, all 29 chapters
+- ✅ Learn + five games, points (with −2 for wrong answers), stars, stickers, daily goal, spaced repetition
+- ✅ Swap points for Robux with grown-up approval, PIN-protected Grown-ups area
+- ✅ OpenAI voice for every word, plus the transcription check
+- ✅ PWA (installable, offline), data checks and a phone-sized playthrough test
+- ⏳ Curated photos for every word: the script is ready, waiting on a Pexels API key
 
 **Phase 2: talk and tones**
 
@@ -283,17 +300,16 @@ scripts/
 
 ## 11. What I need from you
 
-1. **Allow these domains** in this cloud environment: environment menu in the session title bar → Edit → Network access → Allowed domains, with "Allow package managers" left on.
-   `api.openai.com` · `api.pexels.com` · `images.pexels.com` · `pixabay.com` · `cdn.pixabay.com`
-   ([docs](https://code.claude.com/docs/en/cloud-environments#network-access))
-2. **A free Pexels API key** (pexels.com/api), or the name of the image service your video project used.
+1. ~~Allow the OpenAI and photo domains in the cloud environment.~~ Done.
+2. **A free Pexels API key** (pexels.com/api). A Pixabay key too if you have one (pixabay.com/api/docs).
 3. **For the AI conversation:** in Vercel, add `OPENAI_API_KEY` and a family passcode `CHAT_PASSCODE` as environment variables.
 4. **A Thai speaker for a 20-minute listen-through** once the audio exists.
 5. **Rotate the OpenAI key when we're done.** It's in this chat's transcript.
 
-## 12. Open questions
+## 12. Decisions so far
 
-- What language should the app's own buttons and instructions be in: English, or something else Sofia speaks at home?
-- Does Sofia read English yet? If not, the instructions should be spoken too.
-- Romanisation on by default (small), or hidden with a parent toggle?
-- Should the village link to the Thai app, or should they stay separate?
+- Buttons and instructions in **English**. Sofia reads, so instructions are on screen, not spoken.
+- **Pronunciation shown by default**, with a toggle in the Grown-ups area.
+- **Points can be swapped for Robux** at a rate set later. Wrong answers cost a little.
+
+Still open: should the village link to the Thai app, or should they stay separate?

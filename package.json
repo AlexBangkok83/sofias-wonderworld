@@ -3,22 +3,31 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Sofia's Village — a cozy blocky 3D roleplay sandbox",
+  "description": "Sofia's Village (a cozy blocky 3D roleplay sandbox) and Learn Thai",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
     "voices": "node scripts/generate-voices.mjs",
     "check": "node scripts/check-world.mjs",
-    "test": "node scripts/check-world.mjs && npm run build && node scripts/smoke-test.mjs",
+    "test": "node scripts/check-world.mjs && node scripts/check-thai.mjs && npm run build && node scripts/smoke-test.mjs && node scripts/smoke-thai.mjs",
     "standalone": "node scripts/build-standalone.mjs",
-    "thai:vocab": "node scripts/thai-vocab-md.mjs"
+    "thai:vocab": "node scripts/thai-vocab-md.mjs",
+    "thai:check": "node scripts/check-thai.mjs",
+    "thai:test": "node scripts/check-thai.mjs && npm run build && node scripts/smoke-thai.mjs",
+    "thai:audio": "node scripts/generate-thai-audio.mjs",
+    "thai:photos": "node scripts/thai-photos.mjs",
+    "thai:deco": "node scripts/thai-deco.mjs"
   },
   "dependencies": {
+    "@fontsource/mali": "^5.3.0",
+    "@fontsource/nunito": "^5.3.0",
     "three": "^0.185.1"
   },
   "devDependencies": {
+    "@lobehub/fluent-emoji-3d": "^1.1.0",
     "playwright": "^1.62.1",
+    "sharp": "^0.35.5",
     "vite": "^8.2.0"
   }
 }

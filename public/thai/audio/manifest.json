@@ -1,0 +1,2540 @@
+{
+ "model": "gpt-4o-mini-tts",
+ "voice": "marin",
+ "clips": {
+  "กบ": {
+   "file": "c7420b0a06f5.mp3",
+   "hash": "c7420b0a06f5",
+   "rom": "gòp",
+   "heard": "กบ",
+   "ok": true
+  },
+  "กรรไกร": {
+   "file": "e17c0aa95d72-t3.mp3",
+   "hash": "e17c0aa95d72",
+   "rom": "gan-grai",
+   "heard": "กรรไกร",
+   "ok": true
+  },
+  "กระดาษ": {
+   "file": "31a87e1f6dfc.mp3",
+   "hash": "31a87e1f6dfc",
+   "rom": "grà-dàat",
+   "heard": "กระดาษ",
+   "ok": true
+  },
+  "กระต่าย": {
+   "file": "b8de2cb30d4d.mp3",
+   "hash": "b8de2cb30d4d",
+   "rom": "grà-dtàai",
+   "heard": "กระต่าย.",
+   "ok": true
+  },
+  "กระเทียม": {
+   "file": "6153196bce96.mp3",
+   "hash": "6153196bce96",
+   "rom": "grà-tiam",
+   "heard": "กระเทียม",
+   "ok": true
+  },
+  "กระเป๋า": {
+   "file": "339cf46194f2.mp3",
+   "hash": "339cf46194f2",
+   "rom": "grà-bpǎo",
+   "heard": "กระเป๋า",
+   "ok": true
+  },
+  "กล้วย": {
+   "file": "6014c31e1211.mp3",
+   "hash": "6014c31e1211",
+   "rom": "glûai",
+   "heard": "กล้วย",
+   "ok": true
+  },
+  "กลอง": {
+   "file": "0da18bb26d33.mp3",
+   "hash": "0da18bb26d33",
+   "rom": "glawng",
+   "heard": "กลอง",
+   "ok": true
+  },
+  "กลัว": {
+   "file": "7b477c82bf9e.mp3",
+   "hash": "7b477c82bf9e",
+   "rom": "glua",
+   "heard": "กลัว",
+   "ok": true
+  },
+  "ก๋วยเตี๋ยว": {
+   "file": "6c38c4c7a765.mp3",
+   "hash": "6c38c4c7a765",
+   "rom": "gǔai-dtǐao",
+   "heard": "ก๋วยเตี๋ยว",
+   "ok": true
+  },
+  "กอด": {
+   "file": "5cf1e2ce2ab3.mp3",
+   "hash": "5cf1e2ce2ab3",
+   "rom": "gàwt",
+   "heard": "กอด",
+   "ok": true
+  },
+  "กางเกง": {
+   "file": "993880881654.mp3",
+   "hash": "993880881654",
+   "rom": "gaang-geng",
+   "heard": "กางเกง",
+   "ok": true
+  },
+  "การบ้าน": {
+   "file": "c155a78ff940.mp3",
+   "hash": "c155a78ff940",
+   "rom": "gaan-bâan",
+   "heard": "การบ้าน",
+   "ok": true
+  },
+  "กิน": {
+   "file": "6c75012357da.mp3",
+   "hash": "6c75012357da",
+   "rom": "gin",
+   "heard": "กิน",
+   "ok": true
+  },
+  "กีตาร์": {
+   "file": "0c4cab8f85c2.mp3",
+   "hash": "0c4cab8f85c2",
+   "rom": "gee-dtâa",
+   "heard": "กีตาร์",
+   "ok": true
+  },
+  "กุ้ง": {
+   "file": "77f123704c98.mp3",
+   "hash": "77f123704c98",
+   "rom": "gûng",
+   "heard": "กุ้ง",
+   "ok": true
+  },
+  "กุญแจ": {
+   "file": "890dc9bd8dd9.mp3",
+   "hash": "890dc9bd8dd9",
+   "rom": "gun-jae",
+   "heard": "กุญแจ",
+   "ok": true
+  },
+  "เก่งมาก": {
+   "file": "45b706d5b899.mp3",
+   "hash": "45b706d5b899",
+   "rom": "gèng mâak",
+   "heard": "เก่งมาก",
+   "ok": true
+  },
+  "เกม": {
+   "file": "f6499cb5c89f.mp3",
+   "hash": "f6499cb5c89f",
+   "rom": "gem",
+   "heard": "เกม",
+   "ok": true
+  },
+  "เก้า": {
+   "file": "99d3d6718a3a.mp3",
+   "hash": "99d3d6718a3a",
+   "rom": "gâo",
+   "heard": "เก้า.",
+   "ok": true
+  },
+  "เก้าอี้": {
+   "file": "0b920e655a27.mp3",
+   "hash": "0b920e655a27",
+   "rom": "gâo-êe",
+   "heard": "เก้าอี้",
+   "ok": true
+  },
+  "เกาะ": {
+   "file": "34cf97487d1a.mp3",
+   "hash": "34cf97487d1a",
+   "rom": "gàw",
+   "heard": "เกาะ",
+   "ok": true
+  },
+  "เกือบแล้ว": {
+   "file": "64cc66457a3c.mp3",
+   "hash": "64cc66457a3c",
+   "rom": "gùeap láew",
+   "heard": "เกือบแล้ว",
+   "ok": true
+  },
+  "แกง": {
+   "file": "68e0a9c18d7b.mp3",
+   "hash": "68e0a9c18d7b",
+   "rom": "gaeng",
+   "heard": "แกง",
+   "ok": true
+  },
+  "แกะ": {
+   "file": "4f029ddffe70.mp3",
+   "hash": "4f029ddffe70",
+   "rom": "gàe",
+   "heard": "แกะ",
+   "ok": true
+  },
+  "โกรธ": {
+   "file": "8f4c83eb167c.mp3",
+   "hash": "8f4c83eb167c",
+   "rom": "gròht",
+   "heard": "โกรธ",
+   "ok": true
+  },
+  "ไก่": {
+   "file": "097ba0402b69.mp3",
+   "hash": "097ba0402b69",
+   "rom": "gài",
+   "heard": "ไก่",
+   "ok": true
+  },
+  "ไก่ทอด": {
+   "file": "10c111437970.mp3",
+   "hash": "10c111437970",
+   "rom": "gài-tâwt",
+   "heard": "ไก่ทอด",
+   "ok": true
+  },
+  "ขนมปัง": {
+   "file": "8bb6eba31942.mp3",
+   "hash": "8bb6eba31942",
+   "rom": "kà-nǒm-bpang",
+   "heard": "ขนมปัง",
+   "ok": true
+  },
+  "ของขวัญ": {
+   "file": "cc24307f53a7.mp3",
+   "hash": "cc24307f53a7",
+   "rom": "kǎwng-kwǎn",
+   "heard": "ของขวัญ",
+   "ok": true
+  },
+  "ขอโทษค่ะ": {
+   "file": "934c2436a8f8.mp3",
+   "hash": "934c2436a8f8",
+   "rom": "kǎw-tôht kâ",
+   "heard": "ขอโทษค่ะ",
+   "ok": true
+  },
+  "ขอบคุณค่ะ": {
+   "file": "dc1ad017d83b.mp3",
+   "hash": "dc1ad017d83b",
+   "rom": "kàwp-kun kâ",
+   "heard": "ขอบคุณค่ะ",
+   "ok": true
+  },
+  "ขออีกได้ไหมคะ": {
+   "file": "59516d6493a5.mp3",
+   "hash": "59516d6493a5",
+   "rom": "kǎw èek dâai mǎi ká",
+   "heard": "ขออีกได้ไหมคะ",
+   "ok": true
+  },
+  "ขา": {
+   "file": "c00a73045ae8.mp3",
+   "hash": "c00a73045ae8",
+   "rom": "kǎa",
+   "heard": "ขา",
+   "ok": true
+  },
+  "ข้าว": {
+   "file": "5cf1e87bf2bb.mp3",
+   "hash": "5cf1e87bf2bb",
+   "rom": "kâao",
+   "heard": "ข้าว",
+   "ok": true
+  },
+  "ข้าวโพด": {
+   "file": "ab6430302ca5.mp3",
+   "hash": "ab6430302ca5",
+   "rom": "kâao-pôht",
+   "heard": "ข้าวโพด",
+   "ok": true
+  },
+  "ขี่จักรยาน": {
+   "file": "45b8a564e208.mp3",
+   "hash": "45b8a564e208",
+   "rom": "kèe-jàk-grà-yaan",
+   "heard": "ขี่จักรยาน",
+   "ok": true
+  },
+  "เขิน": {
+   "file": "5c44ecef7fca.mp3",
+   "hash": "5c44ecef7fca",
+   "rom": "kǒen",
+   "heard": "เขิน",
+   "ok": true
+  },
+  "เขียน": {
+   "file": "cee059fca575.mp3",
+   "hash": "cee059fca575",
+   "rom": "kǐan",
+   "heard": "เขียน",
+   "ok": true
+  },
+  "แขน": {
+   "file": "1cdd020b721c.mp3",
+   "hash": "1cdd020b721c",
+   "rom": "kǎen",
+   "heard": "แขน",
+   "ok": true
+  },
+  "ไข่": {
+   "file": "66a9b9d46f57.mp3",
+   "hash": "66a9b9d46f57",
+   "rom": "kài",
+   "heard": "ไข่",
+   "ok": true
+  },
+  "ไข่ดาว": {
+   "file": "f0a8c9565876.mp3",
+   "hash": "f0a8c9565876",
+   "rom": "kài-daao",
+   "heard": "ไข่ดาว",
+   "ok": true
+  },
+  "ครอบครัว": {
+   "file": "1dd0734ee30f.mp3",
+   "hash": "1dd0734ee30f",
+   "rom": "krâwp-krua",
+   "heard": "ครอบครัว",
+   "ok": true
+  },
+  "ครู": {
+   "file": "40fde7bfe594.mp3",
+   "hash": "40fde7bfe594",
+   "rom": "kroo",
+   "heard": "ครู",
+   "ok": true
+  },
+  "คอมพิวเตอร์": {
+   "file": "d115606e81b5.mp3",
+   "hash": "d115606e81b5",
+   "rom": "kawm-piw-dtôe",
+   "heard": "คอมพิวเตอร์",
+   "ok": true
+  },
+  "คิด": {
+   "file": "7e917d96f992-t2.mp3",
+   "hash": "7e917d96f992",
+   "rom": "kít",
+   "heard": "คิด",
+   "ok": true
+  },
+  "คุกกี้": {
+   "file": "4e338e4f2820.mp3",
+   "hash": "4e338e4f2820",
+   "rom": "kúk-gêe",
+   "heard": "คุกกี้",
+   "ok": true
+  },
+  "คุณตา": {
+   "file": "d7647706542b.mp3",
+   "hash": "d7647706542b",
+   "rom": "kun-dtaa",
+   "heard": "คุณตา",
+   "ok": true
+  },
+  "คุณยาย": {
+   "file": "ce9681f2afde.mp3",
+   "hash": "ce9681f2afde",
+   "rom": "kun-yaai",
+   "heard": "คุณยาย",
+   "ok": true
+  },
+  "เค้ก": {
+   "file": "d40205a9e8a7.mp3",
+   "hash": "d40205a9e8a7",
+   "rom": "kék",
+   "heard": "เค้ก",
+   "ok": true
+  },
+  "เครื่องบิน": {
+   "file": "e823ba0036d8.mp3",
+   "hash": "e823ba0036d8",
+   "rom": "krûeang-bin",
+   "heard": "เครื่องบิน",
+   "ok": true
+  },
+  "แครอท": {
+   "file": "a6d0d6e9c7c9.mp3",
+   "hash": "a6d0d6e9c7c9",
+   "rom": "kae-ràwt",
+   "heard": "แครอท",
+   "ok": true
+  },
+  "ง่วง": {
+   "file": "41e8506b46af.mp3",
+   "hash": "41e8506b46af",
+   "rom": "ngûang",
+   "heard": "ง่วง",
+   "ok": true
+  },
+  "งู": {
+   "file": "d24ad10c4678.mp3",
+   "hash": "d24ad10c4678",
+   "rom": "ngoo",
+   "heard": "งู",
+   "ok": true
+  },
+  "จมูก": {
+   "file": "fb7c4996d1a8.mp3",
+   "hash": "fb7c4996d1a8",
+   "rom": "jà-mòok",
+   "heard": "จมูก",
+   "ok": true
+  },
+  "จรวด": {
+   "file": "02907b8a3247.mp3",
+   "hash": "02907b8a3247",
+   "rom": "jà-rùat",
+   "heard": "จรวด",
+   "ok": true
+  },
+  "จระเข้": {
+   "file": "5a7de7217e55.mp3",
+   "hash": "5a7de7217e55",
+   "rom": "jaw-rá-kê",
+   "heard": "จระเข้",
+   "ok": true
+  },
+  "จักรยาน": {
+   "file": "1e484bbbf0a8.mp3",
+   "hash": "1e484bbbf0a8",
+   "rom": "jàk-grà-yaan",
+   "heard": "จักรยาน",
+   "ok": true
+  },
+  "จิ๊กซอว์": {
+   "file": "92f70e34d5cc.mp3",
+   "hash": "92f70e34d5cc",
+   "rom": "jík-saw",
+   "heard": "จิ๊กซอว์",
+   "ok": true
+  },
+  "จิงโจ้": {
+   "file": "e4ef9b2e7b5d-t2.mp3",
+   "hash": "e4ef9b2e7b5d",
+   "rom": "jing-jôh",
+   "heard": "จิงโจ้",
+   "ok": true
+  },
+  "เจ็ด": {
+   "file": "ade23d7bc740.mp3",
+   "hash": "ade23d7bc740",
+   "rom": "jèt",
+   "heard": "เจ็ด",
+   "ok": true
+  },
+  "เจอกันพรุ่งนี้": {
+   "file": "403d6485e11c.mp3",
+   "hash": "403d6485e11c",
+   "rom": "joe gan prûng-née",
+   "heard": "เจอกันพรุ่งนี้",
+   "ok": true
+  },
+  "เจอกันพรุ่งนี้นะ": {
+   "file": "9986344ae17e.mp3",
+   "hash": "9986344ae17e",
+   "rom": "joe gan prûng-née ná",
+   "heard": "เจอกันพรุ่งนี้นะ",
+   "ok": true
+  },
+  "เจ้าหญิง": {
+   "file": "587ef29fe4c7.mp3",
+   "hash": "587ef29fe4c7",
+   "rom": "jâo-yǐng",
+   "heard": "เจ้าหญิง",
+   "ok": true
+  },
+  "ฉลาม": {
+   "file": "5fe49bcd45d5.mp3",
+   "hash": "5fe49bcd45d5",
+   "rom": "chà-lǎam",
+   "heard": "ฉลาม",
+   "ok": true
+  },
+  "ช่วยด้วย": {
+   "file": "4a616ecb8bc9.mp3",
+   "hash": "4a616ecb8bc9",
+   "rom": "chûai dûai",
+   "heard": "ช่วยด้วย.",
+   "ok": true
+  },
+  "ช็อกโกแลต": {
+   "file": "a97ecb7b34cc.mp3",
+   "hash": "a97ecb7b34cc",
+   "rom": "chók-goh-láet",
+   "heard": "ช็อกโกแลต",
+   "ok": true
+  },
+  "ชอบ": {
+   "file": "c8c0a3da351b.mp3",
+   "hash": "c8c0a3da351b",
+   "rom": "châwp",
+   "heard": "ชอบ",
+   "ok": true
+  },
+  "ช้าง": {
+   "file": "8850946bab47.mp3",
+   "hash": "8850946bab47",
+   "rom": "cháang",
+   "heard": "ช้าง",
+   "ok": true
+  },
+  "ช่างซ่อมรถ": {
+   "file": "c49f3079ed6a.mp3",
+   "hash": "c49f3079ed6a",
+   "rom": "châang-sâwm-rót",
+   "heard": "ช่างซ่อมรถ",
+   "ok": true
+  },
+  "ชานมไข่มุก": {
+   "file": "1484ee8fdf28.mp3",
+   "hash": "1484ee8fdf28",
+   "rom": "chaa-nom kài-múk",
+   "heard": "ชานมไข่มุก",
+   "ok": true
+  },
+  "ชายหาด": {
+   "file": "11eab9dfc579.mp3",
+   "hash": "11eab9dfc579",
+   "rom": "chaai-hàat",
+   "heard": "ชายหาด",
+   "ok": true
+  },
+  "ชาวนา": {
+   "file": "f579f7588c8f.mp3",
+   "hash": "f579f7588c8f",
+   "rom": "chaao-naa",
+   "heard": "ชาวนา",
+   "ok": true
+  },
+  "ชิงช้า": {
+   "file": "475d679ab359.mp3",
+   "hash": "475d679ab359",
+   "rom": "ching-cháa",
+   "heard": "ชิงช้า",
+   "ok": true
+  },
+  "ชุดกระโปรง": {
+   "file": "586f3962d30c.mp3",
+   "hash": "586f3962d30c",
+   "rom": "chút-grà-bprohng",
+   "heard": "ชุดกระโปรง",
+   "ok": true
+  },
+  "ชุดว่ายน้ำ": {
+   "file": "0347c6aad9c7.mp3",
+   "hash": "0347c6aad9c7",
+   "rom": "chút-wâai-náam",
+   "heard": "ชุดว่ายน้ำ",
+   "ok": true
+  },
+  "เชฟ": {
+   "file": "47d2c3f9b418.mp3",
+   "hash": "47d2c3f9b418",
+   "rom": "chéf",
+   "heard": "เชฟ.",
+   "ok": true
+  },
+  "เชอร์รี่": {
+   "file": "ba75dca93d24.mp3",
+   "hash": "ba75dca93d24",
+   "rom": "choe-rêe",
+   "heard": "เชอร์รี่",
+   "ok": true
+  },
+  "ใช่": {
+   "file": "1b6fdd5f2455.mp3",
+   "hash": "1b6fdd5f2455",
+   "rom": "châi",
+   "heard": "ใช่",
+   "ok": true
+  },
+  "ใช่แล้ว": {
+   "file": "e442e9fc00b1.mp3",
+   "hash": "e442e9fc00b1",
+   "rom": "châi láew",
+   "heard": "ใช่ แล้ว",
+   "ok": true
+  },
+  "ซ่อน": {
+   "file": "d29f8fb18c29.mp3",
+   "hash": "d29f8fb18c29",
+   "rom": "sâwn",
+   "heard": "ซ่อน",
+   "ok": true
+  },
+  "ซูเปอร์ฮีโร่": {
+   "file": "a05eb2c04e0f.mp3",
+   "hash": "a05eb2c04e0f",
+   "rom": "soo-bpôe-hee-rôh",
+   "heard": "ซูเปอร์ฮีโร่",
+   "ok": true
+  },
+  "ดอกไม้": {
+   "file": "0bf8c1a01ac6.mp3",
+   "hash": "0bf8c1a01ac6",
+   "rom": "dàwk-máai",
+   "heard": "ดอกไม้",
+   "ok": true
+  },
+  "ดอกไม้ไฟ": {
+   "file": "5a5e04d8eba1.mp3",
+   "hash": "5a5e04d8eba1",
+   "rom": "dàwk-máai-fai",
+   "heard": "ดอกไม้ไฟ",
+   "ok": true
+  },
+  "ดาว": {
+   "file": "c30f7b776487.mp3",
+   "hash": "c30f7b776487",
+   "rom": "daao",
+   "heard": "ดาว",
+   "ok": true
+  },
+  "ดินสอ": {
+   "file": "87b97939fac6.mp3",
+   "hash": "87b97939fac6",
+   "rom": "din-sǎw",
+   "heard": "ดินสอ",
+   "ok": true
+  },
+  "ดี": {
+   "file": "9964864159e5.mp3",
+   "hash": "9964864159e5",
+   "rom": "dee",
+   "heard": "ดี.",
+   "ok": true
+  },
+  "ดีใจ": {
+   "file": "17cc96fbf251.mp3",
+   "hash": "17cc96fbf251",
+   "rom": "dee-jai",
+   "heard": "ดีใจ",
+   "ok": true
+  },
+  "ดื่ม": {
+   "file": "73654a2a36f8.mp3",
+   "hash": "73654a2a36f8",
+   "rom": "dùem",
+   "heard": "ดื่ม",
+   "ok": true
+  },
+  "ดู": {
+   "file": "af7b1a365a57.mp3",
+   "hash": "af7b1a365a57",
+   "rom": "doo",
+   "heard": "ดู.",
+   "ok": true
+  },
+  "เด็ก": {
+   "file": "68a2a4a9a91d.mp3",
+   "hash": "68a2a4a9a91d",
+   "rom": "dèk",
+   "heard": "เด็ก",
+   "ok": true
+  },
+  "เดิน": {
+   "file": "a04b552dc5d6.mp3",
+   "hash": "a04b552dc5d6",
+   "rom": "doen",
+   "heard": "เดิน.",
+   "ok": true
+  },
+  "โดนัท": {
+   "file": "18e5b4652192.mp3",
+   "hash": "18e5b4652192",
+   "rom": "doh-nát",
+   "heard": "โดนัท",
+   "ok": true
+  },
+  "ได้": {
+   "file": "0aa1da4d1eef.mp3",
+   "hash": "0aa1da4d1eef",
+   "rom": "dâai",
+   "heard": "ได้",
+   "ok": true
+  },
+  "ไดโนเสาร์": {
+   "file": "f82c0facce5c.mp3",
+   "hash": "f82c0facce5c",
+   "rom": "dai-noh-sǎo",
+   "heard": "ไดโนเสาร์",
+   "ok": true
+  },
+  "ตกใจ": {
+   "file": "fb96510049c5.mp3",
+   "hash": "fb96510049c5",
+   "rom": "dtòk-jai",
+   "heard": "ตกใจ",
+   "ok": true
+  },
+  "ต้นไม้": {
+   "file": "364c2c826a81.mp3",
+   "hash": "364c2c826a81",
+   "rom": "dtôn-máai",
+   "heard": "ต้นไม้",
+   "ok": true
+  },
+  "ต้มยำ": {
+   "file": "3a3ff384d170.mp3",
+   "hash": "3a3ff384d170",
+   "rom": "dtôm-yam",
+   "heard": "ต้มยำ",
+   "ok": true
+  },
+  "ตลก": {
+   "file": "84844cdf404f.mp3",
+   "hash": "84844cdf404f",
+   "rom": "dtà-lòk",
+   "heard": "ตลก",
+   "ok": true
+  },
+  "ตลาด": {
+   "file": "1d13c5e1b040.mp3",
+   "hash": "1d13c5e1b040",
+   "rom": "dtà-làat",
+   "heard": "ตลาด",
+   "ok": true
+  },
+  "ตัวต่อ": {
+   "file": "e10dce0d1651.mp3",
+   "hash": "e10dce0d1651",
+   "rom": "dtua-dtàw",
+   "heard": "ตัวต่อ",
+   "ok": true
+  },
+  "ตา": {
+   "file": "1d572d1c708a.mp3",
+   "hash": "1d572d1c708a",
+   "rom": "dtaa",
+   "heard": "ตา",
+   "ok": true
+  },
+  "ตำรวจ": {
+   "file": "1b8d1b0a6713.mp3",
+   "hash": "1b8d1b0a6713",
+   "rom": "dtam-rùat",
+   "heard": "ตำรวจ",
+   "ok": true
+  },
+  "ตื่นนอน": {
+   "file": "c70fda54fc1f.mp3",
+   "hash": "c70fda54fc1f",
+   "rom": "dtùen-nawn",
+   "heard": "ตื่นนอน",
+   "ok": true
+  },
+  "ตุ๊กตา": {
+   "file": "4107efae419e.mp3",
+   "hash": "4107efae419e",
+   "rom": "dtúk-gà-dtaa",
+   "heard": "ตุ๊กตา",
+   "ok": true
+  },
+  "ตุ๊กตาหมี": {
+   "file": "bc74551e0792-t3.mp3",
+   "hash": "bc74551e0792",
+   "rom": "dtúk-gà-dtaa-měe",
+   "heard": "ตุ๊กตาหมี",
+   "ok": true
+  },
+  "ตุ๊กตุ๊ก": {
+   "file": "03bb9f7ee481.mp3",
+   "hash": "03bb9f7ee481",
+   "rom": "dtúk-dtúk",
+   "heard": "ตุ๊ก ตุ๊ก",
+   "ok": true
+  },
+  "เต้น": {
+   "file": "802eebad3911.mp3",
+   "hash": "802eebad3911",
+   "rom": "dtên",
+   "heard": "เต้น",
+   "ok": true
+  },
+  "เต่า": {
+   "file": "dbb716ff3cd6.mp3",
+   "hash": "dbb716ff3cd6",
+   "rom": "dtào",
+   "heard": "เต่า",
+   "ok": true
+  },
+  "เต่าทอง": {
+   "file": "09b414a10780.mp3",
+   "hash": "09b414a10780",
+   "rom": "dtào-tawng",
+   "heard": "เต่าทอง",
+   "ok": true
+  },
+  "เตียง": {
+   "file": "c72f0b21d106.mp3",
+   "hash": "c72f0b21d106",
+   "rom": "dtiang",
+   "heard": "เตียง",
+   "ok": true
+  },
+  "แตงกวา": {
+   "file": "f00227c7596c-t4.mp3",
+   "hash": "f00227c7596c",
+   "rom": "dtaeng-gwaa",
+   "heard": "แตงกวา.",
+   "ok": true
+  },
+  "แตงโม": {
+   "file": "80d785269c5f.mp3",
+   "hash": "80d785269c5f",
+   "rom": "dtaeng-moh",
+   "heard": "แตงโม",
+   "ok": true
+  },
+  "โต๊ะ": {
+   "file": "9150fbc2bac1.mp3",
+   "hash": "9150fbc2bac1",
+   "rom": "dtó",
+   "heard": "โต๊ะ",
+   "ok": true
+  },
+  "ถั่ว": {
+   "file": "11b157333554.mp3",
+   "hash": "11b157333554",
+   "rom": "tùa",
+   "heard": "ถั่ว",
+   "ok": true
+  },
+  "ถุงเท้า": {
+   "file": "a73997053f77.mp3",
+   "hash": "a73997053f77",
+   "rom": "tǔng-táo",
+   "heard": "ถุงเท้า",
+   "ok": true
+  },
+  "ถุงมือ": {
+   "file": "3e079959b8e7.mp3",
+   "hash": "3e079959b8e7",
+   "rom": "tǔng-mue",
+   "heard": "ถุงมือ",
+   "ok": true
+  },
+  "ถูกต้อง": {
+   "file": "1487713a8dd1.mp3",
+   "hash": "1487713a8dd1",
+   "rom": "tòok-dtâwng",
+   "heard": "ถูกต้อง",
+   "ok": true
+  },
+  "ทะเล": {
+   "file": "403b7520bdb5.mp3",
+   "hash": "403b7520bdb5",
+   "rom": "tá-le",
+   "heard": "ทะเล.",
+   "ok": true
+  },
+  "ทะเลทราย": {
+   "file": "8723bd7b3e58.mp3",
+   "hash": "8723bd7b3e58",
+   "rom": "tá-le-saai",
+   "heard": "ทะเลทราย.",
+   "ok": true
+  },
+  "ทีวี": {
+   "file": "0f3ba82b049d.mp3",
+   "hash": "0f3ba82b049d",
+   "rom": "tee-wee",
+   "heard": "ทีวี",
+   "ok": true
+  },
+  "ที่ไหน": {
+   "file": "ea667f6651b4.mp3",
+   "hash": "ea667f6651b4",
+   "rom": "têe-nǎi",
+   "heard": "ที่ไหน",
+   "ok": true
+  },
+  "ทุเรียน": {
+   "file": "7a099bf7cbb6.mp3",
+   "hash": "7a099bf7cbb6",
+   "rom": "tú-rian",
+   "heard": "ทุเรียน",
+   "ok": true
+  },
+  "เท้า": {
+   "file": "23b0a84aea4d.mp3",
+   "hash": "23b0a84aea4d",
+   "rom": "táo",
+   "heard": "เท้า",
+   "ok": true
+  },
+  "เท่าไหร่": {
+   "file": "c318f2c8ff81.mp3",
+   "hash": "c318f2c8ff81",
+   "rom": "tâo-rài",
+   "heard": "เท่าไหร่",
+   "ok": true
+  },
+  "เทียน": {
+   "file": "8c282082fc3d.mp3",
+   "hash": "8c282082fc3d",
+   "rom": "tian",
+   "heard": "เทียน",
+   "ok": true
+  },
+  "แท็กซี่": {
+   "file": "1143ab79a4b0.mp3",
+   "hash": "1143ab79a4b0",
+   "rom": "táek-sêe",
+   "heard": "แท็กซี่",
+   "ok": true
+  },
+  "โทรศัพท์": {
+   "file": "1df14a0d56ef.mp3",
+   "hash": "1df14a0d56ef",
+   "rom": "toh-rá-sàp",
+   "heard": "โทรศัพท์",
+   "ok": true
+  },
+  "นก": {
+   "file": "dad4faadecf6.mp3",
+   "hash": "dad4faadecf6",
+   "rom": "nók",
+   "heard": "นก",
+   "ok": true
+  },
+  "นกแก้ว": {
+   "file": "8f997d7b55ea.mp3",
+   "hash": "8f997d7b55ea",
+   "rom": "nók-gâew",
+   "heard": "นกแก้ว",
+   "ok": true
+  },
+  "นกยูง": {
+   "file": "3a809f90b4f7.mp3",
+   "hash": "3a809f90b4f7",
+   "rom": "nók-yoong",
+   "heard": "นกยูง",
+   "ok": true
+  },
+  "นกฮูก": {
+   "file": "e0b82f775594.mp3",
+   "hash": "e0b82f775594",
+   "rom": "nók-hôok",
+   "heard": "นกฮูก",
+   "ok": true
+  },
+  "นม": {
+   "file": "5bfcda0091cf.mp3",
+   "hash": "5bfcda0091cf",
+   "rom": "nom",
+   "heard": "นม.",
+   "ok": true
+  },
+  "น้อง": {
+   "file": "88f004d7aba7.mp3",
+   "hash": "88f004d7aba7",
+   "rom": "náwng",
+   "heard": "น้อง",
+   "ok": true
+  },
+  "นอน": {
+   "file": "f8548b31bba3.mp3",
+   "hash": "f8548b31bba3",
+   "rom": "nawn",
+   "heard": "นอน",
+   "ok": true
+  },
+  "นักดับเพลิง": {
+   "file": "cf46d9966d8f-t2.mp3",
+   "hash": "cf46d9966d8f",
+   "rom": "nák-dàp-ploeng",
+   "heard": "นักดับเพลิง",
+   "ok": true
+  },
+  "นักบิน": {
+   "file": "c677a0c3d43d.mp3",
+   "hash": "c677a0c3d43d",
+   "rom": "nák-bin",
+   "heard": "นักบิน",
+   "ok": true
+  },
+  "นักบินอวกาศ": {
+   "file": "f93211813d9b.mp3",
+   "hash": "f93211813d9b",
+   "rom": "nák-bin-à-wá-gàat",
+   "heard": "นักบินอวกาศ",
+   "ok": true
+  },
+  "นักร้อง": {
+   "file": "759cba1cad27.mp3",
+   "hash": "759cba1cad27",
+   "rom": "nák-ráwng",
+   "heard": "นักร้อง",
+   "ok": true
+  },
+  "นักเรียน": {
+   "file": "61bf8b8a3a39.mp3",
+   "hash": "61bf8b8a3a39",
+   "rom": "nák-rian",
+   "heard": "นักเรียน",
+   "ok": true
+  },
+  "นักวิทยาศาสตร์": {
+   "file": "80e8333622a9.mp3",
+   "hash": "80e8333622a9",
+   "rom": "nák-wít-tá-yaa-sàat",
+   "heard": "นักวิทยาศาสตร์",
+   "ok": true
+  },
+  "นางเงือก": {
+   "file": "5761c47edec1.mp3",
+   "hash": "5761c47edec1",
+   "rom": "naang-ngûeak",
+   "heard": "นาง.",
+   "ok": false
+  },
+  "นางฟ้า": {
+   "file": "1c3126a51625.mp3",
+   "hash": "1c3126a51625",
+   "rom": "naang-fáa",
+   "heard": "นางฟ้า",
+   "ok": true
+  },
+  "น่ารักจัง": {
+   "file": "1f2201f3ea36.mp3",
+   "hash": "1f2201f3ea36",
+   "rom": "nâa-rák jang",
+   "heard": "น่ารักจัง",
+   "ok": true
+  },
+  "นาฬิกา": {
+   "file": "ae4a8a9e22b2.mp3",
+   "hash": "ae4a8a9e22b2",
+   "rom": "naa-lí-gaa",
+   "heard": "นาฬิกา",
+   "ok": true
+  },
+  "น้ำ": {
+   "file": "f9c4c1b701bf.mp3",
+   "hash": "f9c4c1b701bf",
+   "rom": "náam",
+   "heard": "น้ำ",
+   "ok": true
+  },
+  "น้ำแข็ง": {
+   "file": "efc3d631156e.mp3",
+   "hash": "efc3d631156e",
+   "rom": "náam-kǎeng",
+   "heard": "น้ำแข็ง",
+   "ok": true
+  },
+  "น้ำตก": {
+   "file": "ff5e81ab42d9.mp3",
+   "hash": "ff5e81ab42d9",
+   "rom": "náam-dtòk",
+   "heard": "น้ำตก",
+   "ok": true
+  },
+  "น้ำส้ม": {
+   "file": "e19f0d097b6c.mp3",
+   "hash": "e19f0d097b6c",
+   "rom": "náam-sôm",
+   "heard": "น้ำส้ม",
+   "ok": true
+  },
+  "นิ้ว": {
+   "file": "170d420c4971.mp3",
+   "hash": "170d420c4971",
+   "rom": "níw",
+   "heard": "นิ้ว",
+   "ok": true
+  },
+  "บรอกโคลี": {
+   "file": "d8c2f57ae708.mp3",
+   "hash": "d8c2f57ae708",
+   "rom": "bràwk-koh-lêe",
+   "heard": "บรอกโคลี",
+   "ok": true
+  },
+  "บ้าน": {
+   "file": "d0cfdf08264f.mp3",
+   "hash": "d0cfdf08264f",
+   "rom": "bâan",
+   "heard": "บ้าน",
+   "ok": true
+  },
+  "บ๊ายบาย": {
+   "file": "3b75800f88f9.mp3",
+   "hash": "3b75800f88f9",
+   "rom": "báai-baai",
+   "heard": "บาย บาย.",
+   "ok": true
+  },
+  "ใบไม้": {
+   "file": "a2136f195434.mp3",
+   "hash": "a2136f195434",
+   "rom": "bai-máai",
+   "heard": "ใบไม้",
+   "ok": true
+  },
+  "ประตู": {
+   "file": "a5ef979d3fd6.mp3",
+   "hash": "a5ef979d3fd6",
+   "rom": "bprà-dtoo",
+   "heard": "ประตู",
+   "ok": true
+  },
+  "ปราสาท": {
+   "file": "65f8cf7963f7.mp3",
+   "hash": "65f8cf7963f7",
+   "rom": "bpraa-sàat",
+   "heard": "ปราสาท",
+   "ok": true
+  },
+  "ปลา": {
+   "file": "23fcba95c47f.mp3",
+   "hash": "23fcba95c47f",
+   "rom": "bplaa",
+   "heard": "ปลา",
+   "ok": true
+  },
+  "ปลาการ์ตูน": {
+   "file": "4947c575299c.mp3",
+   "hash": "4947c575299c",
+   "rom": "bplaa-gaa-dtoon",
+   "heard": "ปลาการ์ตูน",
+   "ok": true
+  },
+  "ปลาปักเป้า": {
+   "file": "975cc99e2231.mp3",
+   "hash": "975cc99e2231",
+   "rom": "bplaa-bpàk-bpâo",
+   "heard": "ปลาปักเป้า",
+   "ok": true
+  },
+  "ปลาโลมา": {
+   "file": "022e98348356.mp3",
+   "hash": "022e98348356",
+   "rom": "bplaa-loh-maa",
+   "heard": "ปลาโลมา",
+   "ok": true
+  },
+  "ปลาวาฬ": {
+   "file": "b9dad57b45c8.mp3",
+   "hash": "b9dad57b45c8",
+   "rom": "bplaa-waan",
+   "heard": "ปลาวาฬ.",
+   "ok": true
+  },
+  "ปลาหมึก": {
+   "file": "b9ad801ac5ef.mp3",
+   "hash": "b9ad801ac5ef",
+   "rom": "bplaa-mùek",
+   "heard": "ปลาหมึก",
+   "ok": true
+  },
+  "ป่วย": {
+   "file": "48528b816ade.mp3",
+   "hash": "48528b816ade",
+   "rom": "bpùai",
+   "heard": "ป่วย.",
+   "ok": true
+  },
+  "ป๊อปคอร์น": {
+   "file": "e5875b5c5111.mp3",
+   "hash": "e5875b5c5111",
+   "rom": "bpáwp-kawn",
+   "heard": "ป๊อปคอร์น",
+   "ok": true
+  },
+  "ป่า": {
+   "file": "599f2baf0c5b.mp3",
+   "hash": "599f2baf0c5b",
+   "rom": "bpàa",
+   "heard": "ป่า",
+   "ok": true
+  },
+  "ปาก": {
+   "file": "10fea709e0cc.mp3",
+   "hash": "10fea709e0cc",
+   "rom": "bpàak",
+   "heard": "ปาก",
+   "ok": true
+  },
+  "ปากกา": {
+   "file": "8c42e969657e.mp3",
+   "hash": "8c42e969657e",
+   "rom": "bpàak-gaa",
+   "heard": "ปากกา",
+   "ok": true
+  },
+  "ปาร์ตี้": {
+   "file": "d5b2218fc91c.mp3",
+   "hash": "d5b2218fc91c",
+   "rom": "bpaa-dtêe",
+   "heard": "ปาร์ตี้",
+   "ok": true
+  },
+  "ปีน": {
+   "file": "92269745ca24.mp3",
+   "hash": "92269745ca24",
+   "rom": "bpeen",
+   "heard": "ปีน",
+   "ok": true
+  },
+  "ปู": {
+   "file": "0f0c99b1085f.mp3",
+   "hash": "0f0c99b1085f",
+   "rom": "bpoo",
+   "heard": "ปู.",
+   "ok": true
+  },
+  "เป็ด": {
+   "file": "6dc8126b35ed.mp3",
+   "hash": "6dc8126b35ed",
+   "rom": "bpèt",
+   "heard": "เป็ด",
+   "ok": true
+  },
+  "เปียโน": {
+   "file": "ec46764fee0a.mp3",
+   "hash": "ec46764fee0a",
+   "rom": "bpia-noh",
+   "heard": "เปียโน",
+   "ok": true
+  },
+  "แปด": {
+   "file": "a27ead3fadad.mp3",
+   "hash": "a27ead3fadad",
+   "rom": "bpàet",
+   "heard": "แปด.",
+   "ok": true
+  },
+  "แปรงสีฟัน": {
+   "file": "fc9121a0ba44.mp3",
+   "hash": "fc9121a0ba44",
+   "rom": "bpraeng-sěe-fan",
+   "heard": "แปรงสีฟัน",
+   "ok": true
+  },
+  "ไปเล่นกันเถอะ": {
+   "file": "5760ea087669.mp3",
+   "hash": "5760ea087669",
+   "rom": "bpai lên gan tòe",
+   "heard": "ไปเล่นกันเถอะ",
+   "ok": true
+  },
+  "ไปห้องน้ำได้ไหมคะ": {
+   "file": "64fbc664aa97.mp3",
+   "hash": "64fbc664aa97",
+   "rom": "bpai hâwng-náam dâai mǎi ká",
+   "heard": "ไปห้องน้ำได้ไหมคะ?",
+   "ok": true
+  },
+  "ผม": {
+   "file": "485ea621b300.mp3",
+   "hash": "485ea621b300",
+   "rom": "pǒm",
+   "heard": "ผม",
+   "ok": true
+  },
+  "ผัก": {
+   "file": "19e2fcd21af3-t2.mp3",
+   "hash": "19e2fcd21af3",
+   "rom": "pàk",
+   "heard": "ผัก",
+   "ok": true
+  },
+  "ผี": {
+   "file": "7336fb88804e.mp3",
+   "hash": "7336fb88804e",
+   "rom": "pěe",
+   "heard": "ผี",
+   "ok": true
+  },
+  "ผีเสื้อ": {
+   "file": "9e872d02c9a3.mp3",
+   "hash": "9e872d02c9a3",
+   "rom": "pěe-sûea",
+   "heard": "ผีเสื้อ",
+   "ok": true
+  },
+  "ผึ้ง": {
+   "file": "1cc67df8753a.mp3",
+   "hash": "1cc67df8753a",
+   "rom": "pûeng",
+   "heard": "พึ่ง",
+   "ok": true
+  },
+  "ฝน": {
+   "file": "bcb69ffb43de.mp3",
+   "hash": "bcb69ffb43de",
+   "rom": "fǒn",
+   "heard": "ฝน",
+   "ok": true
+  },
+  "ฝันดีนะ": {
+   "file": "3fa0a43a19c3.mp3",
+   "hash": "3fa0a43a19c3",
+   "rom": "fǎn-dee ná",
+   "heard": "ฝันดีนะ",
+   "ok": true
+  },
+  "พระจันทร์": {
+   "file": "6e746da82396.mp3",
+   "hash": "6e746da82396",
+   "rom": "prá-jan",
+   "heard": "พระจันทร์",
+   "ok": true
+  },
+  "พระอาทิตย์": {
+   "file": "ac40a7c0cb34.mp3",
+   "hash": "ac40a7c0cb34",
+   "rom": "prá-aa-tít",
+   "heard": "พระอาทิตย์",
+   "ok": true
+  },
+  "พริก": {
+   "file": "aa9d5b38e540-t2.mp3",
+   "hash": "aa9d5b38e540",
+   "rom": "prík",
+   "heard": "พริก",
+   "ok": true
+  },
+  "พ่อ": {
+   "file": "b4d1f58bd0ee.mp3",
+   "hash": "b4d1f58bd0ee",
+   "rom": "pâw",
+   "heard": "พ่อ",
+   "ok": true
+  },
+  "พิซซ่า": {
+   "file": "c5c7fdf0224d.mp3",
+   "hash": "c5c7fdf0224d",
+   "rom": "pít-sâa",
+   "heard": "พิซซ่า",
+   "ok": true
+  },
+  "พี่ชาย": {
+   "file": "7b663b76f2fd.mp3",
+   "hash": "7b663b76f2fd",
+   "rom": "pêe-chaai",
+   "heard": "พี่ชาย",
+   "ok": true
+  },
+  "พี่สาว": {
+   "file": "60f5ee6af3ed.mp3",
+   "hash": "60f5ee6af3ed",
+   "rom": "pêe-sǎao",
+   "heard": "พี่สาว",
+   "ok": true
+  },
+  "พู่กัน": {
+   "file": "2ba4d973409c.mp3",
+   "hash": "2ba4d973409c",
+   "rom": "pôo-gan",
+   "heard": "ผู้กัน",
+   "ok": true
+  },
+  "เพนกวิน": {
+   "file": "4a4aee3f360a.mp3",
+   "hash": "4a4aee3f360a",
+   "rom": "pen-gwin",
+   "heard": "เพนกวิน",
+   "ok": true
+  },
+  "เพลง": {
+   "file": "02cb5d9556f6.mp3",
+   "hash": "02cb5d9556f6",
+   "rom": "pleng",
+   "heard": "เพลง",
+   "ok": true
+  },
+  "เพื่อน": {
+   "file": "499282fb0c71.mp3",
+   "hash": "499282fb0c71",
+   "rom": "pûean",
+   "heard": "เพื่อน",
+   "ok": true
+  },
+  "แพนด้า": {
+   "file": "383dc76b0d54.mp3",
+   "hash": "383dc76b0d54",
+   "rom": "paen-dâa",
+   "heard": "แพนด้า",
+   "ok": true
+  },
+  "แพะ": {
+   "file": "df734b4fc9b6.mp3",
+   "hash": "df734b4fc9b6",
+   "rom": "páe",
+   "heard": "แพะ",
+   "ok": true
+  },
+  "ฟองสบู่": {
+   "file": "417caa19246b.mp3",
+   "hash": "417caa19246b",
+   "rom": "fawng-sà-bòo",
+   "heard": "ฟองสบู่",
+   "ok": true
+  },
+  "ฟักทอง": {
+   "file": "7ff6bf428b00.mp3",
+   "hash": "7ff6bf428b00",
+   "rom": "fák-tawng",
+   "heard": "ฟักทอง",
+   "ok": true
+  },
+  "ฟัง": {
+   "file": "b4518045ce8b.mp3",
+   "hash": "b4518045ce8b",
+   "rom": "fang",
+   "heard": "ฟัง",
+   "ok": true
+  },
+  "ฟัน": {
+   "file": "4ee14d02ae10.mp3",
+   "hash": "4ee14d02ae10",
+   "rom": "fan",
+   "heard": "ฟัน",
+   "ok": true
+  },
+  "ฟ้าผ่า": {
+   "file": "baaddf20ee63.mp3",
+   "hash": "baaddf20ee63",
+   "rom": "fáa-pàa",
+   "heard": "ฟ้าผ่า",
+   "ok": true
+  },
+  "ฟ้าร้อง": {
+   "file": "9c27060423ef-t3.mp3",
+   "hash": "9c27060423ef",
+   "rom": "fáa-ráwng",
+   "heard": "ฟ้าร้อง",
+   "ok": true
+  },
+  "เฟรนช์ฟรายส์": {
+   "file": "819275c61270.mp3",
+   "hash": "819275c61270",
+   "rom": "fren-fraai",
+   "heard": "French fries.",
+   "ok": true
+  },
+  "ไฟ": {
+   "file": "65b5f5b16a58.mp3",
+   "hash": "65b5f5b16a58",
+   "rom": "fai",
+   "heard": "ไฟ.",
+   "ok": true
+  },
+  "ภูเขา": {
+   "file": "1a1158a3eaa6.mp3",
+   "hash": "1a1158a3eaa6",
+   "rom": "poo-kǎo",
+   "heard": "ภูเขา",
+   "ok": true
+  },
+  "ภูเขาไฟ": {
+   "file": "a8226152196b.mp3",
+   "hash": "a8226152196b",
+   "rom": "poo-kǎo-fai",
+   "heard": "ภูเขาไฟ",
+   "ok": true
+  },
+  "มงกุฎ": {
+   "file": "592484e1db10.mp3",
+   "hash": "592484e1db10",
+   "rom": "mong-gùt",
+   "heard": "มงกุฎ",
+   "ok": true
+  },
+  "มด": {
+   "file": "c41ea23067f7.mp3",
+   "hash": "c41ea23067f7",
+   "rom": "mót",
+   "heard": "มด",
+   "ok": true
+  },
+  "มอเตอร์ไซค์": {
+   "file": "03339fae6bde.mp3",
+   "hash": "03339fae6bde",
+   "rom": "maw-dtoe-sai",
+   "heard": "มอเตอร์ไซค์",
+   "ok": true
+  },
+  "มะเขือเทศ": {
+   "file": "e4f01450ea9a.mp3",
+   "hash": "e4f01450ea9a",
+   "rom": "má-kǔea-têt",
+   "heard": "มะเขือเทศ",
+   "ok": true
+  },
+  "มะนาว": {
+   "file": "65b36f0e52ba.mp3",
+   "hash": "65b36f0e52ba",
+   "rom": "má-naao",
+   "heard": "มะนาว",
+   "ok": true
+  },
+  "มะพร้าว": {
+   "file": "dfc5a3fda672.mp3",
+   "hash": "dfc5a3fda672",
+   "rom": "má-práao",
+   "heard": "มะพร้าว",
+   "ok": true
+  },
+  "มะม่วง": {
+   "file": "774e58919734.mp3",
+   "hash": "774e58919734",
+   "rom": "má-mûang",
+   "heard": "มะม่วง",
+   "ok": true
+  },
+  "มังกร": {
+   "file": "3a04f2fa5f3c.mp3",
+   "hash": "3a04f2fa5f3c",
+   "rom": "mang-gawn",
+   "heard": "มังกร",
+   "ok": true
+  },
+  "มันฝรั่ง": {
+   "file": "8e476e91932f.mp3",
+   "hash": "8e476e91932f",
+   "rom": "man-fà-ràng",
+   "heard": "มันฝรั่ง",
+   "ok": true
+  },
+  "ม้า": {
+   "file": "6daac40f1416.mp3",
+   "hash": "6daac40f1416",
+   "rom": "máa",
+   "heard": "ม้า",
+   "ok": true
+  },
+  "มาเรียนภาษาไทยกันเถอะ": {
+   "file": "ed67e1472fa3.mp3",
+   "hash": "ed67e1472fa3",
+   "rom": "maa rian paa-sǎa tai gan tòe",
+   "heard": "มาเรียนภาษาไทยกันเถอะ",
+   "ok": true
+  },
+  "ม้าลาย": {
+   "file": "8aeda6188614.mp3",
+   "hash": "8aeda6188614",
+   "rom": "máa-laai",
+   "heard": "ม้าลาย.",
+   "ok": true
+  },
+  "มือ": {
+   "file": "b955645faf98.mp3",
+   "hash": "b955645faf98",
+   "rom": "mue",
+   "heard": "มือ",
+   "ok": true
+  },
+  "เมฆ": {
+   "file": "23b88c102da8.mp3",
+   "hash": "23b88c102da8",
+   "rom": "mêk",
+   "heard": "เมฆ",
+   "ok": true
+  },
+  "แม่": {
+   "file": "829a2564edc7.mp3",
+   "hash": "829a2564edc7",
+   "rom": "mâe",
+   "heard": "แม่",
+   "ok": true
+  },
+  "แมงกะพรุน": {
+   "file": "26c1cd3c0e5e.mp3",
+   "hash": "26c1cd3c0e5e",
+   "rom": "maeng-gà-prun",
+   "heard": "แมงกะพรุน",
+   "ok": true
+  },
+  "แมงมุม": {
+   "file": "43936a4ac0eb.mp3",
+   "hash": "43936a4ac0eb",
+   "rom": "maeng-mum",
+   "heard": "แมงมุม",
+   "ok": true
+  },
+  "แม่น้ำ": {
+   "file": "fa6c8404b520.mp3",
+   "hash": "fa6c8404b520",
+   "rom": "mâe-náam",
+   "heard": "แม่น้ำ",
+   "ok": true
+  },
+  "แม่มด": {
+   "file": "4a1c9dcf9c4a.mp3",
+   "hash": "4a1c9dcf9c4a",
+   "rom": "mâe-mót",
+   "heard": "แม่หมด",
+   "ok": false
+  },
+  "แมว": {
+   "file": "833083d38bbd.mp3",
+   "hash": "833083d38bbd",
+   "rom": "maew",
+   "heard": "แมว",
+   "ok": true
+  },
+  "แมวน้ำ": {
+   "file": "34599b15a74a.mp3",
+   "hash": "34599b15a74a",
+   "rom": "maew-náam",
+   "heard": "แมวน้ำ",
+   "ok": true
+  },
+  "ไม้กายสิทธิ์": {
+   "file": "1402a4a56bce.mp3",
+   "hash": "1402a4a56bce",
+   "rom": "máai-gaai-yá-sìt",
+   "heard": "ไม้กายสิทธิ์",
+   "ok": true
+  },
+  "ไม่ชอบ": {
+   "file": "887d565366b2.mp3",
+   "hash": "887d565366b2",
+   "rom": "mâi châwp",
+   "heard": "ไม่ชอบ",
+   "ok": true
+  },
+  "ไม่ใช่": {
+   "file": "37b8459df9e6.mp3",
+   "hash": "37b8459df9e6",
+   "rom": "mâi châi",
+   "heard": "ไม่ใช่",
+   "ok": true
+  },
+  "ไม่ดี": {
+   "file": "4c618db8939e.mp3",
+   "hash": "4c618db8939e",
+   "rom": "mâi dee",
+   "heard": "ไม่ดี",
+   "ok": true
+  },
+  "ไม่ได้": {
+   "file": "6d62819d3d76.mp3",
+   "hash": "6d62819d3d76",
+   "rom": "mâi dâai",
+   "heard": "ไม่ได้",
+   "ok": true
+  },
+  "ไม้บรรทัด": {
+   "file": "d3d594e2c398.mp3",
+   "hash": "d3d594e2c398",
+   "rom": "máai-ban-tát",
+   "heard": "ไม้บรรทัด",
+   "ok": true
+  },
+  "ไม่เป็นไร": {
+   "file": "8150d8010753.mp3",
+   "hash": "8150d8010753",
+   "rom": "mâi-bpen-rai",
+   "heard": "ไม่เป็นไร.",
+   "ok": true
+  },
+  "ไม่เอาค่ะ": {
+   "file": "4e89e48cb21a.mp3",
+   "hash": "4e89e48cb21a",
+   "rom": "mâi ao kâ",
+   "heard": "ไม่เอาค่ะ",
+   "ok": true
+  },
+  "ยางลบ": {
+   "file": "2c5cbaf16b5c.mp3",
+   "hash": "2c5cbaf16b5c",
+   "rom": "yaang-lóp",
+   "heard": "ยางลบ",
+   "ok": true
+  },
+  "ยิ้ม": {
+   "file": "961ade47b4cf.mp3",
+   "hash": "961ade47b4cf",
+   "rom": "yím",
+   "heard": "ยิ้ม",
+   "ok": true
+  },
+  "ยีราฟ": {
+   "file": "e7a25c64cbc4.mp3",
+   "hash": "e7a25c64cbc4",
+   "rom": "yee-râap",
+   "heard": "ยีราฟ",
+   "ok": true
+  },
+  "ยุง": {
+   "file": "99f61dcff9a9.mp3",
+   "hash": "99f61dcff9a9",
+   "rom": "yung",
+   "heard": "ยุง",
+   "ok": true
+  },
+  "ยูนิคอร์น": {
+   "file": "2576bcdcd8b1.mp3",
+   "hash": "2576bcdcd8b1",
+   "rom": "yoo-ní-kawn",
+   "heard": "ยูนิคอร์น",
+   "ok": true
+  },
+  "เยี่ยมเลย": {
+   "file": "7c558f98bb2f.mp3",
+   "hash": "7c558f98bb2f",
+   "rom": "yîam loei",
+   "heard": "เยี่ยมเลย",
+   "ok": true
+  },
+  "รถ": {
+   "file": "d34feb0ea496.mp3",
+   "hash": "d34feb0ea496",
+   "rom": "rót",
+   "heard": "รถ",
+   "ok": true
+  },
+  "รถดับเพลิง": {
+   "file": "8145cabeb37f.mp3",
+   "hash": "8145cabeb37f",
+   "rom": "rót-dàp-ploeng",
+   "heard": "รถดับเพลิง",
+   "ok": true
+  },
+  "รถพยาบาล": {
+   "file": "6a4b1d1e27ad.mp3",
+   "hash": "6a4b1d1e27ad",
+   "rom": "rót-pá-yaa-baan",
+   "heard": "รถพยาบาล",
+   "ok": true
+  },
+  "รถไฟ": {
+   "file": "cfed68c3e71a.mp3",
+   "hash": "cfed68c3e71a",
+   "rom": "rót-fai",
+   "heard": "รถไฟ",
+   "ok": true
+  },
+  "รถเมล์": {
+   "file": "6a6b84af78a6.mp3",
+   "hash": "6a6b84af78a6",
+   "rom": "rót-me",
+   "heard": "รถเมล์",
+   "ok": true
+  },
+  "ร่ม": {
+   "file": "f420d6158f42.mp3",
+   "hash": "f420d6158f42",
+   "rom": "rôm",
+   "heard": "ร่ม",
+   "ok": true
+  },
+  "รองเท้า": {
+   "file": "17ceae9a294d.mp3",
+   "hash": "17ceae9a294d",
+   "rom": "rawng-táo",
+   "heard": "รองเท้า",
+   "ok": true
+  },
+  "ร้องเพลง": {
+   "file": "6cb96b45db34.mp3",
+   "hash": "6cb96b45db34",
+   "rom": "ráwng-pleng",
+   "heard": "ร้องเพลง",
+   "ok": true
+  },
+  "ร้องไห้": {
+   "file": "f917673770e7.mp3",
+   "hash": "f917673770e7",
+   "rom": "ráwng-hâi",
+   "heard": "ร้องไห้",
+   "ok": true
+  },
+  "ร้อน": {
+   "file": "a35b0dc7dbf9.mp3",
+   "hash": "a35b0dc7dbf9",
+   "rom": "ráwn",
+   "heard": "ร้อน",
+   "ok": true
+  },
+  "รักนะ": {
+   "file": "7ecef5076665.mp3",
+   "hash": "7ecef5076665",
+   "rom": "rák ná",
+   "heard": "รักนะ",
+   "ok": true
+  },
+  "ร้านค้า": {
+   "file": "7c475ff4e086.mp3",
+   "hash": "7c475ff4e086",
+   "rom": "ráan-káa",
+   "heard": "ร้านค้า",
+   "ok": true
+  },
+  "ร้านอาหาร": {
+   "file": "e8e614f03de9.mp3",
+   "hash": "e8e614f03de9",
+   "rom": "ráan-aa-hǎan",
+   "heard": "ร้านอาหาร.",
+   "ok": true
+  },
+  "เรือ": {
+   "file": "56a58c927b28-t2.mp3",
+   "hash": "56a58c927b28",
+   "rom": "ruea",
+   "heard": "เรือ",
+   "ok": true
+  },
+  "โรงพยาบาล": {
+   "file": "1b5c7248d0c6.mp3",
+   "hash": "1b5c7248d0c6",
+   "rom": "rohng-pá-yaa-baan",
+   "heard": "โรงพยาบาล",
+   "ok": true
+  },
+  "โรงเรียน": {
+   "file": "ad5657768eb3.mp3",
+   "hash": "ad5657768eb3",
+   "rom": "rohng-rian",
+   "heard": "โรงเรียน",
+   "ok": true
+  },
+  "ลม": {
+   "file": "1d2037b31fec.mp3",
+   "hash": "1d2037b31fec",
+   "rom": "lom",
+   "heard": "ลม",
+   "ok": true
+  },
+  "ลองอีกครั้งนะ": {
+   "file": "63f6f0009fc6.mp3",
+   "hash": "63f6f0009fc6",
+   "rom": "lawng èek kráng ná",
+   "heard": "ลองอีกครั้งนะ",
+   "ok": true
+  },
+  "ลอยกระทง": {
+   "file": "ac53cd1f1bdf.mp3",
+   "hash": "ac53cd1f1bdf",
+   "rom": "loi-grà-tong",
+   "heard": "ลอยกระทง",
+   "ok": true
+  },
+  "ลิง": {
+   "file": "38f2d5af1d9e.mp3",
+   "hash": "38f2d5af1d9e",
+   "rom": "ling",
+   "heard": "ลิง.",
+   "ok": true
+  },
+  "ลูกชิ้น": {
+   "file": "e6dafb64b8da.mp3",
+   "hash": "e6dafb64b8da",
+   "rom": "lôok-chín",
+   "heard": "ลูกชิ้น",
+   "ok": true
+  },
+  "ลูกเต๋า": {
+   "file": "9040c0b1b6ef.mp3",
+   "hash": "9040c0b1b6ef",
+   "rom": "lôok-dtǎo",
+   "heard": "ลูกเต๋า",
+   "ok": true
+  },
+  "ลูกบอล": {
+   "file": "4c3a413dbc23.mp3",
+   "hash": "4c3a413dbc23",
+   "rom": "lôok-bawn",
+   "heard": "ลูกบอล",
+   "ok": true
+  },
+  "ลูกโป่ง": {
+   "file": "2e8de27a3cee.mp3",
+   "hash": "2e8de27a3cee",
+   "rom": "lôok-bpòhng",
+   "heard": "ลูกโป่ง",
+   "ok": true
+  },
+  "ลูกอม": {
+   "file": "1458f465de23.mp3",
+   "hash": "1458f465de23",
+   "rom": "lôok-om",
+   "heard": "ลูกอม",
+   "ok": true
+  },
+  "เล่น": {
+   "file": "7905f11edbf6.mp3",
+   "hash": "7905f11edbf6",
+   "rom": "lên",
+   "heard": "เล่น",
+   "ok": true
+  },
+  "โลก": {
+   "file": "37858ff8dd7f.mp3",
+   "hash": "37858ff8dd7f",
+   "rom": "lôhk",
+   "heard": "โลก",
+   "ok": true
+  },
+  "วัด": {
+   "file": "f4a382056dde.mp3",
+   "hash": "f4a382056dde",
+   "rom": "wát",
+   "heard": "วัด",
+   "ok": true
+  },
+  "วันเกิด": {
+   "file": "580c9edf87ef.mp3",
+   "hash": "580c9edf87ef",
+   "rom": "wan-gòet",
+   "heard": "วันเกิด",
+   "ok": true
+  },
+  "วันนี้เก่งมากเลย": {
+   "file": "f06bac48bb77.mp3",
+   "hash": "f06bac48bb77",
+   "rom": "wan-née gèng mâak loei",
+   "heard": "วันนี้เก่งมากเลย",
+   "ok": true
+  },
+  "วัว": {
+   "file": "e01a1a37f6b2.mp3",
+   "hash": "e01a1a37f6b2",
+   "rom": "wua",
+   "heard": "วัว",
+   "ok": true
+  },
+  "วาดรูป": {
+   "file": "1095402ce225.mp3",
+   "hash": "1095402ce225",
+   "rom": "wâat-rôop",
+   "heard": "วาดรูป",
+   "ok": true
+  },
+  "ว่ายน้ำ": {
+   "file": "a2fec8b0054c.mp3",
+   "hash": "a2fec8b0054c",
+   "rom": "wâai-náam",
+   "heard": "ว่ายน้ำ",
+   "ok": true
+  },
+  "ว่าว": {
+   "file": "c5bb4e59bff3.mp3",
+   "hash": "c5bb4e59bff3",
+   "rom": "wâao",
+   "heard": "ว้าว",
+   "ok": false
+  },
+  "วิ่ง": {
+   "file": "4cee60bcda11.mp3",
+   "hash": "4cee60bcda11",
+   "rom": "wîng",
+   "heard": "วิ่ง",
+   "ok": true
+  },
+  "แว่นตา": {
+   "file": "93a1a5e5a420.mp3",
+   "hash": "93a1a5e5a420",
+   "rom": "wâen-dtaa",
+   "heard": "แว่นตา",
+   "ok": true
+  },
+  "ศิลปิน": {
+   "file": "324e9b949da4.mp3",
+   "hash": "324e9b949da4",
+   "rom": "sǐn-lá-bpin",
+   "heard": "ศิลปิน",
+   "ok": true
+  },
+  "ศูนย์": {
+   "file": "cf69c08886e5.mp3",
+   "hash": "cf69c08886e5",
+   "rom": "sǒon",
+   "heard": "ศูนย์",
+   "ok": true
+  },
+  "สงกรานต์": {
+   "file": "e4fbe938f9ad.mp3",
+   "hash": "e4fbe938f9ad",
+   "rom": "sǒng-graan",
+   "heard": "สงกรานต์",
+   "ok": true
+  },
+  "สตรอว์เบอร์รี่": {
+   "file": "d191967cb8d9.mp3",
+   "hash": "d191967cb8d9",
+   "rom": "sà-dtraw-boe-rêe",
+   "heard": "สตรอเบอร์รี่",
+   "ok": true
+  },
+  "สนามเด็กเล่น": {
+   "file": "656942364e49.mp3",
+   "hash": "656942364e49",
+   "rom": "sà-nǎam-dèk-lên",
+   "heard": "สนามเด็กเล่น",
+   "ok": true
+  },
+  "สนามบิน": {
+   "file": "aa5ba33d5de2.mp3",
+   "hash": "aa5ba33d5de2",
+   "rom": "sà-nǎam-bin",
+   "heard": "สนามบิน",
+   "ok": true
+  },
+  "สบายดีค่ะ": {
+   "file": "1089ad64aeee.mp3",
+   "hash": "1089ad64aeee",
+   "rom": "sà-baai-dee kâ",
+   "heard": "สบายดีค่ะ",
+   "ok": true
+  },
+  "สบายดีไหมคะ": {
+   "file": "d29b3f397d00.mp3",
+   "hash": "d29b3f397d00",
+   "rom": "sà-baai-dee mǎi ká",
+   "heard": "สบายดีไหมคะ?",
+   "ok": true
+  },
+  "ส้ม": {
+   "file": "d5cea7e55ff0.mp3",
+   "hash": "d5cea7e55ff0",
+   "rom": "sôm",
+   "heard": "ส้ม",
+   "ok": true
+  },
+  "สวนสนุก": {
+   "file": "98b2ce563f10.mp3",
+   "hash": "98b2ce563f10",
+   "rom": "sǔan-sà-nùk",
+   "heard": "สวนสนุก",
+   "ok": true
+  },
+  "สวนสัตว์": {
+   "file": "071171805019.mp3",
+   "hash": "071171805019",
+   "rom": "sǔan-sàt",
+   "heard": "สวนสัตว์",
+   "ok": true
+  },
+  "สวัสดีค่ะ": {
+   "file": "194b826461c8.mp3",
+   "hash": "194b826461c8",
+   "rom": "sà-wàt-dee kâ",
+   "heard": "สวัสดีค่ะ",
+   "ok": true
+  },
+  "สวัสดีค่ะ โซเฟีย": {
+   "file": "cbf38955cb48.mp3",
+   "hash": "cbf38955cb48",
+   "rom": "sà-wàt-dee kâ, Soh-fia",
+   "heard": "สวัสดีค่ะ โซเฟีย",
+   "ok": true
+  },
+  "สอง": {
+   "file": "237ca59bcfdb.mp3",
+   "hash": "237ca59bcfdb",
+   "rom": "sǎwng",
+   "heard": "สอง.",
+   "ok": true
+  },
+  "สับปะรด": {
+   "file": "24442b686a0d.mp3",
+   "hash": "24442b686a0d",
+   "rom": "sàp-bpà-rót",
+   "heard": "สับปะรด",
+   "ok": true
+  },
+  "สาม": {
+   "file": "443f1ebc7fcb.mp3",
+   "hash": "443f1ebc7fcb",
+   "rom": "sǎam",
+   "heard": "สาม",
+   "ok": true
+  },
+  "สายรุ้ง": {
+   "file": "777300c3f8dc.mp3",
+   "hash": "777300c3f8dc",
+   "rom": "sǎai-rúng",
+   "heard": "สายรุ้ง",
+   "ok": true
+  },
+  "สิงโต": {
+   "file": "88c2712803f3.mp3",
+   "hash": "88c2712803f3",
+   "rom": "sǐng-dtoh",
+   "heard": "สิงโต",
+   "ok": true
+  },
+  "สิบ": {
+   "file": "d52bf95c1dda.mp3",
+   "hash": "d52bf95c1dda",
+   "rom": "sìp",
+   "heard": "สิบ",
+   "ok": true
+  },
+  "สี่": {
+   "file": "f77f4b90b8b2.mp3",
+   "hash": "f77f4b90b8b2",
+   "rom": "sèe",
+   "heard": "สี่",
+   "ok": true
+  },
+  "สีขาว": {
+   "file": "ed5370e913b7.mp3",
+   "hash": "ed5370e913b7",
+   "rom": "sěe-kǎao",
+   "heard": "สีขาว",
+   "ok": true
+  },
+  "สีเขียว": {
+   "file": "f34f62997865.mp3",
+   "hash": "f34f62997865",
+   "rom": "sěe-kǐao",
+   "heard": "สีเขียว",
+   "ok": true
+  },
+  "สีชมพู": {
+   "file": "aa221abac7f0.mp3",
+   "hash": "aa221abac7f0",
+   "rom": "sěe-chom-poo",
+   "heard": "สีชมพู",
+   "ok": true
+  },
+  "สีดำ": {
+   "file": "7f63a4781ed3.mp3",
+   "hash": "7f63a4781ed3",
+   "rom": "sěe-dam",
+   "heard": "สีดำ",
+   "ok": true
+  },
+  "สีแดง": {
+   "file": "64386006a88e.mp3",
+   "hash": "64386006a88e",
+   "rom": "sěe-daeng",
+   "heard": "สีแดง",
+   "ok": true
+  },
+  "สีเทา": {
+   "file": "d1b419b8b109.mp3",
+   "hash": "d1b419b8b109",
+   "rom": "sěe-tao",
+   "heard": "สีเทา",
+   "ok": true
+  },
+  "สีเทียน": {
+   "file": "e57577b2e092.mp3",
+   "hash": "e57577b2e092",
+   "rom": "sěe-tian",
+   "heard": "สีเทียน",
+   "ok": true
+  },
+  "สีน้ำเงิน": {
+   "file": "bae592c819e0.mp3",
+   "hash": "bae592c819e0",
+   "rom": "sěe-náam-ngoen",
+   "heard": "สีน้ำเงิน",
+   "ok": true
+  },
+  "สีน้ำตาล": {
+   "file": "62721fd09057.mp3",
+   "hash": "62721fd09057",
+   "rom": "sěe-náam-dtaan",
+   "heard": "สีน้ำตาล",
+   "ok": true
+  },
+  "สีฟ้า": {
+   "file": "092f1513c3e4.mp3",
+   "hash": "092f1513c3e4",
+   "rom": "sěe-fáa",
+   "heard": "สีฟ้า",
+   "ok": true
+  },
+  "สีม่วง": {
+   "file": "32c1c8766dd1.mp3",
+   "hash": "32c1c8766dd1",
+   "rom": "sěe-mûang",
+   "heard": "สีม่วง",
+   "ok": true
+  },
+  "สีส้ม": {
+   "file": "ccd4aacd3adb.mp3",
+   "hash": "ccd4aacd3adb",
+   "rom": "sěe-sôm",
+   "heard": "สีส้ม",
+   "ok": true
+  },
+  "สีเหลือง": {
+   "file": "a1ee6dcb6955.mp3",
+   "hash": "a1ee6dcb6955",
+   "rom": "sěe-lǔeang",
+   "heard": "สีเหลือง",
+   "ok": true
+  },
+  "สุดยอด": {
+   "file": "5841dada9eb2.mp3",
+   "hash": "5841dada9eb2",
+   "rom": "sùt-yâwt",
+   "heard": "สุดยอด!",
+   "ok": true
+  },
+  "เสียใจ": {
+   "file": "bc3f911815fa.mp3",
+   "hash": "bc3f911815fa",
+   "rom": "sǐa-jai",
+   "heard": "เสียใจ.",
+   "ok": true
+  },
+  "เสือ": {
+   "file": "b24cc607a1f6.mp3",
+   "hash": "b24cc607a1f6",
+   "rom": "sǔea",
+   "heard": "เสือ",
+   "ok": true
+  },
+  "เสื้อ": {
+   "file": "7ce419849520.mp3",
+   "hash": "7ce419849520",
+   "rom": "sûea",
+   "heard": "เสื้อ",
+   "ok": true
+  },
+  "เสื้อกันหนาว": {
+   "file": "bb8c40dcb77a.mp3",
+   "hash": "bb8c40dcb77a",
+   "rom": "sûea-gan-nǎao",
+   "heard": "เสื้อกันหนาว",
+   "ok": true
+  },
+  "ไส้กรอก": {
+   "file": "17a158bb4494-t2.mp3",
+   "hash": "17a158bb4494",
+   "rom": "sâi-gràwk",
+   "heard": "ไส้กรอก",
+   "ok": true
+  },
+  "หก": {
+   "file": "392953fdd003.mp3",
+   "hash": "392953fdd003",
+   "rom": "hòk",
+   "heard": "หก",
+   "ok": true
+  },
+  "หนอน": {
+   "file": "2525685c78fe.mp3",
+   "hash": "2525685c78fe",
+   "rom": "nǎwn",
+   "heard": "หนอน",
+   "ok": true
+  },
+  "หนังสือ": {
+   "file": "388897912d7b.mp3",
+   "hash": "388897912d7b",
+   "rom": "nǎng-sǔe",
+   "heard": "หนังสือ",
+   "ok": true
+  },
+  "หน้าต่าง": {
+   "file": "340ffa55646d.mp3",
+   "hash": "340ffa55646d",
+   "rom": "nâa-dtàang",
+   "heard": "หน้าต่าง",
+   "ok": true
+  },
+  "หนาว": {
+   "file": "1d32e31e61c5.mp3",
+   "hash": "1d32e31e61c5",
+   "rom": "nǎao",
+   "heard": "หนาว",
+   "ok": true
+  },
+  "หนึ่ง": {
+   "file": "6341cf1121f0.mp3",
+   "hash": "6341cf1121f0",
+   "rom": "nùeng",
+   "heard": "หนึ่ง.",
+   "ok": true
+  },
+  "หนู": {
+   "file": "fc1dc98e3653.mp3",
+   "hash": "fc1dc98e3653",
+   "rom": "nǒo",
+   "heard": "หนู.",
+   "ok": true
+  },
+  "หนูชื่อโซเฟียค่ะ": {
+   "file": "92ec56251132.mp3",
+   "hash": "92ec56251132",
+   "rom": "nǒo chûe Soh-fia kâ",
+   "heard": "หนูชื่อโซเฟียค่ะ",
+   "ok": true
+  },
+  "หนูไม่เข้าใจค่ะ": {
+   "file": "6c728b841032.mp3",
+   "hash": "6c728b841032",
+   "rom": "nǒo mâi kâo-jai kâ",
+   "heard": "หนูไม่เข้าใจค่ะ",
+   "ok": true
+  },
+  "หนูหิวแล้วค่ะ": {
+   "file": "55154b10af9b.mp3",
+   "hash": "55154b10af9b",
+   "rom": "nǒo hǐw láew kâ",
+   "heard": "หนูหิวแล้วค่ะ",
+   "ok": true
+  },
+  "หนูอายุเจ็ดขวบค่ะ": {
+   "file": "c3684e8273cc.mp3",
+   "hash": "c3684e8273cc",
+   "rom": "nǒo aa-yú jèt kùap kâ",
+   "heard": "หนูอายุเจ็ดขวบค่ะ",
+   "ok": true
+  },
+  "หมดแล้ว": {
+   "file": "46534cd4d64c.mp3",
+   "hash": "46534cd4d64c",
+   "rom": "mòt láew",
+   "heard": "หมดแล้ว",
+   "ok": true
+  },
+  "หมวก": {
+   "file": "c66412bded3e.mp3",
+   "hash": "c66412bded3e",
+   "rom": "mùak",
+   "heard": "หมวก",
+   "ok": true
+  },
+  "หมอ": {
+   "file": "c76a1e8b55a5.mp3",
+   "hash": "c76a1e8b55a5",
+   "rom": "mǎw",
+   "heard": "หมอ",
+   "ok": true
+  },
+  "หมอฟัน": {
+   "file": "4315040f59dc.mp3",
+   "hash": "4315040f59dc",
+   "rom": "mǎw-fan",
+   "heard": "หมอฟัน",
+   "ok": true
+  },
+  "หมา": {
+   "file": "c8a8ce1d0273.mp3",
+   "hash": "c8a8ce1d0273",
+   "rom": "mǎa",
+   "heard": "หมา",
+   "ok": true
+  },
+  "หมี": {
+   "file": "5de8fbfeb02a.mp3",
+   "hash": "5de8fbfeb02a",
+   "rom": "měe",
+   "heard": "หมี",
+   "ok": true
+  },
+  "หมู": {
+   "file": "c78f948d26c4.mp3",
+   "hash": "c78f948d26c4",
+   "rom": "mǒo",
+   "heard": "หมู",
+   "ok": true
+  },
+  "ห้องน้ำ": {
+   "file": "b271ea33c66a.mp3",
+   "hash": "b271ea33c66a",
+   "rom": "hâwng-náam",
+   "heard": "ห้องน้ำ",
+   "ok": true
+  },
+  "ห้องสมุด": {
+   "file": "1bea1fd38fe0.mp3",
+   "hash": "1bea1fd38fe0",
+   "rom": "hâwng-sà-mùt",
+   "heard": "ห้องสมุด",
+   "ok": true
+  },
+  "หอย": {
+   "file": "b82da29eb983.mp3",
+   "hash": "b82da29eb983",
+   "rom": "hǒi",
+   "heard": "หอย",
+   "ok": true
+  },
+  "หอยทาก": {
+   "file": "63229dce1561.mp3",
+   "hash": "63229dce1561",
+   "rom": "hǒi-tâak",
+   "heard": "หอยทาก",
+   "ok": true
+  },
+  "หัว": {
+   "file": "0d8cade8ba8a.mp3",
+   "hash": "0d8cade8ba8a",
+   "rom": "hǔa",
+   "heard": "หัว",
+   "ok": true
+  },
+  "หัวเราะ": {
+   "file": "d45eebdb38b5.mp3",
+   "hash": "d45eebdb38b5",
+   "rom": "hǔa-ráw",
+   "heard": "หัวเราะ",
+   "ok": true
+  },
+  "หัวหอม": {
+   "file": "b2d68c290e55.mp3",
+   "hash": "b2d68c290e55",
+   "rom": "hǔa-hǎwm",
+   "heard": "หัวหอม",
+   "ok": true
+  },
+  "ห้า": {
+   "file": "864af4c1f8d6.mp3",
+   "hash": "864af4c1f8d6",
+   "rom": "hâa",
+   "heard": "ห้า.",
+   "ok": true
+  },
+  "ห้าง": {
+   "file": "38f3ec6074d5.mp3",
+   "hash": "38f3ec6074d5",
+   "rom": "hâang",
+   "heard": "ห้าง",
+   "ok": true
+  },
+  "หิน": {
+   "file": "984e76fc2d0b.mp3",
+   "hash": "984e76fc2d0b",
+   "rom": "hǐn",
+   "heard": "หิน",
+   "ok": true
+  },
+  "หิมะ": {
+   "file": "fe069189389f.mp3",
+   "hash": "fe069189389f",
+   "rom": "hì-má",
+   "heard": "หิมะ",
+   "ok": true
+  },
+  "หิว": {
+   "file": "dceebecec122.mp3",
+   "hash": "dceebecec122",
+   "rom": "hǐw",
+   "heard": "หิว",
+   "ok": true
+  },
+  "หุ่นยนต์": {
+   "file": "49cd8ec7ac78.mp3",
+   "hash": "49cd8ec7ac78",
+   "rom": "hùn-yon",
+   "heard": "หุ่นยนต์",
+   "ok": true
+  },
+  "หู": {
+   "file": "ed1e378a77c9.mp3",
+   "hash": "ed1e378a77c9",
+   "rom": "hǒo",
+   "heard": "หู",
+   "ok": true
+  },
+  "เห็ด": {
+   "file": "851e4dcf7064.mp3",
+   "hash": "851e4dcf7064",
+   "rom": "hèt",
+   "heard": "เห็ด",
+   "ok": true
+  },
+  "เหนื่อย": {
+   "file": "90ba218042f5.mp3",
+   "hash": "90ba218042f5",
+   "rom": "nùeai",
+   "heard": "เหนื่อย.",
+   "ok": true
+  },
+  "องุ่น": {
+   "file": "f56677e7ce62.mp3",
+   "hash": "f56677e7ce62",
+   "rom": "à-ngùn",
+   "heard": "องุ่น",
+   "ok": true
+  },
+  "อร่อยมาก": {
+   "file": "ae551de530e4.mp3",
+   "hash": "ae551de530e4",
+   "rom": "à-ròi mâak",
+   "heard": "อร่อยมาก",
+   "ok": true
+  },
+  "อะไร": {
+   "file": "3f30c0f97e2e.mp3",
+   "hash": "3f30c0f97e2e",
+   "rom": "à-rai",
+   "heard": "อะไร",
+   "ok": true
+  },
+  "อ่านหนังสือ": {
+   "file": "a2ae45a5c8c1.mp3",
+   "hash": "a2ae45a5c8c1",
+   "rom": "àan-nǎng-sǔe",
+   "heard": "อ่าน หนังสือ",
+   "ok": true
+  },
+  "อาบน้ำ": {
+   "file": "9f242ee75eba.mp3",
+   "hash": "9f242ee75eba",
+   "rom": "àap-náam",
+   "heard": "อาบน้ำ",
+   "ok": true
+  },
+  "อีก": {
+   "file": "d2beba51e91e.mp3",
+   "hash": "d2beba51e91e",
+   "rom": "èek",
+   "heard": "อีก",
+   "ok": true
+  },
+  "เอาค่ะ": {
+   "file": "a9824f7e6d8f.mp3",
+   "hash": "a9824f7e6d8f",
+   "rom": "ao kâ",
+   "heard": "เอาค่ะ",
+   "ok": true
+  },
+  "แอปเปิ้ล": {
+   "file": "00499815eb98.mp3",
+   "hash": "00499815eb98",
+   "rom": "áep-bpôen",
+   "heard": "แอปเปิ้ล",
+   "ok": true
+  },
+  "ไอติม": {
+   "file": "44fb972fd409.mp3",
+   "hash": "44fb972fd409",
+   "rom": "ai-dtim",
+   "heard": "ไอติม",
+   "ok": true
+  },
+  "ฮิปโป": {
+   "file": "8e90fa8c628d.mp3",
+   "hash": "8e90fa8c628d",
+   "rom": "híp-bpoh",
+   "heard": "ฮิปโป",
+   "ok": true
+  },
+  "เฮลิคอปเตอร์": {
+   "file": "1f40b0122c03.mp3",
+   "hash": "1f40b0122c03",
+   "rom": "he-lí-káwp-dtôe",
+   "heard": "เฮลิคอปเตอร์",
+   "ok": true
+  },
+  "แฮมเบอร์เกอร์": {
+   "file": "f27a90941dcc.mp3",
+   "hash": "f27a90941dcc",
+   "rom": "haem-boe-gôe",
+   "heard": "แฮมเบอร์เกอร์",
+   "ok": true
+  }
+ }
+}
