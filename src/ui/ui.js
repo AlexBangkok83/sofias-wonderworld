@@ -1,26 +1,29 @@
-import { paletteBlocks, packBlocks } from '../world/blocks.js';
 import {
-  SKIN_TONES, HAIR_COLORS, CLOTH_COLORS, HAIR_STYLES, ACCESSORIES, BODY_TYPES,
-  DEFAULT_CHARACTER, randomCharacter, unlockedOptions,
-} from '../player/avatar.js';
-import { PACKS } from '../shop/packs.js';
-import { CharacterPreview } from './preview.js';
+  SKIN_TONES, HAIR_COLORS, CLOTH_COLORS, HAIR_STYLES, OUTFITS, ACCESSORIES, BODY_TYPES,
+  DEFAULT_CHARACTER, randomCharacter, unlockedOptions, drawPerson,
+} from '../art/person.js';
+import { THINGS } from '../art/things.js';
+import { isUnlocked, getPack } from '../shop/packs.js';
 import { ShopPanel } from './shop.js';
-import { el, blockIcon } from './dom.js';
-import { IS_TOUCH } from '../core/input.js';
+import { el, thingThumb, personThumb } from './dom.js';
+
+/**
+ * Everything that isn't the dollhouse itself: the buttons along the top, the
+ * toy box drawer, the title screen, menus, the character creator and the
+ * shop. It talks to main.js only through `emit`.
+ */
+
+const TOUCH = typeof window !== 'undefined'
+  && (window.matchMedia?.('(pointer: coarse)').matches || 'ontouchstart' in window);
 
 export class UI {
   constructor(root) {
     this.root = root;
     this.callbacks = {};
-    // Shop packs she owns. Locked blocks and looks are simply left out of the
-    // hotbar and the character creator; the shop is where she sees them.
     this.owned = new Set();
-    this.paletteGroups = paletteBlocks(this.owned);
-    this.activeGroup = this.paletteGroups[0]?.key || 'build';
-    this.selectedBlockId = this.paletteGroups[0]?.blocks[0]?.id ?? null;
+    this.people = [];
+    this.drawerTab = 'stuff';
     this.creatorState = null;
-    this.preview = null;
     this._build();
   }
 
@@ -30,65 +33,40 @@ export class UI {
   }
 
   emit(name, ...args) {
-    this.callbacks[name]?.(...args);
+    return this.callbacks[name]?.(...args);
   }
 
   _build() {
-    // --- canvas + HUD ---
-    this.canvas = el('canvas', { id: 'scene' });
+    this.viewport = el('div', { id: 'stage-viewport' });
 
-    this.crosshair = el('div', { id: 'crosshair' });
-    this.placeLabel = el('div', { id: 'place-label' });
-    this.hint = el('div', { id: 'hint' });
-    this.toasts = el('div', { id: 'toasts' });
-    this.zoneName = el('div', { id: 'zone-name' }, 'The Village');
-
+    // --- top bar ---
     this.menuBtn = el('button', {
-      class: 'icon-btn', title: 'Menu', 'aria-label': 'Menu',
-      onclick: () => this.emit('pause'),
+      class: 'icon-btn', title: 'Menu', 'aria-label': 'Menu', onclick: () => this.emit('pause'),
     }, '☰');
-    this.cameraBtn = el('button', {
-      class: 'icon-btn', title: 'Change view', 'aria-label': 'Change view',
-      onclick: () => this.emit('toggleCamera'),
-    }, '👁');
+    this.townBtn = el('button', {
+      id: 'town-btn', class: 'icon-btn', title: 'Back to the street', 'aria-label': 'Back to the street',
+      onclick: () => this.emit('go', 'town'),
+    }, '🏘');
     this.shopBtn = el('button', {
-      id: 'shop-btn', class: 'icon-btn', title: 'Shop', 'aria-label': 'Shop',
-      onclick: () => this.emit('openShop'),
+      id: 'shop-btn', class: 'icon-btn', title: 'Shop', 'aria-label': 'Shop', onclick: () => this.emit('openShop'),
     }, '🛍');
+    this.placeName = el('div', { id: 'place-name' }, '');
+    this.topBar = el('div', { id: 'top-bar' }, this.menuBtn, this.townBtn, this.shopBtn, this.placeName);
+    this.toasts = el('div', { id: 'toasts' });
 
-    this.topLeft = el('div', { id: 'top-left' },
-      this.menuBtn, this.cameraBtn, this.shopBtn, this.zoneName);
+    // --- the toy box ---
+    this.drawerBtn = el('button', {
+      id: 'drawer-btn', 'aria-label': 'Toy box', title: 'Toy box', onclick: () => this.toggleDrawer(),
+    }, el('span', { class: 'emoji' }, '🧸'), el('span', { class: 'put-away' }, 'Put away'));
+    this.drawerTabs = el('div', { class: 'drawer-tabs' });
+    this.drawerList = el('div', { class: 'drawer-list' });
+    this.drawer = el('div', { id: 'drawer', hidden: true },
+      el('div', { class: 'drawer-head' }, this.drawerTabs,
+        el('div', { class: 'drawer-hint' }, 'Drag up to bring out · drag back here to put away'),
+        el('button', { class: 'icon-btn small', 'aria-label': 'Close', onclick: () => this.toggleDrawer(false) }, '✕')),
+      this.drawerList);
 
-    // --- hotbar ---
-    this.tabsEl = el('div', { id: 'palette-tabs' });
-    this.hotbarEl = el('div', { id: 'hotbar' });
-    this.selectedName = el('div', { id: 'selected-name' });
-    this.hotbarWrap = el('div', { id: 'hotbar-wrap' },
-      this.tabsEl, this.selectedName, this.hotbarEl);
-
-    this.hud = el('div', { id: 'hud' },
-      this.crosshair, this.placeLabel, this.hint, this.toasts,
-      this.topLeft, this.hotbarWrap);
-
-    // --- touch controls ---
-    this.joystick = el('div', { id: 'joystick' }, el('div', { class: 'nub' }));
-    this.jumpBtn = el('button', { class: 'round-btn', 'aria-label': 'Jump' }, '⤒');
-    this.placeBtn = el('button', { class: 'round-btn', 'aria-label': 'Place block' }, '▣');
-    this.breakBtn = el('button', { class: 'round-btn', 'aria-label': 'Remove block' }, '⛏');
-    this.talkBtn = el('button', { class: 'round-btn wide', hidden: true, 'aria-label': 'Talk' }, '💬 Talk');
-    this.touchButtons = el('div', { id: 'touch-buttons' },
-      this.breakBtn, this.placeBtn, this.jumpBtn, this.talkBtn);
-    this.touch = el('div', { id: 'touch', hidden: !IS_TOUCH },
-      this.joystick, this.touchButtons);
-
-    // --- dialogue ---
-    this.dialogueWho = el('div', { class: 'who' });
-    this.dialogueText = el('div', { class: 'text' });
-    this.dialogueMore = el('div', { class: 'more' });
-    this.dialogue = el('div', {
-      id: 'dialogue', class: 'panel',
-      onclick: () => this.emit('talk'),
-    }, this.dialogueWho, this.dialogueText, this.dialogueMore);
+    this.hud = el('div', { id: 'hud' }, this.topBar, this.toasts, this.drawerBtn, this.drawer);
 
     // --- overlays ---
     this.titleScreen = this._buildTitle();
@@ -100,42 +78,27 @@ export class UI {
       onClose: () => this.emit('closeShop'),
     });
     this.loading = el('div', { id: 'loading' },
-      el('span', { class: 'moon' }, '🌙'),
-      el('div', {}, 'Building the village…'));
+      el('span', { class: 'moon' }, '🏡'), el('div', {}, 'Opening the dollhouse…'));
 
-    this.root.append(
-      this.canvas, this.hud, this.touch, this.dialogue,
-      this.titleScreen, this.pauseMenu, this.helpMenu, this.creator, this.shop.root,
-      this.loading,
-    );
-
-    this.renderPalette();
+    this.root.append(this.viewport, this.hud, this.titleScreen, this.pauseMenu, this.helpMenu,
+      this.creator, this.shop.root, this.loading);
   }
 
   // ------------------------------------------------------------------
-  // Title
+  // Title, pause, help
   // ------------------------------------------------------------------
-  _buildTitle() {
-    this.titlePlayBtn = el('button', {
-      class: 'btn', onclick: () => this.emit('play'),
-    }, 'Play');
-    this.titleContinueBtn = el('button', {
-      class: 'btn secondary', hidden: true, onclick: () => this.emit('play'),
-    }, 'Carry on');
-    this.titleCharBtn = el('button', {
-      class: 'btn lilac', onclick: () => this.emit('openCharacters'),
-    }, 'Characters');
-    this.titleShopBtn = el('button', {
-      class: 'btn secondary', onclick: () => this.emit('openShop'),
-    }, '🛍 Shop');
 
+  _buildTitle() {
+    this.titlePlayBtn = el('button', { class: 'btn', onclick: () => this.emit('play') }, 'Play');
     return el('div', { id: 'title', class: 'overlay' },
       el('div', { class: 'panel card' },
-        el('div', { class: 'moon' }, '🌙'),
+        el('div', { class: 'title-art', html: drawPerson(DEFAULT_CHARACTER, { mood: 'happy' }) }),
         el('h1', {}, "Sofia's Village"),
-        el('p', {}, 'Wander around, go inside the houses, make characters, '
-          + 'and build whatever you like out of blocks.'),
-        el('div', { class: 'row' }, this.titlePlayBtn, this.titleCharBtn, this.titleShopBtn)));
+        el('p', {}, 'Pick up anyone and anything. Tap things to see what they do. '
+          + 'Make your own people, and visit every house.'),
+        el('div', { class: 'row' }, this.titlePlayBtn,
+          el('button', { class: 'btn lilac', onclick: () => this.emit('openCharacters') }, 'Characters'),
+          el('button', { class: 'btn secondary', onclick: () => this.emit('openShop') }, '🛍 Shop'))));
   }
 
   showTitle(hasSave) {
@@ -147,88 +110,65 @@ export class UI {
     this.titleScreen.hidden = true;
   }
 
-  // ------------------------------------------------------------------
-  // Pause menu
-  // ------------------------------------------------------------------
   _buildPause() {
-    const toggle = (label, key, initial) => {
+    const toggle = (label, key) => {
       const btn = el('button', {
-        class: 'btn small', onclick: () => {
+        class: 'btn small',
+        onclick: () => {
           const next = btn.dataset.on !== 'true';
-          btn.dataset.on = String(next);
-          btn.textContent = next ? 'On' : 'Off';
+          this.setSettingValue(key, next);
           this.emit('setting', key, next);
         },
-      }, initial ? 'On' : 'Off');
-      btn.dataset.on = String(initial);
+      }, 'On');
+      btn.dataset.on = 'true';
       this[`${key}Toggle`] = btn;
       return el('div', { class: 'setting' }, el('span', {}, label), btn);
     };
-
-    this.pauseRows = el('div', { class: 'menu-rows' },
-      el('button', { class: 'btn', onclick: () => this.emit('resume') }, 'Back to playing'),
-      el('button', { class: 'btn lilac', onclick: () => this.emit('openCharacters') }, 'Characters'),
-      el('button', { class: 'btn', onclick: () => this.emit('openShop') }, '🛍 Shop'),
-      el('button', {
-        class: 'btn secondary',
-        onclick: () => { this.pauseMenu.hidden = true; this.helpMenu.hidden = false; },
-      }, 'How to play'),
-      toggle('Villager voices', 'voice', true),
-      toggle('Shadows', 'shadows', true),
-      el('button', {
-        class: 'btn secondary', onclick: () => this.emit('save'),
-      }, 'Save now'),
-      el('button', {
-        class: 'btn danger small',
-        onclick: () => {
-          if (window.confirm('Start the whole village again? Everything you built will go.')) {
-            this.emit('reset');
-          }
-        },
-      }, 'Start over'));
-
     return el('div', { id: 'pause', class: 'overlay', hidden: true },
       el('div', { class: 'panel menu-card' },
         el('h2', {}, 'Paused'),
         el('p', { class: 'sub' }, 'Everything saves by itself.'),
-        this.pauseRows));
+        el('div', { class: 'menu-rows' },
+          el('button', { class: 'btn', onclick: () => this.emit('resume') }, 'Back to playing'),
+          el('button', { class: 'btn lilac', onclick: () => this.emit('openCharacters') }, 'Characters'),
+          el('button', { class: 'btn', onclick: () => this.emit('openShop') }, '🛍 Shop'),
+          el('button', {
+            class: 'btn secondary',
+            onclick: () => { this.pauseMenu.hidden = true; this.helpMenu.hidden = false; },
+          }, 'How to play'),
+          toggle('Villager voices', 'voice'),
+          toggle('Sounds', 'sounds'),
+          el('button', { class: 'btn secondary', onclick: () => this.emit('save') }, 'Save now'),
+          el('button', {
+            class: 'btn danger small',
+            onclick: () => {
+              if (window.confirm('Start the whole village again? Everything will go back to how it was.')) {
+                this.emit('reset');
+              }
+            },
+          }, 'Start over'))));
   }
 
   _buildHelp() {
-    const rows = IS_TOUCH
-      ? [
-        ['Walk', 'Slide your left thumb anywhere on the left side of the screen.'],
-        ['Look', 'Drag on the right side of the screen.'],
-        ['Jump', 'The ⤒ button.'],
-        ['Build', '▣ puts a block down. ⛏ takes one away. Tap the screen to place too.'],
-        ['Pick a block', 'Tap one in the bar at the bottom.'],
-        ['Talk', 'Walk up to a villager and press 💬 Talk.'],
-        ['Go inside', 'Just walk into a door.'],
-        ['Shop', 'The 🛍 button. Something new to get, a little every day.'],
-      ]
-      : [
-        ['Walk', 'W A S D, or the arrow keys. Hold Shift to run.'],
-        ['Look', 'Move the mouse. Click the game first to grab the mouse; Esc lets it go.'],
-        ['Jump', 'Space.'],
-        ['Build', 'Right-click places a block. Left-click removes one.'],
-        ['Pick a block', 'Number keys 1–9, the mouse wheel, or click the bar at the bottom.'],
-        ['Talk', 'Walk up to a villager and press E.'],
-        ['Change view', 'C swaps between watching yourself and looking through your own eyes.'],
-        ['Go inside', 'Just walk into a door.'],
-        ['Shop', 'Esc, then 🛍 Shop. Something new to get, a little every day.'],
-      ];
-
+    const finger = TOUCH ? 'finger' : 'mouse';
+    const rows = [
+      ['Move things', `Press on anyone or anything and drag it with your ${finger}. Let go and it drops.`],
+      ['Sit down', 'Drop someone on a chair or a sofa. Drop them on a bed and they go to sleep.'],
+      ['Hold things', 'Drop something small onto a person and they hold it.'],
+      ['Eat', 'Tap food to take a bite.'],
+      ['Tap things', 'Lamps, the TV, the oven, the fridge, the piano, the animals — try everything.'],
+      ['Go places', 'Tap a house on the street to go in. Drag someone onto a door to take them with you.'],
+      ['The toy box', '🧸 has everyone and everything. Drag them out, or drag them back in to put them away.'],
+      ['The shop', '🛍 has new things. Come back every day.'],
+    ];
     return el('div', { id: 'help', class: 'overlay', hidden: true },
       el('div', { class: 'panel menu-card help' },
         el('h2', {}, 'How to play'),
         el('p', { class: 'sub' }, 'There is no way to lose. Nothing here can go wrong.'),
-        el('dl', {}, rows.flatMap(([term, def]) => [
-          el('dt', {}, term), el('dd', {}, def),
-        ])),
+        el('dl', {}, rows.flatMap(([term, def]) => [el('dt', {}, term), el('dd', {}, def)])),
         el('div', { class: 'menu-rows', style: 'margin-top:18px' },
           el('button', {
-            class: 'btn',
-            onclick: () => { this.helpMenu.hidden = true; this.pauseMenu.hidden = false; },
+            class: 'btn', onclick: () => { this.helpMenu.hidden = true; this.pauseMenu.hidden = false; },
           }, 'Back'))));
   }
 
@@ -243,13 +183,141 @@ export class UI {
   }
 
   get anyMenuOpen() {
-    return !this.pauseMenu.hidden || !this.helpMenu.hidden
-      || !this.creator.hidden || !this.titleScreen.hidden || this.shop.isOpen;
+    return !this.pauseMenu.hidden || !this.helpMenu.hidden || !this.creator.hidden
+      || !this.titleScreen.hidden || this.shop.isOpen;
+  }
+
+  setSettingValue(key, value) {
+    const btn = this[`${key}Toggle`];
+    if (!btn) return;
+    btn.dataset.on = String(value);
+    btn.textContent = value ? 'On' : 'Off';
+  }
+
+  // ------------------------------------------------------------------
+  // Top bar, toasts
+  // ------------------------------------------------------------------
+
+  setPlace(place) {
+    this.placeName.textContent = place.label;
+    this.townBtn.hidden = place.id === 'town';
+  }
+
+  toast(text, duration = 3200) {
+    const node = el('div', { class: 'toast' }, text);
+    this.toasts.append(node);
+    setTimeout(() => {
+      node.classList.add('leaving');
+      setTimeout(() => node.remove(), 420);
+    }, duration);
+  }
+
+  // ------------------------------------------------------------------
+  // The toy box
+  // ------------------------------------------------------------------
+
+  toggleDrawer(open = this.drawer.hidden) {
+    this.drawer.hidden = !open;
+    this.drawerBtn.classList.toggle('open', open);
+    if (open) this.renderDrawer();
+  }
+
+  showDrawerTab(tab, scrollToPack = null) {
+    this.drawerTab = tab;
+    this.toggleDrawer(true);
+    if (scrollToPack) {
+      const first = this.drawerList.querySelector(`[data-pack="${scrollToPack}"]`);
+      if (first) this.drawerList.scrollLeft = first.offsetLeft - 12;
+    }
+  }
+
+  /** Everyone, for the People tab: [{ key, name, cfg, here }]. */
+  setPeople(people) {
+    this.people = people;
+    if (!this.drawer.hidden && this.drawerTab === 'people') this.renderDrawer();
+  }
+
+  renderDrawer() {
+    const tab = (key, label) => el('button', {
+      class: `tab${this.drawerTab === key ? ' active' : ''}`,
+      onclick: () => { this.drawerTab = key; this.renderDrawer(); },
+    }, label);
+    this.drawerTabs.replaceChildren(tab('stuff', '🧸 Stuff'), tab('people', '👫 People'));
+
+    let tiles;
+    if (this.drawerTab === 'people') {
+      tiles = this.people.map((p) => this._tile(
+        personThumb(p.cfg), p.name, { person: p.key }, p.here ? 'here' : '',
+      ));
+    } else {
+      const free = THINGS.filter((t) => !t.pack);
+      const bought = THINGS.filter((t) => t.pack && isUnlocked(t, this.owned));
+      tiles = [...bought.reverse(), ...free].map((def) => this._tile(
+        thingThumb(def), def.label, { thing: def.id }, def.pack ? 'new' : '', def.pack,
+      ));
+    }
+    this.drawerList.replaceChildren(...tiles);
+    this.drawerList.scrollLeft = 0;
+  }
+
+  /**
+   * One tile. Tap it to drop the thing (or person) into the middle of the
+   * view; drag it upwards to carry it out to exactly where you want it.
+   */
+  _tile(thumb, label, spec, badge = '', pack = null) {
+    const tile = el('button', {
+      class: `tile${badge ? ` ${badge}` : ''}`,
+      'data-thing': spec.thing || null,
+      'data-person': spec.person || null,
+      'data-pack': pack,
+      title: label,
+    }, thumb, el('span', { class: 'label' }, label),
+    badge === 'new' && pack ? el('span', { class: 'badge' }, getPack(pack)?.emoji || '★') : null);
+
+    let start = null;
+    tile.addEventListener('pointerdown', (e) => {
+      start = { x: e.clientX, y: e.clientY, id: e.pointerId };
+    });
+    tile.addEventListener('pointermove', (e) => {
+      if (!start || e.pointerId !== start.id) return;
+      const dx = e.clientX - start.x;
+      const dy = e.clientY - start.y;
+      if (dy < -12 && Math.abs(dy) > Math.abs(dx)) {
+        start = null;
+        this.emit('spawn', spec, e);
+      }
+    });
+    tile.addEventListener('pointerup', (e) => {
+      if (!start || e.pointerId !== start.id) return;
+      const moved = Math.hypot(e.clientX - start.x, e.clientY - start.y);
+      start = null;
+      if (moved < 10) this.emit('place', spec);
+    });
+    tile.addEventListener('pointercancel', () => { start = null; });
+    return tile;
+  }
+
+  /** Is a point over the toy box (the open drawer, or the 🧸 button)? */
+  isOverDrawer(x, y) {
+    const inside = (r, pad = 0) => x >= r.left - pad && x <= r.right + pad && y >= r.top - pad && y <= r.bottom + pad;
+    if (!this.drawer.hidden && inside(this.drawer.getBoundingClientRect())) return true;
+    return inside(this.drawerBtn.getBoundingClientRect(), 14);
+  }
+
+  /** While something is being carried, the toy box becomes a place to drop it. */
+  setDragging(on) {
+    this.root.classList.toggle('carrying', on);
+    if (!on) this.drawerBtn.classList.remove('hot');
+  }
+
+  highlightDrop(x, y) {
+    this.drawerBtn.classList.toggle('hot', this.isOverDrawer(x, y));
   }
 
   // ------------------------------------------------------------------
   // Shop
   // ------------------------------------------------------------------
+
   openShop(view) {
     this.shop.open(view);
   }
@@ -262,250 +330,64 @@ export class UI {
     return this.shop.isOpen;
   }
 
-  /** She bought something (or the save loaded): show what's now hers. */
   setOwnedPacks(owned) {
     this.owned = new Set(owned);
-    this.paletteGroups = paletteBlocks(this.owned);
-    if (!this.paletteGroups.some((g) => g.key === this.activeGroup)) {
-      this.activeGroup = this.paletteGroups[0]?.key || 'build';
-    }
-    this.renderPalette();
+    if (!this.drawer.hidden) this.renderDrawer();
     if (this.creatorState) this._renderCreatorOptions();
-  }
-
-  /** Jump the hotbar to a pack's tab — used right after buying it. */
-  showPaletteGroup(key) {
-    const group = this.paletteGroups.find((g) => g.key === key);
-    if (!group) return;
-    this.activeGroup = key;
-    if (group.blocks[0]) this.selectedBlockId = group.blocks[0].id;
-    this.renderPalette();
-  }
-
-  setSettingValue(key, value) {
-    const btn = this[`${key}Toggle`];
-    if (!btn) return;
-    btn.dataset.on = String(value);
-    btn.textContent = value ? 'On' : 'Off';
-  }
-
-  // ------------------------------------------------------------------
-  // Hotbar
-  // ------------------------------------------------------------------
-  renderPalette() {
-    const tabs = this.paletteGroups.map((group) => el('button', {
-      class: `tab${group.key === this.activeGroup ? ' active' : ''}`,
-      onclick: () => {
-        this.activeGroup = group.key;
-        const first = group.blocks[0];
-        if (first) this.selectBlock(first.id);
-        this.renderPalette();
-      },
-    }, group.label));
-    // While there are still blocks in the shop she doesn't have, a way there
-    // from the place she'd go looking for more.
-    if (PACKS.some((pack) => !this.owned.has(pack.id) && packBlocks(pack.id).length)) {
-      tabs.push(el('button', {
-        class: 'tab shop-tab', onclick: () => this.emit('openShop'),
-      }, '🛍 More'));
-    }
-    this.tabsEl.replaceChildren(...tabs);
-    this._revealActiveTab();
-
-    const group = this.paletteGroups.find((g) => g.key === this.activeGroup);
-    const blocks = group ? group.blocks : [];
-    this.currentSlots = blocks;
-    this.hotbarEl.replaceChildren(...blocks.map((block, i) => {
-      const icon = blockIcon(block.id);
-      const slot = el('div', {
-        class: `slot${block.id === this.selectedBlockId ? ' active' : ''}`,
-        title: block.label,
-        onclick: () => this.selectBlock(block.id),
-      }, i < 9 ? el('span', { class: 'num' }, String(i + 1)) : null);
-      if (icon) slot.style.backgroundImage = `url(${icon})`;
-      else slot.style.background = block.icon;
-      return slot;
-    }));
-    this._updateSelectedName();
-  }
-
-  /**
-   * With a few packs bought the tabs scroll sideways, and a pack she's just
-   * bought lands at the end — so keep the open tab in view.
-   */
-  _revealActiveTab() {
-    const tab = this.tabsEl.querySelector('.tab.active');
-    if (!tab || this.hotbarWrap.hidden) return;
-    const box = this.tabsEl.getBoundingClientRect();
-    const rect = tab.getBoundingClientRect();
-    if (rect.left < box.left || rect.right > box.right) {
-      this.tabsEl.scrollLeft += rect.left - box.left - (box.width - rect.width) / 2;
-    }
-  }
-
-  _updateSelectedName() {
-    const block = (this.currentSlots || []).find((b) => b.id === this.selectedBlockId);
-    this.selectedName.textContent = block ? block.label : '';
-  }
-
-  selectBlock(id) {
-    this.selectedBlockId = id;
-    for (const [i, block] of (this.currentSlots || []).entries()) {
-      this.hotbarEl.children[i]?.classList.toggle('active', block.id === id);
-    }
-    this._updateSelectedName();
-    this.emit('selectBlock', id);
-  }
-
-  /** Number-key / wheel selection within the visible group. */
-  selectSlot(index) {
-    const block = (this.currentSlots || [])[index];
-    if (block) this.selectBlock(block.id);
-  }
-
-  cycleSlot(direction) {
-    const slots = this.currentSlots || [];
-    if (!slots.length) return;
-    const current = slots.findIndex((b) => b.id === this.selectedBlockId);
-    const next = (current + direction + slots.length) % slots.length;
-    this.selectBlock(slots[next].id);
-  }
-
-  setBuildingAllowed(allowed) {
-    this.hotbarWrap.hidden = !allowed;
-    if (allowed) this._revealActiveTab();
-    this.placeBtn.hidden = !allowed;
-    this.breakBtn.hidden = !allowed;
-    this.crosshair.classList.toggle('hidden', !allowed);
-  }
-
-  // ------------------------------------------------------------------
-  // HUD bits
-  // ------------------------------------------------------------------
-  setZoneName(name) {
-    this.zoneName.textContent = name;
-  }
-
-  showHint(text, key) {
-    this.hint.replaceChildren(
-      ...(key ? [el('span', { class: 'key' }, key)] : []),
-      document.createTextNode(text),
-    );
-    this.hint.classList.add('show');
-  }
-
-  hideHint() {
-    this.hint.classList.remove('show');
-  }
-
-  flashLabel(text) {
-    this.placeLabel.textContent = text;
-    this.placeLabel.classList.add('show');
-    clearTimeout(this._labelTimer);
-    this._labelTimer = setTimeout(() => this.placeLabel.classList.remove('show'), 900);
-  }
-
-  toast(text, duration = 3200) {
-    const node = el('div', { class: 'toast' }, text);
-    this.toasts.append(node);
-    setTimeout(() => {
-      node.style.transition = 'opacity 0.4s ease';
-      node.style.opacity = '0';
-      setTimeout(() => node.remove(), 420);
-    }, duration);
-  }
-
-  showDialogue(name, role, text, more) {
-    this.dialogueWho.replaceChildren(
-      el('span', {}, name),
-      role ? el('span', { class: 'role' }, role) : null,
-    );
-    this.dialogueText.textContent = text;
-    this.dialogueMore.textContent = more;
-    this.dialogue.classList.add('show');
-  }
-
-  hideDialogue() {
-    this.dialogue.classList.remove('show');
-  }
-
-  get dialogueOpen() {
-    return this.dialogue.classList.contains('show');
-  }
-
-  setTalkAvailable(available) {
-    this.talkBtn.hidden = !available;
   }
 
   // ------------------------------------------------------------------
   // Character creator
   // ------------------------------------------------------------------
+
   _buildCreator() {
-    this.previewCanvas = el('canvas', { id: 'preview-canvas' });
+    this.previewEl = el('div', { id: 'preview-box' });
     this.charListEl = el('div', { id: 'character-list' });
     this.optionsEl = el('div', { class: 'options' });
     this.nameInput = el('input', {
       type: 'text', maxlength: '16', placeholder: 'Name',
       oninput: () => {
-        if (!this.creatorState) return;
-        this.creatorState.draft.name = this.nameInput.value;
+        if (this.creatorState) this.creatorState.draft.name = this.nameInput.value;
       },
     });
-
-    const layout = el('div', { class: 'layout' },
-      el('div', { id: 'preview-box' },
-        this.previewCanvas,
-        el('div', { class: 'spin' }, 'drag to spin')),
-      this.optionsEl);
-
     this.creatorTitle = el('h2', {}, 'Characters');
-
     return el('div', { id: 'creator', class: 'overlay', hidden: true },
       el('div', { class: 'panel menu-card' },
         this.creatorTitle,
-        el('p', { class: 'sub' }, 'Make as many as you like, then pick who to be.'),
+        el('p', { class: 'sub' }, 'Make as many people as you like. New people pop up wherever you are.'),
         this.charListEl,
-        layout,
+        el('div', { class: 'layout' }, this.previewEl, this.optionsEl),
         el('div', { class: 'row-split', style: 'margin-top:16px' },
           el('button', {
             class: 'btn secondary',
             onclick: () => {
-              this.creatorState.draft = randomCharacter(
-                this.creatorState.draft.name || 'Friend', this.owned,
-              );
+              this.creatorState.draft = randomCharacter(this.creatorState.draft.name || 'Friend', this.owned);
               this.nameInput.value = this.creatorState.draft.name;
               this._renderCreatorOptions();
             },
           }, '🎲 Surprise me'),
           el('button', {
-            class: 'btn',
-            onclick: () => this.emit('saveCharacter', { ...this.creatorState.draft }),
+            class: 'btn', onclick: () => this.emit('saveCharacter', { ...this.creatorState.draft }),
           }, 'Save'),
-          el('button', {
-            class: 'btn secondary',
-            onclick: () => this.emit('closeCharacters'),
-          }, 'Done'))));
+          el('button', { class: 'btn secondary', onclick: () => this.emit('closeCharacters') }, 'Done'))));
   }
 
-  openCreator(characters, activeId) {
+  openCreator(characters, editingId = characters[0]?.id ?? null) {
+    const editing = characters.find((c) => c.id === editingId);
     this.creatorState = {
       characters,
-      activeId,
-      editingId: activeId,
-      draft: { ...(characters.find((c) => c.id === activeId) || DEFAULT_CHARACTER) },
+      editingId: editing ? editingId : null,
+      draft: { ...(editing || DEFAULT_CHARACTER) },
     };
     delete this.creatorState.draft.id;
     this.creator.hidden = false;
     this.nameInput.value = this.creatorState.draft.name || '';
-    if (!this.preview) this.preview = new CharacterPreview(this.previewCanvas);
-    this.preview.start();
     this._renderCharacterList();
     this._renderCreatorOptions();
   }
 
   closeCreator() {
     this.creator.hidden = true;
-    this.preview?.stop();
   }
 
   _renderCharacterList() {
@@ -513,8 +395,8 @@ export class UI {
     const rows = state.characters.map((char) => el('div', {
       class: `char-row${char.id === state.editingId ? ' active' : ''}`,
     },
+    personThumb(char),
     el('span', { class: 'name' }, char.name || 'Someone'),
-    char.id === state.activeId ? el('span', { class: 'tag' }, 'playing') : null,
     el('button', {
       class: 'btn small secondary',
       onclick: () => {
@@ -526,12 +408,8 @@ export class UI {
         this._renderCreatorOptions();
       },
     }, 'Edit'),
-    char.id === state.activeId ? null : el('button', {
-      class: 'btn small lilac',
-      onclick: () => this.emit('playAs', char.id),
-    }, 'Play as'),
     state.characters.length > 1 ? el('button', {
-      class: 'btn small danger',
+      class: 'btn small danger', 'aria-label': `Delete ${char.name}`,
       onclick: () => this.emit('deleteCharacter', char.id),
     }, '✕') : null));
 
@@ -545,41 +423,31 @@ export class UI {
         this._renderCreatorOptions();
       },
     }, '+ New character'));
-
     this.charListEl.replaceChildren(...rows);
     this.creatorTitle.textContent = state.editingId ? 'Change this character' : 'Make a character';
   }
 
   _renderCreatorOptions() {
     const draft = this.creatorState.draft;
-    this.preview?.setCharacter(draft);
-
+    this.previewEl.innerHTML = drawPerson(draft, { mood: 'happy' });
     const owned = this.owned;
+
     const chips = (label, all, key) => el('div', { class: 'opt-group' },
       el('div', { class: 'opt-label' }, label),
       el('div', { class: 'chips' }, unlockedOptions(all, owned).map((entry) => el('button', {
         class: `chip${draft[key] === entry.id ? ' active' : ''}`,
-        onclick: () => {
-          draft[key] = entry.id;
-          this._renderCreatorOptions();
-        },
+        onclick: () => { draft[key] = entry.id; this._renderCreatorOptions(); },
       }, entry.label))));
 
     const swatches = (label, all, key) => el('div', { class: 'opt-group' },
       el('div', { class: 'opt-label' }, label),
-      el('div', { class: 'chips' }, unlockedOptions(all, owned).map((entry) => {
-        const btn = el('button', {
-          class: `swatch${draft[key] === entry.id ? ' active' : ''}`,
-          'aria-label': entry.id,
-          title: entry.id,
-          onclick: () => {
-            draft[key] = entry.id;
-            this._renderCreatorOptions();
-          },
-        });
-        btn.style.background = `#${entry.color.toString(16).padStart(6, '0')}`;
-        return btn;
-      })));
+      el('div', { class: 'chips' }, unlockedOptions(all, owned).map((entry) => el('button', {
+        class: `swatch${draft[key] === entry.id ? ' active' : ''}`,
+        'aria-label': entry.id,
+        title: entry.id,
+        style: `background:${entry.color}`,
+        onclick: () => { draft[key] = entry.id; this._renderCreatorOptions(); },
+      }))));
 
     this.optionsEl.replaceChildren(
       el('div', { class: 'name-row' }, this.nameInput),
@@ -587,6 +455,7 @@ export class UI {
       swatches('Skin', SKIN_TONES, 'skin'),
       chips('Hair', HAIR_STYLES, 'hair'),
       swatches('Hair colour', HAIR_COLORS, 'hairColor'),
+      chips('Clothes', OUTFITS, 'outfit'),
       swatches('Top', CLOTH_COLORS, 'shirt'),
       swatches('Trousers', CLOTH_COLORS, 'pants'),
       swatches('Shoes', CLOTH_COLORS, 'shoes'),
@@ -599,10 +468,9 @@ export class UI {
     return this.creatorState?.editingId ?? null;
   }
 
-  refreshCharacterList(characters, activeId) {
+  refreshCharacterList(characters) {
     if (!this.creatorState) return;
     this.creatorState.characters = characters;
-    this.creatorState.activeId = activeId;
     this._renderCharacterList();
   }
 
@@ -614,5 +482,3 @@ export class UI {
     this.loading.hidden = true;
   }
 }
-
-export { el };

@@ -15,14 +15,14 @@ export const VILLAGERS = {
     voice: { pitch: 1.25, rate: 0.95 },
     character: {
       body: 'medium', skin: 'warm', hair: 'braids', hairColor: 'chestnut',
-      shirt: 'mint', pants: 'brown', shoes: 'brown', accessory: 'flower', accessoryColor: 'rose',
+      outfit: 'dress', shirt: 'mint', pants: 'brown', shoes: 'brown', accessory: 'flower', accessoryColor: 'rose',
     },
     lines: [
       'Oh, hello! Welcome to my cottage.',
-      'You can build anything you like in here. I never mind.',
+      'Move anything you like in here. I never mind.',
       'I light all the lanterns before it gets dark. It makes the whole room glow.',
       'The loft up there is my favourite spot. Try putting a bed in it!',
-      'If you stack blocks you can make a chair, or a table, or a whole castle.',
+      'Sit me on the sofa. It is the comfiest one in the village.',
     ],
   },
   oskar: {
@@ -37,7 +37,7 @@ export const VILLAGERS = {
       'Hey! Big windows, aren\'t they? I like being able to see the garden.',
       'There\'s a whole upstairs. Go on, have a look.',
       'My garage is for storing things. Mostly it is empty.',
-      'If you build something up on the roof, I would like that a lot.',
+      'Play the piano for me? Just tap it.',
     ],
   },
   bruno: {
@@ -52,7 +52,7 @@ export const VILLAGERS = {
       'Morning! The oven has been going since before sunrise.',
       'It smells like bread in here all day long. I am used to it now.',
       'Take whatever you want off the shelves. It is all fresh.',
-      'You could build a big table in the middle. Everyone could sit down.',
+      'Hungry? Tap the bread and have a bite.',
     ],
   },
   poppy: {
@@ -61,11 +61,11 @@ export const VILLAGERS = {
     voice: { pitch: 1.35, rate: 1.02 },
     character: {
       body: 'small', skin: 'porcelain', hair: 'buns', hairColor: 'blonde',
-      shirt: 'yellow', pants: 'green', shoes: 'brown', accessory: 'ears', accessoryColor: 'brown',
+      outfit: 'shorts', shirt: 'yellow', pants: 'green', shoes: 'brown', accessory: 'ears', accessoryColor: 'brown',
     },
     lines: [
       'Hi! Careful, there is hay absolutely everywhere.',
-      'The stalls are empty right now. You could make beds in them.',
+      'Tap the cow. She always has something to say.',
       'I sleep in the loft sometimes. It is warmer up there.',
       'Do you want to help me feed everyone later?',
     ],
@@ -76,13 +76,13 @@ export const VILLAGERS = {
     voice: { pitch: 1.1, rate: 0.88 },
     character: {
       body: 'tall', skin: 'deep', hair: 'long', hairColor: 'black',
-      shirt: 'purple', pants: 'navy', shoes: 'black', accessory: 'none', accessoryColor: 'white',
+      outfit: 'dress', shirt: 'purple', pants: 'navy', shoes: 'black', accessory: 'none', accessoryColor: 'white',
     },
     lines: [
       'Shh — only joking. You can be as loud as you like in here.',
-      'There are two floors of books. The balcony stairs are behind you.',
+      'There are two floors of books. Upstairs is the quiet bit.',
       'I read a story once about a house shaped like the moon.',
-      'They say it is hidden behind a hedge, somewhere east of here.',
+      'They say it is hidden behind a hedge, right at the end of the street.',
       'If you ever find it, come back and tell me what it was like.',
     ],
   },
@@ -92,19 +92,19 @@ export const VILLAGERS = {
     voice: { pitch: 1.15, rate: 0.85 },
     character: {
       body: 'medium', skin: 'lilac', hair: 'long', hairColor: 'platinum',
-      shirt: 'lilac', pants: 'navy', shoes: 'purple', accessory: 'halo', accessoryColor: 'yellow',
+      outfit: 'dress', shirt: 'lilac', pants: 'navy', shoes: 'purple', accessory: 'halo', accessoryColor: 'yellow',
     },
     lines: [
       'You found it. Almost nobody finds it.',
       'The whole house is cut open at the front, so you can see every floor at once.',
-      'Walk up the stairs. They go all the way to the top horn.',
+      'The bed at the top is the best place to watch the stars.',
       'The vines grow down through the glass. I never trim them.',
-      'You can build in here too. It is a house, after all.',
+      'You can move anything in here too. It is a house, after all.',
     ],
   },
   tomas: {
     name: 'Tomas',
-    role: 'Stands by the pond',
+    role: 'Lives by the pond',
     voice: { pitch: 0.9, rate: 0.95 },
     character: {
       body: 'medium', skin: 'light', hair: 'short', hairColor: 'brown',
@@ -112,23 +112,23 @@ export const VILLAGERS = {
     },
     lines: [
       'Nice day for it. The pond is my favourite bit of the village.',
-      'Every house here is open. Just walk up to a door and keep walking.',
-      'You cannot build out here in the village — only inside the houses.',
-      'That was the rule the designer set, and I think it is a good one.',
+      'Every house here is open. Tap one to go inside.',
+      'You can take anyone with you. Drag them onto a door.',
+      'Whoever designed this village did a lovely job, I think.',
     ],
   },
   wren: {
     name: 'Wren',
-    role: 'Always on the path',
+    role: 'Always out on the street',
     voice: { pitch: 1.3, rate: 1.05 },
     character: {
       body: 'small', skin: 'light', hair: 'ponytail', hairColor: 'pink',
-      shirt: 'rose', pants: 'lilac', shoes: 'white', accessory: 'bow', accessoryColor: 'white',
+      outfit: 'dress', shirt: 'rose', pants: 'lilac', shoes: 'white', accessory: 'bow', accessoryColor: 'white',
     },
     lines: [
       'Hello hello! Are you new here?',
       'The cottage is that way. It is the prettiest one, I think.',
-      'You can be anyone you want, you know. Just change your character.',
+      'You can make new people too, you know. Look in Characters.',
       'I changed mine four times this morning.',
     ],
   },

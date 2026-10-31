@@ -1,11 +1,13 @@
 #!/usr/bin/env node
 /**
- * Headless smoke test: boots the built game in Chromium, walks through the
- * things Sofia would actually do, and writes screenshots to shots/.
+ * Headless playthrough: boots the built game in Chromium and plays it the way
+ * Sofia would — with real mouse drags and real touch events, not by poking
+ * the game's state — then checks what actually happened. Screenshots go to
+ * shots/.
  *
  *   npm run build && node scripts/smoke-test.mjs
  *
- * It fails loudly on any console error or page exception, so a broken build
+ * Fails loudly on any console error or page exception, so a broken build
  * can't be mistaken for a working one.
  */
 
@@ -44,33 +46,25 @@ function serve() {
 }
 
 const problems = [];
+const check = (ok, message) => { if (!ok) problems.push(message); };
 
 async function shot(page, name) {
   await page.screenshot({ path: path.join(SHOTS, `${name}.png`) });
   console.log(`  📸 ${name}`);
 }
 
-async function waitForFrames(page, count = 3) {
-  await page.evaluate((n) => new Promise((resolve) => {
-    let i = 0;
-    const tick = () => (++i >= n ? resolve() : requestAnimationFrame(tick));
-    requestAnimationFrame(tick);
-  }), count);
-}
+const game = (page, fn, arg) => page.evaluate(fn, arg);
+const settle = (page, ms = 550) => page.waitForTimeout(ms);
 
-/**
- * Read a number out of the running game.
- *
- * Deliberately strict: a probe that comes back undefined means the hook is
- * missing or misnamed, and every `x < y` check downstream would quietly pass.
- */
-async function probeNumber(page, label, fn) {
-  const value = await page.evaluate(fn);
-  if (typeof value !== 'number' || Number.isNaN(value)) {
-    problems.push(`probe "${label}" returned ${JSON.stringify(value)}, expected a number`);
-    return NaN;
+/** A real mouse drag, in small steps, the way a hand moves. */
+async function mouseDrag(page, from, to, steps = 14) {
+  await page.mouse.move(from.x, from.y);
+  await page.mouse.down();
+  for (let i = 1; i <= steps; i++) {
+    await page.mouse.move(from.x + ((to.x - from.x) * i) / steps, from.y + ((to.y - from.y) * i) / steps);
   }
-  return value;
+  await page.mouse.up();
+  await settle(page);
 }
 
 async function main() {
@@ -80,461 +74,424 @@ async function main() {
   }
   await mkdir(SHOTS, { recursive: true });
   const server = await serve();
-
   const browser = await chromium.launch({
     executablePath: process.env.CHROMIUM_PATH || undefined,
-    args: ['--use-gl=swiftshader', '--enable-unsafe-swiftshader', '--no-sandbox'],
+    args: ['--no-sandbox'],
   });
-  // Modest viewport on purpose: this usually runs on software GL, where cost
-  // scales with pixels and a full-size window turns a 5 minute run into 25.
-  const page = await browser.newPage({ viewport: { width: 900, height: 560 } });
+  const page = await browser.newPage({ viewport: { width: 1100, height: 700 } });
+  page.on('console', (msg) => { if (msg.type() === 'error') problems.push(`console: ${msg.text()}`); });
+  page.on('pageerror', (error) => problems.push(`pageerror: ${error.message}`));
 
-  // This runs on software GL, where a 2048² shadow map costs seconds a frame.
-  // Turn shadows off up front so the test finishes in a sane amount of time.
+  // Voices off: headless Chromium has no speech, and it's not what's tested.
   await page.addInitScript(() => {
     try {
-      localStorage.setItem('sofias-village-save', JSON.stringify({
-        version: 1, characters: [], activeCharacterId: null, edits: {}, location: null,
-        discovered: {}, settings: { voice: false, firstPerson: false, shadows: false },
-        playedBefore: false,
-      }));
-    } catch { /* storage blocked; the test still runs, just slower */ }
+      if (!localStorage.getItem('sofias-village-save')) {
+        localStorage.setItem('sofias-village-save', JSON.stringify({
+          version: 2, characters: [], settings: { voice: false, sounds: false },
+        }));
+      }
+    } catch { /* storage blocked; the test still runs */ }
   });
-
-  page.on('console', (msg) => {
-    if (msg.type() === 'error') problems.push(`console: ${msg.text()}`);
-  });
-  page.on('pageerror', (error) => problems.push(`pageerror: ${error.message}`));
 
   console.log('\n  Booting…');
   await page.goto(`http://localhost:${PORT}/`, { waitUntil: 'load' });
-  await page.waitForSelector('#title:not([hidden])', { timeout: 45000 });
-  await waitForFrames(page, 4);
+  await page.waitForSelector('#title:not([hidden])', { timeout: 30000 });
+  await page.waitForFunction(() => !!window.__game);
   await shot(page, '01-title');
-
-  // --- Structural checks over every zone ---
-  console.log('  Checking the world holds together…');
-  const worldProblems = await page.evaluate(() => window.__game.validateWorld());
-  for (const problem of worldProblems) console.log(`    ✗ ${problem}`);
-  if (worldProblems.length) problems.push(...worldProblems.map((p) => `world: ${p}`));
-  else console.log('    all zones, doors and spawns line up');
-
-  // --- Village ---
-  console.log('  Village…');
   await page.click('#title .btn');
-  await waitForFrames(page, 5);
-  const zoneName = await page.textContent('#zone-name');
-  console.log(`    zone: ${zoneName}`);
-  await shot(page, '02-village');
+  await settle(page, 300);
+  const start = await game(page, () => window.__game.placeId());
+  console.log(`    started in: ${start}`);
+  check(start === 'cottage', `expected to start in the cottage, got ${start}`);
+  await shot(page, '02-cottage');
 
-  // Walk forward toward the cottage door, stopping as soon as we're inside.
-  console.log('  Walking to the cottage…');
-  await page.keyboard.down('KeyW');
-  let inside = null;
-  for (let i = 0; i < 45; i++) {
-    await waitForFrames(page, 3);
-    inside = await page.evaluate(() => window.__game.zoneId());
-    if (inside === 'cottage_in') break;
+  const sofia = await game(page, () => window.__game.state.save.characters[0].id);
+  const thingAt = (uid) => game(page, (u) => window.__game.thing(u), uid);
+  const onScreen = (uid) => game(page, (u) => window.__game.thingOnScreen(u), uid);
+  const personAt = (key) => game(page, (k) => window.__game.personOnScreen(k), key);
+  const look = (x) => game(page, (v) => window.__game.look(v), x);
+
+  // --- Dropping something into someone's hand, then eating it ---
+  console.log('  Hand Mila an apple, and eat it…');
+  await look(800);
+  const apple = await game(page, () => window.__game.findThing('apple'));
+  await mouseDrag(page, await onScreen(apple), await personAt('mila'));
+  const held = await thingAt(apple);
+  console.log(`    apple held by: ${held?.heldBy}`);
+  check(held?.heldBy === 'mila', `dropping the apple on Mila didn't put it in her hand (${held?.heldBy})`);
+  for (let i = 0; i < 3; i++) {
+    const box = await page.locator('[data-person="mila"] [data-held]').boundingBox();
+    if (!box) { problems.push('could not find the apple in Mila\'s hand to tap'); break; }
+    await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+    await settle(page, 250);
   }
-  await page.keyboard.up('KeyW');
-  await waitForFrames(page, 4);
-  console.log(`    zone: ${inside}`);
-  // Walking into a door is the whole way you get indoors — there's no prompt
-  // and no button, so if this stops working the village becomes scenery.
-  if (inside !== 'cottage_in') {
-    problems.push(`walking into the cottage door did not go inside (ended in ${inside})`);
+  const eaten = await thingAt(apple);
+  console.log(`    after three bites: ${eaten ? 'still there' : 'all gone'}`);
+  check(!eaten, 'three bites didn\'t finish the apple');
+  await shot(page, '03-ate-apple');
+
+  // --- Sitting down, and going to bed ---
+  console.log('  Sit Sofia on the sofa, put Mila to bed…');
+  await look(1100);
+  const sofa = await game(page, () => window.__game.findThing('sofa'));
+  const seat = await game(page, (u) => window.__game.seatOnScreen(u, 1), sofa);
+  await mouseDrag(page, await personAt(sofia), seat);
+  const sitting = await game(page, (k) => window.__game.person(k), sofia);
+  console.log(`    Sofia is: ${sitting.spot.pose}`);
+  check(sitting.spot.pose === 'sit', `Sofia didn't sit on the sofa (${sitting.spot.pose})`);
+  await look(500);
+  const bed = await game(page, () => window.__game.findThing('bed'));
+  const bedSpot = await game(page, (u) => window.__game.seatOnScreen(u, 0), bed);
+  await mouseDrag(page, await personAt('mila'), bedSpot);
+  const sleeping = await game(page, () => window.__game.person('mila'));
+  console.log(`    Mila is: ${sleeping.spot.pose}`);
+  check(sleeping.spot.pose === 'lie', `Mila didn't lie down in bed (${sleeping.spot.pose})`);
+  await shot(page, '04-sitting-and-sleeping');
+
+  // --- Tapping things ---
+  console.log('  Tapping things…');
+  for (const kind of ['floorlamp', 'fridge', 'stove', 'toybox']) {
+    const uid = await game(page, (k) => window.__game.findThing(k), kind);
+    const thing = await thingAt(uid);
+    await look(thing.x);
+    const p = await onScreen(uid);
+    await page.mouse.click(p.x, p.y);
+    await settle(page, 150);
+    const after = await thingAt(uid);
+    check(after.st.on !== thing.st.on, `tapping the ${kind} didn't switch it`);
   }
-  await shot(page, '03-walked');
+  await look(500);
+  await shot(page, '05-switched-on');
 
-  // --- Cottage interior: building ---
-  console.log('  Cottage interior + building…');
-  await page.evaluate(() => window.__game.enterZone('cottage_in'));
-  await waitForFrames(page, 4);
-  await shot(page, '04-cottage-interior');
+  // --- Things fall when what's under them goes ---
+  console.log('  Move the table out from under the cookie…');
+  await look(800);
+  const table = await game(page, () => window.__game.findThing('table'));
+  const cookie = await game(page, () => window.__game.findThing('cookie'));
+  const cookieBefore = await thingAt(cookie);
+  const tablePos = await onScreen(table);
+  await mouseDrag(page, tablePos, { x: tablePos.x + 260, y: tablePos.y });
+  const cookieAfter = await thingAt(cookie);
+  console.log(`    cookie: y ${cookieBefore.y} → ${cookieAfter.y}`);
+  check(cookieAfter.y === 760, `the cookie didn't fall to the floor when its table moved (y=${cookieAfter.y})`);
 
-  const before = await probeNumber(page, 'blockCount', () => window.__game.blockCount());
-
-  // Park the cursor before aiming. Moving the mouse is itself a look input —
-  // the game applies it, correctly — so aiming first and moving second left the
-  // camera pointing at open air by the time the click landed.
-  await page.mouse.move(450, 280);   // dead centre, over the canvas
-  // Steeply down at the floor just ahead, and re-aimed before every click so a
-  // stray pixel of drift can't send the ray off into nothing.
-  const aimAtFloor = async () => {
-    await page.evaluate(() => window.__game.setLook(0, 0.85));
-    await waitForFrames(page, 2);
-  };
-
-  await aimAtFloor();
-  for (let i = 0; i < 5; i++) {
-    await page.mouse.down({ button: 'right' });
-    await page.mouse.up({ button: 'right' });
-    await waitForFrames(page, 3);
-    await aimAtFloor();
-  }
-  const after = await probeNumber(page, 'blockCount', () => window.__game.blockCount());
-  console.log(`    blocks: ${before} → ${after}`);
-  if (!(after > before)) {
-    problems.push(`placing blocks did not raise the block count (${before} → ${after})`);
-  }
-  await shot(page, '05-built-blocks');
-
-  // Remove one back off.
-  await page.mouse.down({ button: 'left' });
-  await page.mouse.up({ button: 'left' });
-  await waitForFrames(page, 3);
-  const afterBreak = await probeNumber(page, 'blockCount', () => window.__game.blockCount());
-  console.log(`    after removing: ${afterBreak}`);
-  if (!(afterBreak < after)) {
-    problems.push(`removing a block did not lower the block count (${after} → ${afterBreak})`);
-  }
+  // --- Dropping into thin air lands on the floor below ---
+  console.log('  Drop the teddy from up high…');
+  await look(1000);
+  const teddy = await game(page, () => window.__game.findThing('teddy'));
+  const teddyPos = await onScreen(teddy);
+  const high = await game(page, () => window.__game.toScreen(1100, 180));
+  await mouseDrag(page, teddyPos, high);
+  const teddyAfter = await thingAt(teddy);
+  console.log(`    teddy landed at y=${teddyAfter.y}`);
+  check(teddyAfter.y === 430, `the teddy didn't land on the loft floor (y=${teddyAfter.y})`);
 
   // --- Talking ---
-  console.log('  Talking to a villager…');
-  await page.evaluate(() => window.__game.goToNearestNpc());
-  await waitForFrames(page, 3);
-  await page.keyboard.press('KeyE');
-  await waitForFrames(page, 5);
-  const dialogueVisible = await page.evaluate(
-    () => document.getElementById('dialogue').classList.contains('show'),
-  );
-  const said = await page.textContent('#dialogue .text');
-  console.log(`    dialogue: ${dialogueVisible ? `"${said}"` : 'NOT SHOWN'}`);
-  if (!dialogueVisible) problems.push('dialogue did not appear after pressing E next to a villager');
-  await shot(page, '06-dialogue');
+  console.log('  Tap a villager…');
+  await look(400);
+  const mila = await personAt('mila');
+  await page.mouse.click(mila.x, mila.y);
+  await settle(page, 200);
+  const said = await page.evaluate(() => document.querySelector('.pop-speech')?.textContent || null);
+  console.log(`    Mila: ${said ? `"${said}"` : 'NOTHING'}`);
+  check(!!said, 'tapping Mila showed no speech bubble');
 
-  // --- Character creator ---
-  console.log('  Character creator…');
-  await page.keyboard.press('Escape');
-  await waitForFrames(page, 3);
-  await page.click('#pause .btn.lilac');
-  await waitForFrames(page, 4);
-  await shot(page, '07-character-creator');
-  const chipCount = await page.evaluate(() => document.querySelectorAll('#creator .chip').length);
-  if (chipCount < 10) problems.push(`character creator only rendered ${chipCount} options`);
+  // --- The toy box ---
+  console.log('  Toy box…');
+  const countThings = () => game(page, () => window.__game.things().length);
+  const before = await countThings();
+  await page.click('#drawer-btn');
+  await settle(page, 300);
+  await shot(page, '06-toy-box');
+  await page.click('#drawer .tile[data-thing="ball"]');
+  await settle(page);
+  const afterAdd = await countThings();
+  console.log(`    things: ${before} → ${afterAdd} after tapping the ball`);
+  check(afterAdd === before + 1, 'tapping a toy box tile didn\'t add the thing');
+  // Drag a thing out of the drawer by pulling it upwards.
+  await page.locator('#drawer .tile[data-thing="plant"]').scrollIntoViewIfNeeded();
+  const tile = await page.locator('#drawer .tile[data-thing="plant"]').boundingBox();
+  await mouseDrag(page, { x: tile.x + tile.width / 2, y: tile.y + tile.height / 2 },
+    { x: tile.x + tile.width / 2, y: tile.y - 260 });
+  const afterDrag = await countThings();
+  console.log(`    things: ${afterAdd} → ${afterDrag} after dragging a plant out`);
+  check(afterDrag === afterAdd + 1, 'dragging a tile out of the toy box didn\'t add the thing');
+  // And put it back by dropping it on the drawer.
+  const plants = await game(page, () => window.__game.things().filter((t) => t.kind === 'plant').map((t) => t.uid));
+  const newest = plants[plants.length - 1];
+  await look((await thingAt(newest)).x);
+  const drawerBox = await page.locator('#drawer').boundingBox();
+  await mouseDrag(page, await onScreen(newest), { x: drawerBox.x + drawerBox.width / 2, y: drawerBox.y + 50 });
+  const afterPutAway = await countThings();
+  console.log(`    things: ${afterDrag} → ${afterPutAway} after putting it back`);
+  check(afterPutAway === afterDrag - 1, 'dropping a thing on the toy box didn\'t put it away');
+  await page.click('#drawer .icon-btn');
 
-  // Make a new character and switch to them. Buttons are found by their label
-  // rather than by class — several share `.btn.secondary`, including the per-row
-  // Edit buttons, and picking the wrong one silently edits the existing
-  // character instead of creating a new one.
-  const clickByText = (label) => page.evaluate((text) => {
-    const button = [...document.querySelectorAll('#creator button')]
-      .find((b) => b.textContent.trim() === text);
-    if (!button) throw new Error(`no button labelled "${text}"`);
-    button.click();
-  }, label);
+  // --- The street, and taking someone with you ---
+  console.log('  The street…');
+  await page.click('#town-btn');
+  await settle(page, 300);
+  check((await game(page, () => window.__game.placeId())) === 'town', 'the 🏘 button didn\'t go to the street');
+  await shot(page, '07-street');
+  await look(1300);
+  const bakeryDoor = await game(page, () => window.__game.toScreen(1325, 600));
+  await page.mouse.click(bakeryDoor.x, bakeryDoor.y);
+  await settle(page, 300);
+  const inBakery = await game(page, () => window.__game.placeId());
+  console.log(`    tapped the bakery: now in ${inBakery}`);
+  check(inBakery === 'bakery', `tapping the bakery didn't go in (${inBakery})`);
+  await shot(page, '08-bakery');
+  await page.click('#town-btn');
+  await settle(page, 300);
+  await look(900);
+  const wren = await personAt('wren');
+  const libraryDoor = await game(page, () => window.__game.toScreen(2590, 600));
+  await look(900);
+  // Carry Wren along the street — the view slides at the edge — to the library.
+  await page.mouse.move(wren.x, wren.y);
+  await page.mouse.down();
+  await page.mouse.move(wren.x + 30, wren.y - 20);
+  await page.mouse.move(1090, 560, { steps: 8 });
+  await page.waitForFunction(() => window.__game.stage.camX > 1900, null, { timeout: 15000 }).catch(() => {});
+  const door = await game(page, () => window.__game.toScreen(2590, 600));
+  await page.mouse.move(door.x, door.y, { steps: 6 });
+  await page.mouse.up();
+  await settle(page);
+  const wrenNow = await game(page, () => window.__game.person('wren'));
+  const where = await game(page, () => window.__game.placeId());
+  console.log(`    dropped Wren on the library door: she's in ${wrenNow.place}, we're in ${where}`);
+  check(wrenNow.place === 'library' && where === 'library', `dropping Wren on the library door didn't take her in (${wrenNow.place}/${where})`);
+  void libraryDoor;
 
-  await clickByText('+ New character');
-  await waitForFrames(page, 3);
-  await page.fill('#creator input[type="text"]', 'Star');
-  await clickByText('🎲 Surprise me');
-  await waitForFrames(page, 4);
-  const editingBeforeSave = await page.evaluate(() => window.__game && document
-    .querySelector('#creator h2').textContent);
-  if (editingBeforeSave !== 'Make a character') {
-    problems.push(`expected to be making a new character, header said "${editingBeforeSave}"`);
+  // --- The secret ---
+  console.log('  Look for the moon house…');
+  await page.click('#town-btn');
+  await settle(page, 300);
+  await look(3200);
+  const gap = await game(page, () => window.__game.toScreen(3100, 640));
+  await page.mouse.click(gap.x, gap.y);
+  await settle(page, 400);
+  const moon = await game(page, () => window.__game.placeId());
+  const found = await page.evaluate(() => [...document.querySelectorAll('.toast')].map((t) => t.textContent).join(' '));
+  console.log(`    tapped the gap in the hedge: ${moon} (${found.includes('Moon') ? 'found it!' : 'no toast'})`);
+  check(moon === 'moon', `the gap in the hedge didn't lead to the moon house (${moon})`);
+  check(found.includes('Moon House'), 'finding the moon house showed no toast');
+  await shot(page, '09-moon-house');
+
+  // --- Every place opens ---
+  for (const id of ['modern', 'barn', 'library']) {
+    await game(page, (p) => window.__game.go(p), id);
+    await settle(page, 200);
+    await shot(page, `10-${id}`);
   }
-  await clickByText('Save');
-  await waitForFrames(page, 4);
-  const charCount = await probeNumber(page, 'characterCount', () => window.__game.characterCount());
-  console.log(`    characters: ${charCount}`);
-  if (!(charCount >= 2)) problems.push(`saving a new character did not add one (${charCount})`);
-
-  // Switching who you're playing as is half of what the creator is for.
-  await clickByText('Play as');
-  await waitForFrames(page, 5);
-  const playingAs = await page.evaluate(() => window.__game.activeCharacterName());
-  console.log(`    playing as: ${playingAs}`);
-  if (playingAs !== 'Star') problems.push(`switching character failed (playing as ${playingAs})`);
-  await shot(page, '08-two-characters');
-
-  await clickByText('Done');
-  await waitForFrames(page, 5);
+  await game(page, () => window.__game.go('cottage'));
+  await settle(page, 200);
 
   // --- Shop ---
   //
-  // The rule for the shop: money arrives every day but is never shown. So
-  // besides buying, this checks there is no number anywhere on the screen.
+  // The rule: money arrives every day but is never shown. So besides buying,
+  // this checks there is no number anywhere in the shop.
   console.log('  Shop…');
   const shopText = () => page.evaluate(() => document.getElementById('shop').innerText);
   const noNumbers = async (when) => {
     const text = await shopText();
     if (/\d/.test(text)) problems.push(`the shop shows a number ${when}: "${text.match(/.{0,20}\d.{0,20}/)[0]}"`);
   };
-  const status = (id) => page.evaluate((p) => window.__game.packStatus(p), id);
+  const status = (id) => game(page, (p) => window.__game.packStatus(p), id);
 
-  await page.keyboard.press('Escape');
-  await waitForFrames(page, 3);
-  await page.evaluate(() => {
-    const button = [...document.querySelectorAll('#pause button')]
-      .find((b) => b.textContent.includes('Shop'));
-    if (!button) throw new Error('no Shop button in the pause menu');
-    button.click();
-  });
-  await waitForFrames(page, 3);
-  const shopShown = await page.evaluate(() => !document.getElementById('shop').hidden);
-  if (!shopShown) problems.push('the Shop button in the pause menu did not open the shop');
-  const statuses = await page.evaluate(() => [...document.querySelectorAll('#shop .pack-card')]
-    .map((c) => c.dataset.status));
+  await page.click('#shop-btn');
+  await settle(page, 200);
+  check(await page.evaluate(() => !document.getElementById('shop').hidden), 'the 🛍 button did not open the shop');
+  const statuses = await page.evaluate(() => [...document.querySelectorAll('#shop .pack-card')].map((c) => c.dataset.status));
   console.log(`    first visit: ${statuses.join(', ')}`);
-  if (!statuses.includes('buy')) problems.push('nothing in the shop can be bought on the first day');
-  if (!statuses.includes('not-yet')) problems.push('every pack was buyable on the first day');
+  check(statuses.includes('buy'), 'nothing in the shop can be bought on the first day');
+  check(statuses.includes('not-yet'), 'every pack was buyable on the first day');
   await noNumbers('on the first visit');
-  await shot(page, '09a-shop');
+  await shot(page, '11-shop');
 
   await page.click('#shop .pack-card[data-pack="candy"] .btn.buy');
-  await waitForFrames(page, 4);
+  await settle(page, 300);
   const revealed = await page.evaluate(() => !document.querySelector('#shop .shop-reveal').hidden
     && document.querySelector('#shop .reveal-card h2').textContent);
-  console.log(`    bought candy: ${revealed || 'NO REVEAL'}, owned: ${await page.evaluate(() => window.__game.ownedPacks())}`);
-  if (revealed !== "It's yours!") problems.push('buying a pack did not show the reveal');
-  if ((await status('candy')) !== 'owned') problems.push('buying the candy pack did not make it hers');
+  console.log(`    bought candy: ${revealed || 'NO REVEAL'}`);
+  check(revealed === "It's yours!", 'buying a pack did not show the reveal');
+  check((await status('candy')) === 'owned', 'buying the candy pack did not make it hers');
   await noNumbers('after buying');
-  await shot(page, '09b-shop-bought');
+  await shot(page, '12-shop-bought');
   await page.click('#shop .reveal-card .btn');
-  await waitForFrames(page, 2);
+  await settle(page, 150);
 
-  // That was the day's money. Everything else should say "Not yet" now, and
-  // pressing it should say so kindly rather than do anything.
   const oceanAfter = await status('ocean');
-  if (oceanAfter !== 'not-yet') problems.push(`after spending the day's money, ocean was "${oceanAfter}"`);
+  check(oceanAfter === 'not-yet', `after spending the day's money, ocean was "${oceanAfter}"`);
   await page.click('#shop .pack-card[data-pack="ocean"] .btn.not-yet');
-  await waitForFrames(page, 2);
   const note = await page.textContent('#shop .pack-card[data-pack="ocean"] .pack-note');
   console.log(`    not yet: "${note}"`);
-  if (!/come back/i.test(note || '')) problems.push('pressing "Not yet" did not say to come back');
-  if ((await status('ocean')) !== 'not-yet') problems.push('pressing "Not yet" bought the pack anyway');
+  check(/come back/i.test(note || ''), 'pressing "Not yet" did not say to come back');
+  check((await status('ocean')) === 'not-yet', 'pressing "Not yet" bought the pack anyway');
 
-  // Tomorrow, the money is back.
-  await page.evaluate(() => window.__game.skipDays(1));
-  await waitForFrames(page, 2);
+  await game(page, () => window.__game.skipDays(1));
   const tomorrow = await status('ocean');
   console.log(`    next day, ocean: ${tomorrow}`);
-  if (tomorrow !== 'buy') problems.push(`a new day did not make a one-day pack buyable (got "${tomorrow}")`);
+  check(tomorrow === 'buy', `a new day did not make a one-day pack buyable (got "${tomorrow}")`);
   await page.click('#shop .pack-card[data-pack="animals"] .btn.buy');
-  await waitForFrames(page, 3);
+  await settle(page, 200);
   await page.keyboard.press('Escape');   // closes the reveal
-  await waitForFrames(page, 2);
   await page.keyboard.press('Escape');   // closes the shop
-  await waitForFrames(page, 3);
-  if (await page.evaluate(() => !document.getElementById('shop').hidden)) {
-    problems.push('Escape did not close the shop');
-  }
+  await settle(page, 300);
+  check(await page.evaluate(() => document.getElementById('shop').hidden), 'Escape did not close the shop');
 
-  // The new blocks are in their own hotbar tab, already picked.
-  await page.evaluate(() => window.__game.enterZone('cottage_in'));
-  await waitForFrames(page, 3);
-  const tabs = await page.evaluate(() => [...document.querySelectorAll('#palette-tabs .tab')]
-    .map((t) => t.textContent));
-  const picked = await page.evaluate(() => window.__game.ui.selectedBlockId);
-  console.log(`    hotbar tabs: ${tabs.join(' | ')}; picked block ${picked}`);
-  if (!tabs.some((t) => t.includes('Candy'))) problems.push('the candy blocks have no hotbar tab');
-  // Animal Friends was bought last, so its tab is the one that should be open.
-  const newestActive = await page.evaluate(() => document.querySelector('#palette-tabs .tab.active')
-    ?.textContent.includes('Animals'));
-  if (!newestActive) problems.push('the hotbar did not switch to the most recently bought blocks');
+  // Closing the shop opens the toy box on the new things.
+  const tiles = await page.evaluate(() => [...document.querySelectorAll('#drawer:not([hidden]) .tile')].map((t) => t.dataset.thing));
+  console.log(`    toy box opened with: ${tiles.slice(0, 6).join(', ')}…`);
+  check(tiles.includes('cupcake') && tiles.includes('kitty'), 'the bought things are not in the toy box');
+  await page.click('#drawer .tile[data-thing="kitty"]');
+  await settle(page);
+  check((await game(page, () => window.__game.things().some((t) => t.kind === 'kitty'))), 'a bought kitty could not be brought out');
+  await page.click('#drawer .icon-btn');
+  await shot(page, '13-kitty');
 
-  // And the new looks are in the character creator.
+  // --- Characters ---
+  console.log('  Character creator…');
   await page.keyboard.press('Escape');
-  await waitForFrames(page, 2);
   await page.click('#pause .btn.lilac');
-  await waitForFrames(page, 3);
-  const extras = await page.evaluate(() => [...document.querySelectorAll('#creator .chip')]
-    .map((c) => c.textContent));
-  if (!extras.includes('Bunny Ears')) problems.push('Bunny Ears are not in the creator after buying Animal Friends');
-  if (extras.includes('Antennae')) problems.push('Antennae show in the creator without buying the Space pack');
-  await page.evaluate(() => {
-    const chip = [...document.querySelectorAll('#creator .chip')]
-      .find((c) => c.textContent === 'Bunny Ears');
-    chip?.click();
-  });
-  await waitForFrames(page, 4);
-  await shot(page, '09c-bunny-ears');
+  await settle(page, 200);
+  const chips = await page.evaluate(() => [...document.querySelectorAll('#creator .chip')].map((c) => c.textContent));
+  check(chips.includes('Bunny Ears'), 'Bunny Ears are not in the creator after buying Animal Friends');
+  check(!chips.includes('Antennae'), 'Antennae show in the creator without buying the Space pack');
+  const clickByText = (label) => page.evaluate((text) => {
+    const button = [...document.querySelectorAll('#creator button')].find((b) => b.textContent.trim() === text);
+    if (!button) throw new Error(`no button labelled "${text}"`);
+    button.click();
+  }, label);
+  await clickByText('+ New character');
+  await page.fill('#creator input[type="text"]', 'Star');
+  await clickByText('🎲 Surprise me');
+  await clickByText('Bunny Ears');
+  await shot(page, '14-creator');
+  await clickByText('Save');
+  await settle(page, 200);
+  const count = await game(page, () => window.__game.characterCount());
+  const star = await game(page, () => window.__game.state.save.characters.find((c) => c.name === 'Star')?.id);
+  const starHere = await game(page, (k) => window.__game.peopleHere().includes(k), star);
+  console.log(`    characters: ${count}; Star is here: ${starHere}`);
+  check(count === 2, `saving a new character did not add one (${count})`);
+  check(starHere, 'a new character did not appear in the house');
   await clickByText('Done');
-  await waitForFrames(page, 3);
-
-  // --- Other interiors ---
-  for (const zone of ['modern_in', 'bakery_in', 'barn_in', 'library_in']) {
-    console.log(`  ${zone}…`);
-    await page.evaluate((z) => window.__game.enterZone(z), zone);
-    await waitForFrames(page, 4);
-    await shot(page, `09-${zone}`);
-  }
-
-  // --- Moon house ---
-  console.log('  Moon house…');
-  await page.evaluate(() => window.__game.enterZone('moon_house'));
-  await waitForFrames(page, 5);
-  await shot(page, '10-moon-house');
-  // Stand at the back of the viewing island, looking up at the whole crescent.
-  await page.evaluate(() => window.__game.placeAt([21.5, 2, 59.5], 0, -0.36));
-  await waitForFrames(page, 5);
-  await shot(page, '11-moon-house-front');
+  await settle(page, 300);
+  await shot(page, '15-star');
 
   // --- Persistence ---
   console.log('  Save + reload…');
-  await page.evaluate(() => window.__game.saveNow());
-  await page.waitForTimeout(400);
+  await game(page, () => window.__game.saveNow());
   await page.reload({ waitUntil: 'load' });
-  await page.waitForSelector('#title:not([hidden])', { timeout: 45000 });
-  // The hook only exists once boot() has finished; without this wait every
-  // probe below returns undefined and the comparisons pass without testing.
-  await page.waitForFunction(() => !!window.__game, null, { timeout: 45000 });
-  await waitForFrames(page, 4);
-  const restored = await probeNumber(page, 'characterCount', () => window.__game.characterCount());
-  const restoredZone = await page.evaluate(() => window.__game.zoneId());
-  const restoredEdits = await probeNumber(page, 'editCount', () => window.__game.editCount());
-  const restoredPacks = await page.evaluate(() => window.__game.ownedPacks());
-  console.log(`    after reload — characters: ${restored}, zone: ${restoredZone}, edits: ${restoredEdits}, packs: ${restoredPacks}`);
-  if (!(restoredPacks.includes('candy') && restoredPacks.includes('animals'))) {
-    problems.push(`bought packs not persisted across reload (got ${restoredPacks})`);
-  }
-  // Both days' money is spent, so coming back the same day must not pay again.
-  const buyableAfterReload = await page.evaluate(() => ['ocean', 'salon', 'rainbow', 'space', 'castle']
+  await page.waitForFunction(() => !!window.__game, null, { timeout: 30000 });
+  await settle(page, 200);
+  const restored = {
+    place: await game(page, () => window.__game.placeId()),
+    characters: await game(page, () => window.__game.characterCount()),
+    sofia: await game(page, (k) => window.__game.person(k).spot.pose, sofia),
+    apple: await game(page, (u) => !!window.__game.thing(u), apple),
+    packs: await game(page, () => window.__game.ownedPacks()),
+    wren: await game(page, () => window.__game.person('wren').place),
+  };
+  console.log(`    after reload: ${JSON.stringify(restored)}`);
+  check(restored.place === 'cottage', `didn't come back to the same place (${restored.place})`);
+  check(restored.characters === 2, 'characters were not saved');
+  check(restored.sofia === 'sit', 'Sofia was not still sitting on the sofa');
+  check(!restored.apple, 'the eaten apple came back');
+  check(restored.packs.includes('candy') && restored.packs.includes('animals'), 'bought packs were not saved');
+  check(restored.wren === 'library', 'Wren forgot she went to the library');
+  const buyable = await game(page, () => ['ocean', 'salon', 'rainbow', 'space', 'castle']
     .filter((id) => window.__game.packStatus(id) === 'buy'));
-  if (buyableAfterReload.length) {
-    problems.push(`reloading paid the day's money again (buyable: ${buyableAfterReload})`);
-  }
-  if (!(restored >= 2)) problems.push(`characters not persisted across reload (got ${restored})`);
-  if (!(restoredEdits >= 1)) problems.push(`block edits not persisted across reload (got ${restoredEdits})`);
-  if (restoredZone !== 'moon_house') {
-    problems.push(`did not resume in the last zone (got ${restoredZone})`);
-  }
-  await shot(page, '12-after-reload');
+  check(!buyable.length, `reloading paid the day's money again (buyable: ${buyable})`);
 
-  // --- Touch layout ---
-  console.log('  Phone layout…');
+  // --- On a phone, with real touches ---
+  console.log('  Phone…');
   const phone = await browser.newPage({
-    viewport: { width: 390, height: 844 },
+    viewport: { width: 844, height: 390 },
     isMobile: true,
     hasTouch: true,
     deviceScaleFactor: 2,
-    userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15'
-      + ' (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1',
   });
   phone.on('pageerror', (error) => problems.push(`phone pageerror: ${error.message}`));
+  await phone.addInitScript(() => {
+    try {
+      localStorage.setItem('sofias-village-save', JSON.stringify({ version: 2, settings: { voice: false, sounds: false } }));
+    } catch { /* fine */ }
+  });
   await phone.goto(`http://localhost:${PORT}/`, { waitUntil: 'load' });
-  await phone.waitForSelector('#title:not([hidden])', { timeout: 45000 });
-  await phone.screenshot({ path: path.join(SHOTS, '13-phone-title.png') });
-  await phone.click('#title .btn');
-  await waitForFrames(phone, 6);
-  await phone.evaluate(() => window.__game.enterZone('cottage_in'));
-  await waitForFrames(phone, 6);
-  await phone.screenshot({ path: path.join(SHOTS, '14-phone-play.png') });
-  const touchVisible = await phone.evaluate(
-    () => !document.getElementById('touch').hasAttribute('hidden'),
-  );
-  console.log(`    touch controls visible: ${touchVisible}`);
-  if (!touchVisible) problems.push('touch controls are hidden on a touch device');
-  console.log('  📸 13-phone-title, 14-phone-play');
-
-  // --- Touch controls, actually driven ---
-  //
-  // Sofia plays on a phone as often as a laptop, so these are the controls
-  // that matter most. Real touch events through CDP rather than synthesised
-  // DOM events, so the same code path a finger takes gets exercised.
-  console.log('  Phone controls…');
+  await phone.waitForFunction(() => !!window.__game, null, { timeout: 30000 });
+  await phone.tap('#title .btn');
+  await settle(phone, 300);
+  await phone.screenshot({ path: path.join(SHOTS, '16-phone.png') });
   const cdp = await phone.context().newCDPSession(phone);
   const touch = (type, points) => cdp.send('Input.dispatchTouchEvent', {
-    type,
-    touchPoints: points.map(([x, y], i) => ({ x, y, id: i })),
+    type, touchPoints: points.map(([x, y], i) => ({ x, y, id: i })),
   });
-
-  // Joystick: press and drag on the left half, and check she moves.
-  const startPos = await phone.evaluate(() => window.__game.state.player.position.toArray());
-  await touch('touchStart', [[90, 620]]);
-  await waitForFrames(phone, 2);
-  const joystickShown = await phone.evaluate(
-    () => document.getElementById('joystick').classList.contains('active'),
-  );
-  for (let i = 0; i < 8; i++) {
-    await touch('touchMove', [[90, 560]]);   // push "up" = forward
-    await waitForFrames(phone, 2);
-  }
-  await touch('touchEnd', []);
-  await waitForFrames(phone, 2);
-  const movedPos = await phone.evaluate(() => window.__game.state.player.position.toArray());
-  const walked = Math.hypot(movedPos[0] - startPos[0], movedPos[2] - startPos[2]);
-  console.log(`    joystick shown: ${joystickShown}, walked ${walked.toFixed(2)} blocks`);
-  if (!joystickShown) problems.push('the virtual joystick did not appear on touch');
-  if (!(walked > 0.5)) problems.push(`joystick did not move the player (${walked.toFixed(2)} blocks)`);
-  await phone.screenshot({ path: path.join(SHOTS, '15-phone-joystick.png') });
-
-  // Tap-to-place on the right half.
-  await phone.evaluate(() => window.__game.setLook(0, 0.85));
-  await waitForFrames(phone, 2);
-  const beforeTap = await probeNumber(phone, 'blockCount', () => window.__game.blockCount());
-  await touch('touchStart', [[300, 420]]);
-  await touch('touchEnd', []);
-  await waitForFrames(phone, 3);
-  const afterTap = await probeNumber(phone, 'blockCount', () => window.__game.blockCount());
-  console.log(`    tap-to-place: ${beforeTap} → ${afterTap}`);
-  if (!(afterTap > beforeTap)) {
-    problems.push(`tap-to-place put no block down (${beforeTap} → ${afterTap})`);
-  }
-
-  // The on-screen place and remove buttons.
-  const tapButton = async (selector) => {
-    const box = await phone.locator(selector).boundingBox();
-    if (!box) throw new Error(`${selector} has no box`);
-    await touch('touchStart', [[box.x + box.width / 2, box.y + box.height / 2]]);
+  const touchDrag = async (from, to, steps = 10) => {
+    await touch('touchStart', [[from.x, from.y]]);
+    for (let i = 1; i <= steps; i++) {
+      await touch('touchMove', [[from.x + ((to.x - from.x) * i) / steps, from.y + ((to.y - from.y) * i) / steps]]);
+    }
     await touch('touchEnd', []);
-    await waitForFrames(phone, 3);
+    await settle(phone);
   };
-  await phone.evaluate(() => window.__game.setLook(0, 0.85));
-  await waitForFrames(phone, 2);
-  const beforeBtn = await probeNumber(phone, 'blockCount', () => window.__game.blockCount());
-  await tapButton('#touch-buttons .round-btn >> nth=1');   // ▣ place
-  const afterPlaceBtn = await probeNumber(phone, 'blockCount', () => window.__game.blockCount());
-  await tapButton('#touch-buttons .round-btn >> nth=0');   // ⛏ remove
-  const afterBreakBtn = await probeNumber(phone, 'blockCount', () => window.__game.blockCount());
-  console.log(`    place button: ${beforeBtn} → ${afterPlaceBtn}, remove button: → ${afterBreakBtn}`);
-  if (!(afterPlaceBtn > beforeBtn)) problems.push('the on-screen place button did nothing');
-  if (!(afterBreakBtn < afterPlaceBtn)) problems.push('the on-screen remove button did nothing');
+  await phone.evaluate(() => window.__game.look(300));
+  const bread = await phone.evaluate(() => window.__game.findThing('bread'));
+  const breadFrom = await phone.evaluate((u) => window.__game.thing(u), bread);
+  const breadPos = await phone.evaluate((u) => window.__game.thingOnScreen(u), bread);
+  await touchDrag(breadPos, { x: breadPos.x - 120, y: breadPos.y - 40 });
+  const breadTo = await phone.evaluate((u) => window.__game.thing(u), bread);
+  console.log(`    dragged the bread with a finger: x ${breadFrom.x} → ${Math.round(breadTo.x)}, y ${breadTo.y}`);
+  check(Math.abs(breadTo.x - breadFrom.x) > 50, 'a finger drag did not move the bread');
+  check(breadTo.y === 760, `the bread didn't drop to the floor (y=${breadTo.y})`);
 
-  // Picking a different block from the hotbar by tapping it.
-  const firstBlock = await phone.evaluate(() => window.__game.ui.selectedBlockId);
-  await tapButton('#hotbar .slot >> nth=3');
-  const pickedBlock = await phone.evaluate(() => window.__game.ui.selectedBlockId);
-  console.log(`    hotbar tap: block ${firstBlock} → ${pickedBlock}`);
-  if (pickedBlock === firstBlock) problems.push('tapping a hotbar slot did not change the block');
+  // Slide the view with a finger on the background — on the street, which is
+  // wider than the screen (a whole house fits on a phone held sideways).
+  await phone.evaluate(() => window.__game.go('town'));
+  await settle(phone, 200);
+  const camBefore = await phone.evaluate(() => window.__game.stage.camX);
+  await touchDrag({ x: 600, y: 60 }, { x: 300, y: 60 });
+  const camAfter = await phone.evaluate(() => window.__game.stage.camX);
+  console.log(`    swiped the background: view ${Math.round(camBefore)} → ${Math.round(camAfter)}`);
+  check(camAfter > camBefore + 50, 'swiping the background did not slide the view');
 
-  // Talking, via the on-screen Talk button.
-  await phone.evaluate(() => window.__game.goToNearestNpc());
-  await waitForFrames(phone, 3);
-  const talkShown = await phone.evaluate(
-    () => !document.getElementById('touch-buttons').querySelector('.wide').hidden,
-  );
-  if (!talkShown) problems.push('the Talk button did not appear next to a villager');
-  else {
-    await tapButton('#touch-buttons .wide');
-    const spoke = await phone.evaluate(
-      () => document.getElementById('dialogue').classList.contains('show'),
-    );
-    console.log(`    talk button opened dialogue: ${spoke}`);
-    if (!spoke) problems.push('the Talk button did not open dialogue');
-  }
-  await phone.screenshot({ path: path.join(SHOTS, '16-phone-built.png') });
-  console.log('  📸 15-phone-joystick, 16-phone-built');
+  // Two fingers, two things at once.
+  await phone.evaluate(() => window.__game.go('cottage'));
+  await phone.evaluate(() => window.__game.look(1000));
+  const lampUid = await phone.evaluate(() => window.__game.findThing('floorlamp'));
+  const plantUid = await phone.evaluate(() => window.__game.findThing('plant'));
+  const a0 = await phone.evaluate((u) => window.__game.thing(u), lampUid);
+  const b0 = await phone.evaluate((u) => window.__game.thing(u), plantUid);
+  const a = await phone.evaluate((u) => window.__game.thingOnScreen(u), lampUid);
+  const b = await phone.evaluate((u) => window.__game.thingOnScreen(u), plantUid);
+  await touch('touchStart', [[a.x, a.y], [b.x, b.y]]);
+  for (let i = 1; i <= 8; i++) await touch('touchMove', [[a.x - i * 12, a.y], [b.x - i * 12, b.y]]);
+  await touch('touchEnd', []);
+  await settle(phone);
+  const a1 = await phone.evaluate((u) => window.__game.thing(u), lampUid);
+  const b1 = await phone.evaluate((u) => window.__game.thing(u), plantUid);
+  console.log(`    two fingers: lamp moved ${Math.round(a0.x - a1.x)}, plant moved ${Math.round(b0.x - b1.x)}`);
+  check(a0.x - a1.x > 40 && b0.x - b1.x > 40, 'two fingers could not move two things at once');
 
-  // The shop, from the 🛍 button, at phone size.
-  await tapButton('#shop-btn');
-  const phoneShop = await phone.evaluate(() => !document.getElementById('shop').hidden);
-  console.log(`    🛍 opened the shop: ${phoneShop}`);
-  if (!phoneShop) problems.push('the 🛍 button did not open the shop on a phone');
-  const phoneOverflow = await phone.evaluate(
-    () => document.querySelector('#shop .shop-card').scrollWidth
-      > document.querySelector('#shop .shop-card').clientWidth,
-  );
-  if (phoneOverflow) problems.push('the shop scrolls sideways on a phone');
-  await phone.screenshot({ path: path.join(SHOTS, '19-phone-shop.png') });
-  const firstBuy = '#shop .pack-card .btn.buy >> nth=0';
-  await phone.locator(firstBuy).scrollIntoViewIfNeeded();
-  await tapButton(firstBuy);
-  await phone.screenshot({ path: path.join(SHOTS, '20-phone-bought.png') });
-  const phoneOwned = await phone.evaluate(() => window.__game.ownedPacks().length);
-  if (phoneOwned !== 1) problems.push(`tapping Buy on a phone left ${phoneOwned} packs owned`);
-  console.log('  📸 19-phone-shop, 20-phone-bought');
+  // The shop from the 🛍 button, at phone size.
+  await phone.tap('#shop-btn');
+  await settle(phone, 200);
+  check(await phone.evaluate(() => !document.getElementById('shop').hidden), 'the 🛍 button did not open the shop on a phone');
+  const overflow = await phone.evaluate(() => {
+    const card = document.querySelector('#shop .shop-card');
+    return card.scrollWidth > card.clientWidth;
+  });
+  check(!overflow, 'the shop scrolls sideways on a phone');
+  await phone.screenshot({ path: path.join(SHOTS, '17-phone-shop.png') });
+  const firstBuy = phone.locator('#shop .pack-card .btn.buy').first();
+  await firstBuy.scrollIntoViewIfNeeded();
+  await firstBuy.tap();
+  await settle(phone, 300);
+  await phone.screenshot({ path: path.join(SHOTS, '18-phone-bought.png') });
+  const phonePacks = await phone.evaluate(() => window.__game.ownedPacks().length);
+  check(phonePacks === 1, `tapping Buy on a phone left ${phonePacks} packs owned`);
+  console.log('  📸 16-phone, 17-phone-shop, 18-phone-bought');
 
   await browser.close();
   server.close();

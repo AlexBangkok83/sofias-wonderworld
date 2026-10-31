@@ -14,17 +14,20 @@ const STORE = 'state';
 const KEY = 'save';
 const LS_KEY = 'sofias-village-save';
 
-export const SAVE_VERSION = 1;
+// Version 1 was the blocky 3D village. Version 2 is the dollhouse: the block
+// edits and the 3D position are dropped, everything else carries over.
+export const SAVE_VERSION = 2;
 
 export function emptySave() {
   return {
     version: SAVE_VERSION,
     characters: [],
-    activeCharacterId: null,
-    edits: {},
-    location: null,
+    // Where everything and everyone is: { things: {placeId: [...]}, people: {key: {...}} }.
+    // Built from the authored places on first boot (src/world/seed.js).
+    world: null,
+    place: null,
     discovered: {},
-    settings: { voice: true, firstPerson: false, shadows: null, music: false },
+    settings: { voice: true, sounds: true },
     playedBefore: false,
     // Hidden money (src/shop/piggybank.js). Never shown on screen. Filled in
     // on boot, which is also when the day's money arrives.
@@ -98,9 +101,24 @@ export class SaveStore {
   _migrate(data) {
     const base = emptySave();
     const merged = { ...base, ...data, settings: { ...base.settings, ...(data.settings || {}) } };
+    if (!(data.version >= 2)) {
+      // From the 3D village: keep her characters, the piggy bank and her packs.
+      delete merged.edits;
+      delete merged.location;
+      delete merged.activeCharacterId;
+      delete merged.settings.firstPerson;
+      delete merged.settings.shadows;
+      delete merged.settings.music;
+      merged.world = null;
+      merged.place = null;
+    }
     merged.version = SAVE_VERSION;
     if (!Array.isArray(merged.characters)) merged.characters = [];
-    if (!merged.edits || typeof merged.edits !== 'object') merged.edits = {};
+    merged.characters = merged.characters.filter((c) => c && typeof c.id === 'string');
+    if (!merged.world || typeof merged.world !== 'object'
+      || typeof merged.world.things !== 'object' || typeof merged.world.people !== 'object') {
+      merged.world = null;
+    }
     if (!merged.discovered || typeof merged.discovered !== 'object') merged.discovered = {};
     // Saves from before the shop existed have neither of these.
     merged.piggyBank = merged.piggyBank ? cleanBank(merged.piggyBank) : null;

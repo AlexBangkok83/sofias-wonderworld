@@ -47,7 +47,7 @@ async function main() {
 
   const browser = await chromium.launch({
     executablePath: process.env.CHROMIUM_PATH || undefined,
-    args: ['--use-gl=swiftshader', '--enable-unsafe-swiftshader', '--no-sandbox'],
+    args: ['--no-sandbox'],
   });
 
   const check = async (label, page, url, shotName) => {
@@ -71,18 +71,18 @@ async function main() {
     }));
 
     const titleVisible = await target.locator('#title').isVisible();
-    const zone = await handle.evaluate(() => window.__game.zoneId());
-    const blocks = await handle.evaluate(() => window.__game.blockCount());
-    // Is anything actually drawn? Read a pixel out of the WebGL canvas.
+    const place = await handle.evaluate(() => window.__game.placeId());
+    const things = await handle.evaluate(() => window.__game.things().length);
+    // Is the house actually drawn, at a real size?
     const painted = await handle.evaluate(() => {
-      const canvas = document.getElementById('scene');
-      return canvas ? canvas.width > 0 && canvas.height > 0 : false;
+      const box = document.querySelector('#stage .backdrop svg')?.getBoundingClientRect();
+      return !!box && box.width > 100 && box.height > 100;
     });
-    console.log(`    ${label}: title=${titleVisible} zone=${zone} blocks=${blocks} canvas=${painted}`);
+    console.log(`    ${label}: title=${titleVisible} place=${place} things=${things} drawn=${painted}`);
     if (!titleVisible) problems.push(`${label}: the title screen never appeared`);
-    if (zone !== 'village') problems.push(`${label}: booted into "${zone}" instead of the village`);
-    if (!(blocks > 1000)) problems.push(`${label}: village only has ${blocks} blocks`);
-    if (!painted) problems.push(`${label}: the canvas has no size`);
+    if (place !== 'cottage') problems.push(`${label}: opened in "${place}" instead of the cottage`);
+    if (!(things > 10)) problems.push(`${label}: the cottage only has ${things} things in it`);
+    if (!painted) problems.push(`${label}: the house isn't drawn at a visible size`);
 
     await page.screenshot({ path: path.join(SHOTS, `${shotName}.png`) });
     console.log(`  📸 ${shotName}`);

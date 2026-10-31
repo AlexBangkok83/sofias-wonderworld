@@ -1,4 +1,6 @@
-import { getBlockRender } from '../world/blocks.js';
+import { drawThing } from '../art/things.js';
+import { svg } from '../art/kit.js';
+import { drawPerson } from '../art/person.js';
 
 /** Small helper — build an element from a tag, props and children. */
 export function el(tag, props = {}, ...children) {
@@ -19,29 +21,22 @@ export function el(tag, props = {}, ...children) {
   return node;
 }
 
-/** Turn a block's procedural texture into an <img>-able data URL. */
-const iconCache = new Map();
-export function blockIcon(id) {
-  if (iconCache.has(id)) return iconCache.get(id);
-  const render = getBlockRender(id);
-  let url = '';
-  try {
-    // Multi-face blocks are a 1×3 atlas; the side is the most recognisable.
-    const image = render.material.map.image;
-    if (image.height > image.width) {
-      const canvas = document.createElement('canvas');
-      canvas.width = image.width;
-      canvas.height = image.width;
-      canvas.getContext('2d').drawImage(
-        image, 0, image.width, image.width, image.width, 0, 0, image.width, image.width,
-      );
-      url = canvas.toDataURL();
-    } else {
-      url = image.toDataURL();
-    }
-  } catch {
-    url = '';
-  }
-  iconCache.set(id, url);
-  return url;
+let thumbCount = 0;
+
+/** A thing's picture, sized to fit a small square (the drawer, the shop). */
+export function thingThumb(def) {
+  thumbCount += 1;
+  const node = el('span', { class: 'thumb', title: def.label });
+  const pad = 8;
+  node.innerHTML = svg(def.w, def.h, drawThing(def, def.toggle && def.startsOn ? { on: true } : {}, `th${thumbCount}`), {
+    viewBox: `${-pad} ${-pad} ${def.w + pad * 2} ${def.h + pad * 2}`,
+  });
+  return node;
+}
+
+/** A person's picture, head and body, for the drawer and character list. */
+export function personThumb(cfg) {
+  const node = el('span', { class: 'thumb person-thumb' });
+  node.innerHTML = drawPerson(cfg).replace(/viewBox="[^"]*"/, 'viewBox="-62 -200 124 210"');
+  return node;
 }

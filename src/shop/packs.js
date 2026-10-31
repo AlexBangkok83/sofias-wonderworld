@@ -1,15 +1,15 @@
 /**
  * The packs in the shop.
  *
- * Plain data, no imports: blocks.js and avatar.js both read this to label
- * things, so it can't depend on either of them.
+ * Plain data, no imports: things.js and person.js both read this, so it
+ * can't depend on either of them.
  *
  * A pack only says what it is and what it costs. What's *in* it lives next to
- * the things themselves: a block or a dress-up item belongs to a pack by
- * carrying `pack: '<id>'` in its own definition (src/world/blocks.js,
- * src/player/avatar.js). Anything without a `pack` is free and always there.
+ * the things themselves: a toy or a dress-up item belongs to a pack by
+ * carrying `pack: '<id>'` in its own definition (src/art/things.js,
+ * src/art/person.js). Anything without a `pack` is free and always there.
  *
- * To add a pack: add an entry here, then tag the new blocks / hair / extras
+ * To add a pack: add an entry here, then tag the new things / hair / extras
  * with its id. `npm run check` fails if a pack ends up empty or something
  * points at a pack that doesn't exist.
  *
@@ -21,34 +21,30 @@ export const PACKS = [
   {
     id: 'candy',
     name: 'Candy Pack',
-    tab: 'Candy',
     emoji: '🍭',
-    blurb: 'Blocks you could almost eat.',
+    blurb: 'Cupcakes, lollipops, ice cream, a big cake and a gumball machine.',
     color: '#f4a7c4',
     price: 10,
   },
   {
     id: 'ocean',
     name: 'Ocean Pack',
-    tab: 'Ocean',
     emoji: '🐚',
-    blurb: 'Sea glass, coral and wobbly seaweed.',
+    blurb: 'A fish bowl, a beach ball, a rubber duck, a seashell and a surfboard.',
     color: '#8fd3e0',
     price: 10,
   },
   {
     id: 'animals',
     name: 'Animal Friends',
-    tab: 'Animals',
     emoji: '🐰',
-    blurb: 'Bunny ears, bear ears, a unicorn horn — and hay for the barn.',
+    blurb: 'A kitty, a puppy and a bunny to look after — and bunny ears, bear ears and a unicorn horn.',
     color: '#e8c79a',
     price: 10,
   },
   {
     id: 'salon',
     name: 'Hair Salon',
-    tab: 'Salon',
     emoji: '💇',
     blurb: 'New hairstyles and new hair colours.',
     color: '#d9b8ef',
@@ -57,27 +53,24 @@ export const PACKS = [
   {
     id: 'rainbow',
     name: 'Rainbow Pack',
-    tab: 'Rainbow',
     emoji: '🌈',
-    blurb: 'Rainbows, fluffy clouds, glitter lamps and heart glasses.',
+    blurb: 'A rainbow rug, a cloud lamp, a toy unicorn, a heart balloon and heart glasses.',
     color: '#f7d58a',
     price: 20,
   },
   {
     id: 'space',
     name: 'Space Pack',
-    tab: 'Space',
     emoji: '🚀',
-    blurb: 'Starry sky blocks, planets, rocket metal and antennae.',
+    blurb: 'A rocket, a telescope, a planet lamp, an alien friend and antennae.',
     color: '#9aa6e6',
     price: 20,
   },
   {
     id: 'castle',
     name: 'Castle Pack',
-    tab: 'Castle',
     emoji: '🏰',
-    blurb: 'Castle bricks, gold, a royal carpet, torches and a tiara.',
+    blurb: 'A throne, a royal bed, a treasure chest, a magic wand and a tiara.',
     color: '#e6a07c',
     price: 30,
   },

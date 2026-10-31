@@ -1,7 +1,7 @@
-import { el, blockIcon } from './dom.js';
-import { packBlocks } from '../world/blocks.js';
-import { packLooks } from '../player/avatar.js';
-import { playTada } from './sfx.js';
+import { el, thingThumb } from './dom.js';
+import { packThings } from '../art/things.js';
+import { packLooks } from '../art/person.js';
+import { sfx } from './sfx.js';
 
 /**
  * The shop. One card per pack, each with a single button:
@@ -99,17 +99,11 @@ export class ShopPanel {
     return card;
   }
 
-  /** Little pictures of what's inside: block tiles, then dress-up chips. */
+  /** Little pictures of what's inside: things, then dress-up chips. */
   _contents(packId, big = false) {
-    const blocks = packBlocks(packId).map((block) => {
-      const tile = el('span', { class: 'pack-block', title: block.label });
-      const icon = blockIcon(block.id);
-      if (icon) tile.style.backgroundImage = `url(${icon})`;
-      else tile.style.background = block.icon;
-      return big
-        ? el('span', { class: 'pack-item' }, tile, el('span', {}, block.label))
-        : tile;
-    });
+    const things = packThings(packId).map((def) => (big
+      ? el('span', { class: 'pack-item' }, thingThumb(def), el('span', {}, def.label))
+      : thingThumb(def)));
     const looks = packLooks(packId).map((look) => {
       if (look.kind === 'Hair colour') {
         const hex = `#${look.color.toString(16).padStart(6, '0')}`;
@@ -119,7 +113,7 @@ export class ShopPanel {
       }
       return el('span', { class: 'pack-look' }, look.label);
     });
-    return el('div', { class: `pack-items${big ? ' big' : ''}` }, blocks, looks);
+    return el('div', { class: `pack-items${big ? ' big' : ''}` }, things, looks);
   }
 
   /** The moment after pressing Buy: pop the pack open and show what's inside. */
@@ -127,13 +121,12 @@ export class ShopPanel {
     const entry = this.view.find((v) => v.pack.id === packId);
     if (!entry) return;
     const { pack } = entry;
-    const hasBlocks = packBlocks(pack.id).length > 0;
+    const hasThings = packThings(pack.id).length > 0;
     const hasLooks = packLooks(pack.id).length > 0;
 
     const where = [];
-    if (hasBlocks) {
-      where.push(el('p', {}, 'Build with them inside any house — look for the ',
-        el('b', {}, `${pack.emoji} ${pack.tab}`), ' tab.'));
+    if (hasThings) {
+      where.push(el('p', {}, 'Find them in the ', el('b', {}, '🧸 toy box'), ' — drag them in anywhere.'));
     }
     if (hasLooks) {
       where.push(el('p', {}, 'Try them on in ', el('b', {}, 'Characters'), '.'));
@@ -162,7 +155,7 @@ export class ShopPanel {
         el('button', { class: 'btn', onclick: () => this.closeReveal() }, 'Yay!')),
     );
     this.revealEl.hidden = false;
-    playTada();
+    sfx('tada');
   }
 
   closeReveal() {

@@ -63,7 +63,7 @@ ${css}
     meta.content = content;
     document.head.appendChild(meta);
   }
-  // The host's own page styles may not expect a full-bleed canvas.
+  // The host's own page styles may not expect a full-screen game.
   document.documentElement.style.height = '100%';
   document.body.style.height = '100%';
   document.body.style.margin = '0';

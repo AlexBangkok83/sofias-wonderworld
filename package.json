@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Sofia's Village — a cozy blocky 3D roleplay sandbox",
+  "description": "Sofia's Village — a cozy dollhouse sandbox: drag anyone and anything, tap things to play",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -12,9 +12,6 @@
     "check": "node scripts/check-world.mjs && node scripts/check-shop.mjs",
     "test": "npm run check && npm run build && node scripts/smoke-test.mjs",
     "standalone": "node scripts/build-standalone.mjs"
-  },
-  "dependencies": {
-    "three": "^0.185.1"
   },
   "devDependencies": {
     "playwright": "^1.62.1",

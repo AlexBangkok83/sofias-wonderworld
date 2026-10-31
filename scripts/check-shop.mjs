@@ -9,15 +9,15 @@
  * never handed a number, and that every pack actually has something in it.
  */
 
-import { PACKS, getPack } from '../src/shop/packs.js';
+import { PACKS, getPack, isUnlocked } from '../src/shop/packs.js';
 import {
   DAILY_ALLOWANCE, MAX_DAYS_BANKED, emptyBank, cleanBank, payAllowance, buyPack, shopView,
 } from '../src/shop/piggybank.js';
-import { BLOCKS, paletteBlocks, packBlocks } from '../src/world/blocks.js';
+import { THINGS, packThings } from '../src/art/things.js';
 import {
-  HAIR_STYLES, HAIR_COLORS, ACCESSORIES, SKIN_TONES, CLOTH_COLORS, BODY_TYPES,
-  packLooks, randomCharacter,
-} from '../src/player/avatar.js';
+  HAIR_STYLES, HAIR_COLORS, ACCESSORIES, SKIN_TONES, CLOTH_COLORS, BODY_TYPES, OUTFITS,
+  packLooks, randomCharacter, unlockedOptions,
+} from '../src/art/person.js';
 
 const problems = [];
 const expect = (ok, message) => { if (!ok) problems.push(message); };
@@ -27,21 +27,21 @@ const expect = (ok, message) => { if (!ok) problems.push(message); };
 const ids = PACKS.map((p) => p.id);
 expect(new Set(ids).size === ids.length, 'two packs share an id');
 for (const pack of PACKS) {
-  const blocks = packBlocks(pack.id).length;
+  const things = packThings(pack.id).length;
   const looks = packLooks(pack.id).length;
-  expect(blocks + looks > 0, `pack "${pack.id}" has nothing in it`);
+  expect(things + looks > 0, `pack "${pack.id}" has nothing in it`);
   expect(Number.isInteger(pack.price) && pack.price > 0, `pack "${pack.id}" has no sensible price`);
-  for (const field of ['name', 'tab', 'emoji', 'blurb', 'color']) {
+  for (const field of ['name', 'emoji', 'blurb', 'color']) {
     expect(typeof pack[field] === 'string' && pack[field], `pack "${pack.id}" is missing ${field}`);
   }
   // The shop must never show a number, so a pack's own words can't have one.
-  for (const field of ['name', 'tab', 'blurb']) {
+  for (const field of ['name', 'blurb']) {
     expect(!/\d/.test(pack[field]), `pack "${pack.id}" ${field} contains a digit`);
   }
 }
 const tagged = [
-  ...[...BLOCKS.values()].map((b) => ['block', b.key, b.pack]),
-  ...[HAIR_STYLES, HAIR_COLORS, ACCESSORIES, SKIN_TONES, CLOTH_COLORS, BODY_TYPES]
+  ...THINGS.map((t) => ['thing', t.id, t.pack]),
+  ...[HAIR_STYLES, HAIR_COLORS, ACCESSORIES, SKIN_TONES, CLOTH_COLORS, BODY_TYPES, OUTFITS]
     .flatMap((list) => list.map((e) => ['look', e.id, e.pack])),
 ];
 for (const [kind, id, pack] of tagged) {
@@ -52,19 +52,18 @@ expect(
   'nothing in the shop can be bought on the first day',
 );
 
-// --- Locked things stay out of the hotbar and the character creator ---
+// --- Locked things stay out of the toy box and the character creator ---
 
-const starter = paletteBlocks(new Set());
+const inBox = (owned) => THINGS.filter((t) => isUnlocked(t, owned));
+expect(inBox(new Set()).every((t) => !t.pack), 'a pack thing is in the toy box before the pack is bought');
 expect(
-  starter.every((g) => g.blocks.every((b) => !b.pack)),
-  'a pack block shows in the hotbar before the pack is bought',
+  packThings('candy').every((t) => inBox(new Set(['candy'])).includes(t)),
+  'buying the candy pack did not put its things in the toy box',
 );
-const withCandy = paletteBlocks(new Set(['candy']));
-const candyTab = withCandy.find((g) => g.key === 'candy');
-expect(!!candyTab, 'buying the candy pack did not add a Candy tab');
+expect(!unlockedOptions(ACCESSORIES, new Set()).some((a) => a.pack), 'pack extras show in the creator before buying');
 expect(
-  candyTab && candyTab.blocks.length === packBlocks('candy').length,
-  'the Candy tab is missing some of the candy blocks',
+  unlockedOptions(ACCESSORIES, new Set(['animals'])).some((a) => a.id === 'bunny'),
+  'Bunny Ears are not in the creator after buying Animal Friends',
 );
 for (let i = 0; i < 400; i++) {
   const c = randomCharacter('x', new Set());
