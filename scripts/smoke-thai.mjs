@@ -94,6 +94,7 @@ async function main() {
   await page.locator('.node').first().click();
   await page.waitForSelector('.chapter-screen');
   check(await page.locator('.word-mini').count() === 12, 'chapter 1 lists its 12 words');
+  await page.waitForTimeout(400); // let the screen fade in before the screenshot
   await shot('02-chapter');
 
   // ── Learn ──

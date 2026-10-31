@@ -22,7 +22,7 @@
 import { readFile, writeFile, mkdir, readdir, unlink, access } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
 import { allWords, CHAPTERS } from '../src/thai/data/chapters.js';
 
@@ -113,10 +113,11 @@ async function sheets() {
     if (only && chapter.id !== only) continue;
     const words = allWords().filter((w) => w.chapter === chapter.id && manifest.photos[w.id]);
     if (!words.length) continue;
-    const cells = words.map((w) => {
-      const src = pathToFileURL(path.join(IMG, manifest.photos[w.id].file)).href;
-      return `<figure><img src="${src}"><figcaption>${w.en}</figcaption></figure>`;
-    }).join('');
+    // Inline the images: a page set with setContent can't load file:// URLs.
+    const cells = (await Promise.all(words.map(async (w) => {
+      const data = (await readFile(path.join(IMG, manifest.photos[w.id].file))).toString('base64');
+      return `<figure><img src="data:image/webp;base64,${data}"><figcaption>${w.en}</figcaption></figure>`;
+    }))).join('');
     await page.setContent(`<style>
       body{margin:10px;font:600 15px system-ui;background:#fff}
       h1{font-size:18px;margin:0 0 8px}

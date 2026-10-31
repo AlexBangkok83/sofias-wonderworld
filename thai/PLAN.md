@@ -85,19 +85,34 @@ opposites, numbers to 100, food ordering, a "grown-up" phrase pack.
 
 ---
 
-## 3. Pictures: real photos
+## 3. Pictures: one realistic picture per word
 
-- **Pexels**, the main source. Free, no attribution required, high quality, a simple API with a free key.
-- **Pixabay**, the second source, for words that are hard to photograph. It also has illustrations.
-- **Numbers and colours are drawn, not photographed.** A colour is a paint swatch, and a number is counted dots with the digit and the Thai numeral (๓). Photos would be ambiguous: is that "red" or "apple"?
+Pexels paused new API keys, so every picture is **generated** instead, with GPT Image 2.5 on Higgsfield
+at medium quality (0.5 credits each, about 175 credits for all 330 including redos). This turned out
+better than stock photos would have:
 
-**The pipeline** (`npm run thai:photos`):
+- **Every picture shows exactly its word**, even words that are hard to photograph ("sorry", "can't",
+  "I don't understand", "how much?").
+- **Thai life where it matters:** the wai, a teacher in the khaki government uniform, a Thai police
+  officer, a pink Bangkok taxi, a longtail boat, tom yum, ลูกชิ้น skewers, Songkran water guns, a krathong.
+- **One consistent, bright photo style** across all chapters.
+- **No photos of real strangers' children.**
+- **Numbers and colours are drawn, not pictured.** A colour is a paint swatch, and a number is counted dots
+  with the digit and the Thai numeral (๓), because a picture would be ambiguous: is that "red" or "apple"?
 
-1. Search each word with its own query (`q` in the data, so "hello" finds a Thai *wai*, not a phone) and keep 8 candidates.
-2. Build contact sheets. **I review every word visually and pick the clearest, child-appropriate photo.** You can override any pick in `thai/photos/picks.json`.
-3. Download the picks, crop them square, resize to 480 px WebP (about 30 KB each, about 10 MB in all), and commit them, so the app works offline and never hotlinks.
-4. Write a credits page with photographer and link. Pexels doesn't require one, but it's good manners and Pixabay asks for it.
-5. A check fails the build if any word is missing its photo.
+**The pipeline:**
+
+1. One prompt per word in `src/thai/data/picture-prompts.js`.
+2. Generated on Higgsfield. Each job and result URL is recorded in `thai/photos/generated.json`.
+3. `npm run thai:pictures -- import` downloads them, crops to 480 px WebP (about 23 KB each, 7.7 MB in all), and writes the manifest.
+4. `npm run thai:pictures -- sheets` draws a contact sheet per chapter. **I checked every picture by eye.**
+   Six were redone because they could be confused with another word: child/swing, how much?/mango,
+   head/teeth, so cute/dog, thunder/lightning, singer/sing.
+5. Higgsfield's safety filter blocks innocent pictures of children described as sad, sick, crying or
+   "in bed". Those words show the feeling through a small story instead (a dropped ice cream, a blanket and
+   tissues), and "cry" shows a grown-up.
+
+The old stock-photo script (`npm run thai:photos`) is still there if Pexels or Pixabay keys become available.
 
 **Spelling on every picture:** every photo carries its Thai word and pronunciation. The one exception is while
 the picture *is* the question (Listen & Find, the picture side of a memory card). Then the label
@@ -282,7 +297,7 @@ scripts/
 - ✅ Swap points for Robux with grown-up approval, PIN-protected Grown-ups area
 - ✅ OpenAI voice for every word, plus the transcription check
 - ✅ PWA (installable, offline), data checks and a phone-sized playthrough test
-- ⏳ Curated photos for every word: the script is ready, waiting on a Pexels API key
+- ✅ A checked, realistic picture for every word (GPT Image 2.5 on Higgsfield)
 
 **Phase 2: talk and tones**
 
@@ -301,7 +316,7 @@ scripts/
 ## 11. What I need from you
 
 1. ~~Allow the OpenAI and photo domains in the cloud environment.~~ Done.
-2. **A free Pexels API key** (pexels.com/api). A Pixabay key too if you have one (pixabay.com/api/docs).
+2. ~~A Pexels API key.~~ Not needed: pictures are generated on Higgsfield instead.
 3. **For the AI conversation:** in Vercel, add `OPENAI_API_KEY` and a family passcode `CHAT_PASSCODE` as environment variables.
 4. **A Thai speaker for a 20-minute listen-through** once the audio exists.
 5. **Rotate the OpenAI key when we're done.** It's in this chat's transcript.

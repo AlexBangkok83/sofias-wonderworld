@@ -1,1 +1,1984 @@
-{ "photos": {} }
+{
+ "photos": {
+  "actions-1:cry": {
+   "file": "actions-1-cry-510cea37.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "503e0017-a044-4273-bbb7-d49e9d3a6509"
+  },
+  "actions-1:dance": {
+   "file": "actions-1-dance-e4fb8c0c.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "783ec680-25d2-4070-96d8-890fa0600e60"
+  },
+  "actions-1:drink": {
+   "file": "actions-1-drink-a1a3b88d.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "8e77a800-355c-4eff-8e32-cfe57088ea38"
+  },
+  "actions-1:eat": {
+   "file": "actions-1-eat-62edf4ca.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "0c8759a9-08a3-42aa-b145-81fdfa6374f7"
+  },
+  "actions-1:laugh": {
+   "file": "actions-1-laugh-1e6588f0.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "39f7cb3e-6842-45b3-a82f-2b9d44a71894"
+  },
+  "actions-1:look-watch": {
+   "file": "actions-1-look-watch-88a8eb88.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "961d2d33-4bcd-43a3-bb82-393f9a88a0c7"
+  },
+  "actions-1:play": {
+   "file": "actions-1-play-ad63ee08.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "fd3e9352-80b3-4483-b097-2c96b800d9fa"
+  },
+  "actions-1:run": {
+   "file": "actions-1-run-33f7eb8b.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "b4ecb27e-265f-43bb-a0e8-8333904916e2"
+  },
+  "actions-1:sing": {
+   "file": "actions-1-sing-15580e66.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "ab5703bf-b418-4714-979f-fbcd6574ea44"
+  },
+  "actions-1:sleep": {
+   "file": "actions-1-sleep-1a073607.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "967cf797-274a-4df4-82d3-6721547a6304"
+  },
+  "actions-1:swim": {
+   "file": "actions-1-swim-8e259923.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "eeb14b95-77a4-44bc-8bf1-f73e1de5c094"
+  },
+  "actions-1:walk": {
+   "file": "actions-1-walk-d30b605e.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "c1c7c5d7-676f-4de2-a6e5-109db9b6311c"
+  },
+  "actions-2:climb": {
+   "file": "actions-2-climb-dca8de96.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "24fc052a-cad8-413b-bb7a-c64be93bbf8d"
+  },
+  "actions-2:draw": {
+   "file": "actions-2-draw-91f37d59.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "1dbc8fee-d287-488e-a53b-8e31ef45dbc8"
+  },
+  "actions-2:have-a-bath": {
+   "file": "actions-2-have-a-bath-3d33b162.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "e9e422bf-2241-4c7e-b1fb-24ebb41ba079"
+  },
+  "actions-2:hide": {
+   "file": "actions-2-hide-d8282edd.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "22a4531c-f39e-4e9b-a448-df98ce8cd385"
+  },
+  "actions-2:hug": {
+   "file": "actions-2-hug-e90b5aaa.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "ed85352a-6b7b-4ac3-b487-4f2dbec7cc88"
+  },
+  "actions-2:listen": {
+   "file": "actions-2-listen-a485ba70.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "c623ee7b-9998-47a0-b45b-58b927b27114"
+  },
+  "actions-2:read": {
+   "file": "actions-2-read-6fdb750f.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "f4b6df21-944c-4a03-946e-918354c395da"
+  },
+  "actions-2:ride-a-bike": {
+   "file": "actions-2-ride-a-bike-5e37bb99.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "16c63a3b-aa58-4282-b609-661dd88d80bd"
+  },
+  "actions-2:smile": {
+   "file": "actions-2-smile-82e78f5e.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "1ee656ba-bf8c-4214-ac91-112c80152de4"
+  },
+  "actions-2:think": {
+   "file": "actions-2-think-7e25c4cd.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "67835924-4208-4de9-90e5-b16844906687"
+  },
+  "actions-2:wake-up": {
+   "file": "actions-2-wake-up-f7f3c2dd.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "a68b32a6-8622-4cc3-9427-7418a026ac6c"
+  },
+  "actions-2:write": {
+   "file": "actions-2-write-3bc719c6.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "6ecc6b6f-3464-4906-a4dc-9a281cf52b71"
+  },
+  "body:arm": {
+   "file": "body-arm-709a36c0.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "fe87a6fa-8291-4568-a037-a814dadcd9b9"
+  },
+  "body:ear": {
+   "file": "body-ear-7e5b891b.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "c73de133-47dc-40b2-bd30-4032fc909940"
+  },
+  "body:eye": {
+   "file": "body-eye-def4112c.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "c55c0f48-589b-456e-937b-30caeac37459"
+  },
+  "body:finger": {
+   "file": "body-finger-96728900.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "ddba6c0e-bb3f-4071-b64a-d6421c9c38de"
+  },
+  "body:foot": {
+   "file": "body-foot-108a6481.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "dc44d6b7-5810-49ae-9d0f-71eb89bfd227"
+  },
+  "body:hair": {
+   "file": "body-hair-9b2be6b7.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "d8e7028b-bb4f-40cb-9b9a-340b5ebfb970"
+  },
+  "body:hand": {
+   "file": "body-hand-54fd0f7f.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "42431cde-9f25-48fb-9a2b-ed7663e315c1"
+  },
+  "body:head": {
+   "file": "body-head-d2070034.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "986ac35b-a27f-4e21-ad2f-56861568e6f7"
+  },
+  "body:leg": {
+   "file": "body-leg-bb242537.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "dba07194-1055-4607-b818-925b664366c3"
+  },
+  "body:mouth": {
+   "file": "body-mouth-9508a1af.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "3801ae7d-aac6-4939-b442-c3d4c60365cc"
+  },
+  "body:nose": {
+   "file": "body-nose-3195e2e5.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "092932e6-011d-4d0c-a1c3-068cb8e78f0c"
+  },
+  "body:teeth": {
+   "file": "body-teeth-7d4b7452.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "c2c78733-0353-48d3-b9aa-6f997d6d0976"
+  },
+  "bugs:ant": {
+   "file": "bugs-ant-6e268d3d.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "bf35aff3-8de2-453d-a97f-81588773824a"
+  },
+  "bugs:bee": {
+   "file": "bugs-bee-7679770d.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "f3b1b246-6d95-4df0-b152-439b274ece1b"
+  },
+  "bugs:bird": {
+   "file": "bugs-bird-fdc00cee.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "b9c6b8d2-dde1-4922-a876-6ebd4316feec"
+  },
+  "bugs:butterfly": {
+   "file": "bugs-butterfly-244b26da.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "cdee7716-d252-471b-91aa-202f782cef8b"
+  },
+  "bugs:caterpillar": {
+   "file": "bugs-caterpillar-20b1bb14.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "e32de036-cffd-47df-ad1d-5d52e0c53ca1"
+  },
+  "bugs:frog": {
+   "file": "bugs-frog-9c2d71fa.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "9e2ac39c-d86b-4de7-a4bc-d529a806b605"
+  },
+  "bugs:ladybird": {
+   "file": "bugs-ladybird-e2e305fe.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "1809f243-2d9c-447e-b4b9-e607522086bc"
+  },
+  "bugs:mosquito": {
+   "file": "bugs-mosquito-7abc1890.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "82ee6bd5-e359-4f19-91a9-429f41cfc016"
+  },
+  "bugs:owl": {
+   "file": "bugs-owl-9c0d5471.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "7972b641-11a4-4df1-ace9-29ef387f6a43"
+  },
+  "bugs:peacock": {
+   "file": "bugs-peacock-d84a4f5f.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "f790db98-00d5-4c1a-bbd9-a55b37e38f51"
+  },
+  "bugs:penguin": {
+   "file": "bugs-penguin-e932ddc6.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "b7237aec-e7df-4834-8516-42529be2408f"
+  },
+  "bugs:snail": {
+   "file": "bugs-snail-31040bd8.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "b7e8426f-3a65-4fe6-823c-bafe55879c75"
+  },
+  "bugs:spider": {
+   "file": "bugs-spider-45e91394.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "d349863b-b3e3-42ad-9a10-c7dcddbb1cdf"
+  },
+  "clothes:bag": {
+   "file": "clothes-bag-ecc09225.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "dba88505-d8e3-4d66-9807-455501f0324f"
+  },
+  "clothes:crown": {
+   "file": "clothes-crown-96202ef7.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "7198c352-f5a7-4784-b83d-a88d4450af18"
+  },
+  "clothes:dress": {
+   "file": "clothes-dress-64ef0196.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "98b17365-9385-4b68-ae5b-24add8d7fc76"
+  },
+  "clothes:glasses": {
+   "file": "clothes-glasses-34c3b55d.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "dbefddc4-dc2a-4fd9-8cf8-fe6bd17222bb"
+  },
+  "clothes:gloves": {
+   "file": "clothes-gloves-7cebd2ad.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "38072f5c-f4dc-4796-928b-0ef3f3463006"
+  },
+  "clothes:hat": {
+   "file": "clothes-hat-fae6ab01.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "0878b265-5bdf-4ff9-a142-7399f5430a5b"
+  },
+  "clothes:jumper-coat": {
+   "file": "clothes-jumper-coat-cabec9d2.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "af21ce20-51e6-48d6-995d-ae6ba566ef79"
+  },
+  "clothes:shirt-top": {
+   "file": "clothes-shirt-top-1a965aca.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "9a84c762-a466-4834-940e-26bd53561718"
+  },
+  "clothes:shoes": {
+   "file": "clothes-shoes-12f80bc7.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "6b48540a-d175-4f26-9aed-3584bd4a8a10"
+  },
+  "clothes:socks": {
+   "file": "clothes-socks-6a50eda0.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "385b138b-1653-4d2a-a5a6-adde03f1e2e9"
+  },
+  "clothes:swimsuit": {
+   "file": "clothes-swimsuit-4206f3e7.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "091fd8fc-68c9-4774-9afa-afa1e77c163d"
+  },
+  "clothes:trousers": {
+   "file": "clothes-trousers-12e472e0.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "138d9fb0-37f7-401b-8f60-da2aafce21ad"
+  },
+  "family:big-brother": {
+   "file": "family-big-brother-5f132c74.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "ee265d54-e134-4cf9-8536-b261166e255e"
+  },
+  "family:big-sister": {
+   "file": "family-big-sister-de794375.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "c98a224d-39f5-4117-acc7-e001344ab1f2"
+  },
+  "family:child": {
+   "file": "family-child-b0edad0d.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "5ecaf033-9716-49a7-8e68-d11bc54cc8fe"
+  },
+  "family:dad": {
+   "file": "family-dad-4b96f8c8.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "667c7bdd-9317-4aa8-a8de-fc42448f351a"
+  },
+  "family:family": {
+   "file": "family-family-9a19c3be.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "efd11133-fec8-4fed-9b46-16995b0d208d"
+  },
+  "family:friend": {
+   "file": "family-friend-29e4846b.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "26989ea7-85cc-434d-8075-23aa3d14a4db"
+  },
+  "family:grandma": {
+   "file": "family-grandma-2288756f.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "5a53c3a4-426f-463d-a345-57938b3ebdad"
+  },
+  "family:grandpa": {
+   "file": "family-grandpa-2ccc3b3a.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "f1404376-c51a-47cf-88a8-9498cd9a0685"
+  },
+  "family:little-brother-or-sister": {
+   "file": "family-little-brother-or-sister-34ac8027.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "e13010f8-9b73-4749-ba53-33d39183c6f5"
+  },
+  "family:me-a-child-talking": {
+   "file": "family-me-a-child-talking-2055e08b.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "a846e9d5-817b-4484-8fc5-e9d2655711c7"
+  },
+  "family:mum": {
+   "file": "family-mum-217392b5.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "f137abeb-9df1-47db-9f6c-1a97838303e2"
+  },
+  "family:teacher": {
+   "file": "family-teacher-f4e79f41.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "436a303e-8669-4624-a7b7-fc4f8db3f11e"
+  },
+  "farm:cat": {
+   "file": "farm-cat-19f8c6ee.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "bdacfa3d-b227-436f-9ecf-dcb75ca9df9c"
+  },
+  "farm:chicken": {
+   "file": "farm-chicken-82f25503.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "1ad8ec3f-ffc9-48e0-a134-2474093fde12"
+  },
+  "farm:cow": {
+   "file": "farm-cow-3324ac1c.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "34ab6378-0575-4e49-b64e-5d9865592d05"
+  },
+  "farm:dog": {
+   "file": "farm-dog-0f02848c.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "91d5b161-3b39-4a33-a85d-86cd7e7d990a"
+  },
+  "farm:duck": {
+   "file": "farm-duck-02f263d1.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "b87dba95-28b6-417e-b71b-e61187d9f5eb"
+  },
+  "farm:fish": {
+   "file": "farm-fish-cb2dd9cb.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "62992508-d58b-4952-b66f-7343f2b7c76b"
+  },
+  "farm:goat": {
+   "file": "farm-goat-6f334ae8.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "815bc973-75b6-49ad-a03c-3cade79dcf50"
+  },
+  "farm:horse": {
+   "file": "farm-horse-199c3911.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "5139fbec-136c-4b03-a492-927fd68db245"
+  },
+  "farm:mouse": {
+   "file": "farm-mouse-d65442c2.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "e76a1b32-2de4-44a3-86f0-5c21ddcbde68"
+  },
+  "farm:pig": {
+   "file": "farm-pig-a832be6d.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "86956534-7889-41d9-92c3-5d249ec97e7e"
+  },
+  "farm:rabbit": {
+   "file": "farm-rabbit-b4d45f0f.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "680db4f1-2de6-480d-bf9a-17b1732eb572"
+  },
+  "farm:sheep": {
+   "file": "farm-sheep-0d04b01a.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "425cb7ab-0337-4410-b2db-0cbcc05ce48f"
+  },
+  "feelings:angry": {
+   "file": "feelings-angry-f858596b.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "46992f91-2f74-4864-9052-6489775ba6fc"
+  },
+  "feelings:cold": {
+   "file": "feelings-cold-53b7b30e.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "77553cc1-c4c7-443f-9066-7804bd064ea5"
+  },
+  "feelings:funny": {
+   "file": "feelings-funny-f06c9223.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "03bbe4ec-1e10-476a-84be-e0c0b018dcaa"
+  },
+  "feelings:happy": {
+   "file": "feelings-happy-0fd73b5d.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "7f6db981-d0a7-4619-949e-8827a9388de9"
+  },
+  "feelings:hot": {
+   "file": "feelings-hot-4220cea4.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "ab170352-5a65-4967-882d-0d1e3163a9a8"
+  },
+  "feelings:hungry": {
+   "file": "feelings-hungry-e2838d2d.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "40a3984e-5a1c-4577-8598-a901a015f25b"
+  },
+  "feelings:sad": {
+   "file": "feelings-sad-d876a10a.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "786b7b89-84c9-4ec4-842a-34b9f3e14404"
+  },
+  "feelings:scared": {
+   "file": "feelings-scared-d06c316b.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "ffe0032d-100e-48c9-96b0-382ac6ddc4e0"
+  },
+  "feelings:shy": {
+   "file": "feelings-shy-e2a5cf3f.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "f4f282a9-7490-4885-add7-339298b8bb4c"
+  },
+  "feelings:sick": {
+   "file": "feelings-sick-0bf4c1ec.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "18c96303-c88c-43b2-b4e4-acdd39058cbd"
+  },
+  "feelings:sleepy": {
+   "file": "feelings-sleepy-18642fdc.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "02885548-a315-4e67-84f3-69113f9edff0"
+  },
+  "feelings:surprised": {
+   "file": "feelings-surprised-ea7f1e1b.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "ad8389be-8361-4e19-b186-0bbdd710118b"
+  },
+  "feelings:tired": {
+   "file": "feelings-tired-aa9f7ab9.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "522b4949-14a9-445b-a389-2c7a7b76abd5"
+  },
+  "food:bread": {
+   "file": "food-bread-a93e6a96.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "8c6d551d-3c8f-48af-ae77-7454d200b02e"
+  },
+  "food:burger": {
+   "file": "food-burger-ee254745.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "a570ea99-3f9e-477a-9f83-c712ae336ed5"
+  },
+  "food:chips-fries": {
+   "file": "food-chips-fries-58e10e8c.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "d1fcf15c-fef3-40b3-a898-ac3e93945538"
+  },
+  "food:curry": {
+   "file": "food-curry-3034c0ae.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "5116d997-f781-454a-9e1c-7c972f27c365"
+  },
+  "food:egg": {
+   "file": "food-egg-fa0bc2ee.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "4c6a9cd4-a1dc-457f-97c5-ca0159b70a72"
+  },
+  "food:fried-chicken": {
+   "file": "food-fried-chicken-ff570041.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "b6c0a8da-2b3e-4847-86b2-500bdd2cbc33"
+  },
+  "food:fried-egg": {
+   "file": "food-fried-egg-668ee05f.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "154533e4-a8cb-48ad-a06a-5d93e643bcb5"
+  },
+  "food:meatball-skewer": {
+   "file": "food-meatball-skewer-f22e2f64.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "5c60ec01-bb4f-4613-82fa-62def13000eb"
+  },
+  "food:noodle-soup": {
+   "file": "food-noodle-soup-696b36bc.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "5fbd2cdf-a0ad-4258-9745-9f4e12ed42ac"
+  },
+  "food:pizza": {
+   "file": "food-pizza-0bce0d94.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "9fc8a88a-71cf-4364-80bf-1b536a515735"
+  },
+  "food:rice": {
+   "file": "food-rice-88723be2.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "48e186e3-4e47-4849-a2ce-561f0e88020b"
+  },
+  "food:sausage": {
+   "file": "food-sausage-d9c288b9.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "edcc41db-1b37-40a2-9dcb-217400c35a26"
+  },
+  "food:tom-yum-soup": {
+   "file": "food-tom-yum-soup-a2222da5.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "70ac7de6-85fa-43d4-af12-74de408edf6a"
+  },
+  "fruit:apple": {
+   "file": "fruit-apple-0ad0da76.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "8a3435ce-ee0f-4c80-8f67-5292ea6a793d"
+  },
+  "fruit:banana": {
+   "file": "fruit-banana-bd9e3d97.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "36e49124-4948-4546-920d-a32d15648217"
+  },
+  "fruit:cherry": {
+   "file": "fruit-cherry-ccaac394.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "d1e858f6-6fbe-4cfa-89b1-874aba852bf0"
+  },
+  "fruit:coconut": {
+   "file": "fruit-coconut-43c38ed7.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "6e7396d9-70c3-4773-b7b6-576101e20a57"
+  },
+  "fruit:durian": {
+   "file": "fruit-durian-778d71ef.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "62d7f648-b849-48b9-b73c-2fa09c2716f9"
+  },
+  "fruit:grapes": {
+   "file": "fruit-grapes-a5a8e41a.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "80274f73-a4d4-438e-b75d-2cb6827024c9"
+  },
+  "fruit:lime": {
+   "file": "fruit-lime-c075b87d.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "5350698b-6916-4153-bc59-fa1c73bd95cb"
+  },
+  "fruit:mango": {
+   "file": "fruit-mango-dd212b4b.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "25cb8a7a-21f1-40cf-93f6-c15a29d124e5"
+  },
+  "fruit:orange": {
+   "file": "fruit-orange-2416a22a.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "d07c25aa-8211-44f7-8945-d8e086f96482"
+  },
+  "fruit:pineapple": {
+   "file": "fruit-pineapple-7ea6a850.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "388f5d41-6daa-4d41-af04-42ee25417c0f"
+  },
+  "fruit:strawberry": {
+   "file": "fruit-strawberry-80f70efc.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "a43ed5fe-26ee-4aeb-96ea-543881bcdf7f"
+  },
+  "fruit:watermelon": {
+   "file": "fruit-watermelon-d149b494.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "ca9a1c1d-0a38-4430-84f8-948f6e8b3d2f"
+  },
+  "go:aeroplane": {
+   "file": "go-aeroplane-d04ffb1a.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "65e7f82f-79ce-4d5d-bbd3-4bbe42f904d5"
+  },
+  "go:ambulance": {
+   "file": "go-ambulance-5c6be483.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "90a9b0f2-b395-4476-9ead-a46ecee41ecd"
+  },
+  "go:bicycle": {
+   "file": "go-bicycle-0fc00b73.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "b930567b-5191-488d-9f3b-9afb7aa0f4d3"
+  },
+  "go:boat": {
+   "file": "go-boat-1b9901d9.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "47ebc8e0-9508-4032-a198-b11c2d0e8a59"
+  },
+  "go:bus": {
+   "file": "go-bus-39e6cbd0.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "6de67438-1294-4610-997c-a2e84e27f046"
+  },
+  "go:car": {
+   "file": "go-car-3da6eb04.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "236aa8ce-7267-4043-9a7c-d1c3bac9ab4d"
+  },
+  "go:fire-engine": {
+   "file": "go-fire-engine-091fcb73.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "22727c4d-44fd-4d5a-af39-2d747327d74e"
+  },
+  "go:helicopter": {
+   "file": "go-helicopter-b0498794.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "940491a7-0011-42a7-b1dd-98ab542a08e5"
+  },
+  "go:motorbike": {
+   "file": "go-motorbike-9f7113a9.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "b8af04f0-9be6-45c5-a6cf-b0b135f95c26"
+  },
+  "go:rocket": {
+   "file": "go-rocket-7a9e84c2.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "735d7f93-e128-4dd5-b1cb-62c5294a1635"
+  },
+  "go:taxi": {
+   "file": "go-taxi-3c7da1ea.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "443ee2bb-87d8-4396-90cd-4e548926161a"
+  },
+  "go:train": {
+   "file": "go-train-9ac63922.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "ddd9725d-ee76-47a1-8020-c67aa573318b"
+  },
+  "go:tuk-tuk": {
+   "file": "go-tuk-tuk-d84fd630.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "fa54c4c4-b0cc-4f18-8c95-8273d04f3584"
+  },
+  "hello:bye-bye": {
+   "file": "hello-bye-bye-f20f9fd9.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "4681d236-1eee-485f-90b2-1e01fe921cfb"
+  },
+  "hello:hello": {
+   "file": "hello-hello-10a12751.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "d434b53a-f3a1-4fd1-aebf-b966846e3375"
+  },
+  "hello:how-are-you": {
+   "file": "hello-how-are-you-f9ec1c22.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "88ae727f-767e-4302-90ea-ded535d9596e"
+  },
+  "hello:im-fine": {
+   "file": "hello-im-fine-4be6e88d.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "36c58e1e-27ec-4e55-8d5f-7141ea73f409"
+  },
+  "hello:its-okay": {
+   "file": "hello-its-okay-643ab496.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "d43be52b-06dc-4f71-8657-fc5053db5488"
+  },
+  "hello:love-you": {
+   "file": "hello-love-you-97dede88.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "20974253-1816-415b-9d09-ad04666760fc"
+  },
+  "hello:no": {
+   "file": "hello-no-7c30b79c.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "0d42f575-f690-451b-b68e-ce0209d9fa12"
+  },
+  "hello:sorry": {
+   "file": "hello-sorry-e4982176.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "cffa94f9-ad73-492d-a126-9f1ac396b73d"
+  },
+  "hello:sweet-dreams": {
+   "file": "hello-sweet-dreams-d94c0a9c.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "e2b26c59-34e1-41e2-a45c-0a54a9de8861"
+  },
+  "hello:thank-you": {
+   "file": "hello-thank-you-efd8e7da.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "90a7761b-a9b8-4537-a4cb-e605a21dc22d"
+  },
+  "hello:well-done": {
+   "file": "hello-well-done-ab0ac51b.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "da5d46d7-9ba8-49b5-a829-52d3685e0963"
+  },
+  "hello:yes": {
+   "file": "hello-yes-32a1b95b.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "28582aa4-fa3b-4ded-931b-2a6efbfc35a1"
+  },
+  "home:bathroom-toilet": {
+   "file": "home-bathroom-toilet-acc8d030.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "321348b9-6fd5-4929-a206-82413ab553e5"
+  },
+  "home:bed": {
+   "file": "home-bed-fd8dae87.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "b83cad9d-b962-406b-b912-80068c0c3874"
+  },
+  "home:chair": {
+   "file": "home-chair-a70ade24.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "16f30959-b1e2-4bff-bc8a-771c91727877"
+  },
+  "home:clock": {
+   "file": "home-clock-faf03839.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "223edbd2-c7a1-46ab-ae5c-da03c4206cce"
+  },
+  "home:door": {
+   "file": "home-door-7e9a5962.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "bd03ef15-d81d-484d-a633-db94530a85a2"
+  },
+  "home:house": {
+   "file": "home-house-0353a387.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "673e6579-4072-4d3c-8ae8-ae6cdc3129e1"
+  },
+  "home:key": {
+   "file": "home-key-94bd7f2e.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "d1252b11-bb45-44eb-a931-30004d49d4ac"
+  },
+  "home:phone": {
+   "file": "home-phone-d5a0d4a2.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "a4a9214a-7dc3-4ff8-8f1a-a5be230c6a93"
+  },
+  "home:table": {
+   "file": "home-table-699523de.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "060cd51d-3156-43c1-9956-27e2d9226ce2"
+  },
+  "home:toothbrush": {
+   "file": "home-toothbrush-ac3349f8.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "b818a776-ec01-46dc-872a-01a497b61ea0"
+  },
+  "home:tv": {
+   "file": "home-tv-9bea8d12.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "a73fd8f7-a641-46d3-b5aa-e11e280da94a"
+  },
+  "home:window": {
+   "file": "home-window-add36c18.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "ed7cce06-80e3-468a-bb33-4fc983d17035"
+  },
+  "jobs:artist": {
+   "file": "jobs-artist-39485d4d.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "49f0a13a-6cde-437c-91fc-c5fa6269de1a"
+  },
+  "jobs:astronaut": {
+   "file": "jobs-astronaut-fcf01ea0.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "1c597188-4a2b-4b69-95b1-646225b5bff0"
+  },
+  "jobs:chef": {
+   "file": "jobs-chef-e83f79cd.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "904b461d-ef6d-4395-8e85-39ad85571da7"
+  },
+  "jobs:dentist": {
+   "file": "jobs-dentist-36620dec.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "548a52c9-1c09-4afa-9e65-4a94fe7e4d81"
+  },
+  "jobs:doctor": {
+   "file": "jobs-doctor-64d980cf.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "054172dc-1384-4a7c-8328-8c2211ad4bab"
+  },
+  "jobs:farmer": {
+   "file": "jobs-farmer-84a1be00.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "a4f68a17-3790-4fda-a695-cbddd088daed"
+  },
+  "jobs:firefighter": {
+   "file": "jobs-firefighter-d75a03db.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "64027fa9-62b1-4a7e-996b-d6e9021a88a5"
+  },
+  "jobs:mechanic": {
+   "file": "jobs-mechanic-28730ea4.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "6d75f91f-04db-4365-924a-3622f29bb82b"
+  },
+  "jobs:pilot": {
+   "file": "jobs-pilot-8d8af51e.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "33579df0-08ff-451b-8a49-8f3c760b9d60"
+  },
+  "jobs:police-officer": {
+   "file": "jobs-police-officer-e9a420f8.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "c5a1e44a-9a2d-43af-8f74-20652334aac3"
+  },
+  "jobs:scientist": {
+   "file": "jobs-scientist-a45df673.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "62d8485a-7b66-4fbb-ad41-a0c3d100338f"
+  },
+  "jobs:singer": {
+   "file": "jobs-singer-b94180f3.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "ae16c070-10d1-46b3-a792-edace92a04ef"
+  },
+  "little-words:again-more": {
+   "file": "little-words-again-more-32b7ff4b.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "2b799846-b20d-4bec-a134-492bd4cf79b5"
+  },
+  "little-words:all-gone": {
+   "file": "little-words-all-gone-a30ea523.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "21bed250-9da4-4693-bdaf-c5decf4d6816"
+  },
+  "little-words:can-okay": {
+   "file": "little-words-can-okay-90ba3543.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "ee24c0ab-0fc4-4bbd-8112-c73fcec3d063"
+  },
+  "little-words:cant": {
+   "file": "little-words-cant-0a14199f.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "b33858df-cff0-40fc-9220-1dbf2d52615d"
+  },
+  "little-words:dont-like": {
+   "file": "little-words-dont-like-a6d5ada1.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "c3e9a862-5ca8-4b01-898c-19b89526b35b"
+  },
+  "little-words:good": {
+   "file": "little-words-good-80c34689.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "23f09190-072f-4741-abb6-e9e0b69be04f"
+  },
+  "little-words:help": {
+   "file": "little-words-help-b8423dbc.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "eed36d64-9af2-422a-86ae-829f2a0e3480"
+  },
+  "little-words:how-much": {
+   "file": "little-words-how-much-5a3f8874.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "a9b656ac-cd0a-4a19-bdf1-8415210764d2"
+  },
+  "little-words:like": {
+   "file": "little-words-like-71e60696.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "94d5faa7-2841-4150-8c15-9ee374b82159"
+  },
+  "little-words:not-good": {
+   "file": "little-words-not-good-9060ab58.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "d36cb571-c7fb-4f96-b473-965de10780ed"
+  },
+  "little-words:what": {
+   "file": "little-words-what-9f21e5a2.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "f9b5b5f8-7215-4c76-bd79-dd019cd92286"
+  },
+  "little-words:where": {
+   "file": "little-words-where-c8f833be.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "b0e50e50-5308-472d-934a-6ad28abdd561"
+  },
+  "magic:castle": {
+   "file": "magic-castle-5e3be510.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "ff22ff7a-6023-405e-be93-30dddfe4d5a3"
+  },
+  "magic:dinosaur": {
+   "file": "magic-dinosaur-452c7663.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "6660d7ae-9302-4193-8ec3-ddb26395f9c2"
+  },
+  "magic:dragon": {
+   "file": "magic-dragon-89a74e0c.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "8df87061-be2d-4254-89f4-7981280fb843"
+  },
+  "magic:fairy": {
+   "file": "magic-fairy-21a0967a.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "c55d1ac3-952c-4d28-a45a-40309aaf513f"
+  },
+  "magic:ghost": {
+   "file": "magic-ghost-532a2eff.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "e31fd50a-6947-4f29-aa58-cfcebb5fc2ee"
+  },
+  "magic:magic-wand": {
+   "file": "magic-magic-wand-5d2e221f.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "3e8f914c-65ae-4b88-af4f-5ad11f3b3706"
+  },
+  "magic:mermaid": {
+   "file": "magic-mermaid-79ba0d59.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "0606233e-0de7-4494-b71b-6b6ead45ceab"
+  },
+  "magic:princess": {
+   "file": "magic-princess-dcd69c8c.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "4ac14c3c-fa82-4354-a5e4-d266e489038d"
+  },
+  "magic:robot": {
+   "file": "magic-robot-e2df551f.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "b6bb2bfc-163e-459d-a103-0ae01f29143e"
+  },
+  "magic:superhero": {
+   "file": "magic-superhero-eb4eed55.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "af5c0e80-306c-4049-b96d-7cfe23d90c55"
+  },
+  "magic:unicorn": {
+   "file": "magic-unicorn-731afcc7.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "677154e1-8be8-4eb5-a1e9-f9ae57a0d254"
+  },
+  "magic:witch": {
+   "file": "magic-witch-4e40e82b.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "fa771da2-1fc5-4241-9d68-1aeee1e114c6"
+  },
+  "nature:desert": {
+   "file": "nature-desert-3891562f.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "8dfc18c8-23dc-4330-b404-8632cc14d41c"
+  },
+  "nature:fire": {
+   "file": "nature-fire-a9d69cce.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "4d889130-6112-4ea3-a7ae-dbc2dceb787b"
+  },
+  "nature:flower": {
+   "file": "nature-flower-ac29b65c.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "1691bd8d-cf97-49e0-b3ef-e09685763ba4"
+  },
+  "nature:forest": {
+   "file": "nature-forest-35b8c119.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "82889f88-c46e-4d9e-8b76-3c5ccd633978"
+  },
+  "nature:island": {
+   "file": "nature-island-a69016f3.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "851f5d2c-1e2c-4160-bfd9-23e947d6f58d"
+  },
+  "nature:leaf": {
+   "file": "nature-leaf-8a8a21d7.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "1c51a774-6661-4c57-b5b8-3c86870988d0"
+  },
+  "nature:mountain": {
+   "file": "nature-mountain-1269413b.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "ee8e2996-ac80-4a71-8a35-c6c308244447"
+  },
+  "nature:river": {
+   "file": "nature-river-25e1c770.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "ad489351-1352-46d8-a405-8f72e46245f6"
+  },
+  "nature:rock": {
+   "file": "nature-rock-b70a2e00.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "f99337af-c8b5-410a-8972-91af71b9f154"
+  },
+  "nature:tree": {
+   "file": "nature-tree-29294310.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "3a89311c-457a-49b0-b31c-89404b822098"
+  },
+  "nature:volcano": {
+   "file": "nature-volcano-6ca43c75.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "30e0c6e0-c35d-42cb-ba5d-91bd93436446"
+  },
+  "nature:waterfall": {
+   "file": "nature-waterfall-9df6ca77.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "16f8fe51-e7dd-434d-b066-f08701c21d71"
+  },
+  "party:birthday": {
+   "file": "party-birthday-635fcd99.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "682ebc62-9014-4b20-bd10-8782a6fb5f94"
+  },
+  "party:candle": {
+   "file": "party-candle-944903e0.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "8b17a902-0068-4b57-8c3e-e490599a4309"
+  },
+  "party:drum": {
+   "file": "party-drum-6bb2cfac.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "975ac342-cf6e-4436-9474-d43b87b61dc6"
+  },
+  "party:fireworks": {
+   "file": "party-fireworks-afe14dfe.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "e0c2ce29-7bed-422f-8bda-dff55243b4b5"
+  },
+  "party:guitar": {
+   "file": "party-guitar-177e0cb5.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "1e338f3f-ead0-4529-a066-4f4daed22452"
+  },
+  "party:loy-krathong": {
+   "file": "party-loy-krathong-ef776e7c.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "64b265ad-5bce-426e-98bf-0acf60f737a8"
+  },
+  "party:party": {
+   "file": "party-party-7d082a3f.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "1dc04af6-222a-44cc-a5aa-238e8bd4eeb4"
+  },
+  "party:piano": {
+   "file": "party-piano-fd754582.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "fb01f61a-8171-4713-8f4c-0bfe376872e7"
+  },
+  "party:present": {
+   "file": "party-present-8e01dd6a.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "a1761873-29b7-4ea8-8929-ad778d61f71f"
+  },
+  "party:pumpkin": {
+   "file": "party-pumpkin-33e16cf1.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "2a568b52-7383-4d93-b4cf-ae4bc263b548"
+  },
+  "party:song": {
+   "file": "party-song-97169e52.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "42d9b276-ac1a-4423-acbc-b5eae0f77646"
+  },
+  "party:songkran": {
+   "file": "party-songkran-76b52e2f.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "5740f1e2-660a-430f-b913-5ac76d8db899"
+  },
+  "phrases:can-i-have-more-please": {
+   "file": "phrases-can-i-have-more-please-b15149eb.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "d393a673-de41-4fe0-83f8-ea526e077dd4"
+  },
+  "phrases:i-dont-understand": {
+   "file": "phrases-i-dont-understand-55cf7734.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "88d59110-9568-4198-90bf-1548902207d4"
+  },
+  "phrases:im-hungry": {
+   "file": "phrases-im-hungry-11b63a4f.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "77d29dd7-be4a-4e71-9d62-508e15872f31"
+  },
+  "phrases:im-seven-years-old": {
+   "file": "phrases-im-seven-years-old-3ac44007.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "33e7af9c-08c7-4929-8282-a500179a3dc2"
+  },
+  "phrases:lets-go-and-play": {
+   "file": "phrases-lets-go-and-play-e1717ff2.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "5b839d38-a48a-44ba-b0f7-a6ffb0e5f6ba"
+  },
+  "phrases:may-i-go-to-the-toilet": {
+   "file": "phrases-may-i-go-to-the-toilet-162d7113.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "f30759b8-2cb8-4d58-b12e-43059cf5d301"
+  },
+  "phrases:my-name-is-sofia": {
+   "file": "phrases-my-name-is-sofia-1bbc3c00.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "d22c6392-d3b3-452d-96d3-3152093a195e"
+  },
+  "phrases:no-thank-you": {
+   "file": "phrases-no-thank-you-9adab263.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "eb845470-1c36-4f92-bc17-318c16c20237"
+  },
+  "phrases:see-you-tomorrow": {
+   "file": "phrases-see-you-tomorrow-8c6b1a96.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "7c03ba23-00bc-482c-bb50-5e02fbe6a34f"
+  },
+  "phrases:so-cute": {
+   "file": "phrases-so-cute-ad81cf61.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "f8587cf2-34f8-42ea-b1a8-9b10cbe542a1"
+  },
+  "phrases:very-yummy": {
+   "file": "phrases-very-yummy-a6a15d9d.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "9f8d860b-118f-4207-a3ae-397359ec7705"
+  },
+  "phrases:yes-please": {
+   "file": "phrases-yes-please-e583758d.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "cd466858-66e3-47ac-99f2-fe6bee306c5c"
+  },
+  "places:airport": {
+   "file": "places-airport-b9a70aa8.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "ed131a26-37ae-48a5-b232-12bcbea29003"
+  },
+  "places:beach": {
+   "file": "places-beach-eecc576d.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "10c5e74a-b731-4f36-aa59-59b0c6307bb2"
+  },
+  "places:hospital": {
+   "file": "places-hospital-211c2f37.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "92bd7834-852a-4064-afa5-a3b5504d2aa5"
+  },
+  "places:library": {
+   "file": "places-library-38ac9dad.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "9346c4ab-93a9-46e3-aecf-0ed2a2f9e2e9"
+  },
+  "places:market": {
+   "file": "places-market-96fe85f2.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "58c0c5ca-98b9-4d24-b00d-5e8b59514d41"
+  },
+  "places:playground": {
+   "file": "places-playground-2262de38.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "5f0925ec-4a3c-4ed7-ae88-74d712f333ed"
+  },
+  "places:restaurant": {
+   "file": "places-restaurant-48aa8581.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "9f41b557-b9ba-460f-9740-d00c9af9ac3d"
+  },
+  "places:shop": {
+   "file": "places-shop-7d7a9b7d.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "0e1a241c-f33c-4007-8c47-fc9180008c2b"
+  },
+  "places:shopping-mall": {
+   "file": "places-shopping-mall-7ede30fc.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "5033d6c0-e612-44aa-91fd-9c19e1fb5ed5"
+  },
+  "places:temple": {
+   "file": "places-temple-908feb89.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "c8f89cfd-d3ff-4c4f-b030-cdc65a44a27a"
+  },
+  "places:theme-park": {
+   "file": "places-theme-park-1d0f4593.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "85b8f7e9-2cc5-47b2-a029-c6fa8c178bef"
+  },
+  "places:zoo": {
+   "file": "places-zoo-c2c14614.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "0931c50c-a180-4550-a599-317a7a489664"
+  },
+  "school:book": {
+   "file": "school-book-8e4a9072.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "e3bdaed0-9242-4ffb-a207-f6778e46d0c9"
+  },
+  "school:computer": {
+   "file": "school-computer-26d80415.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "5b676d51-a535-47ab-9aa8-57b5d8204bf8"
+  },
+  "school:homework": {
+   "file": "school-homework-8403fbb1.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "c18c5453-989c-4a7f-ac9e-69877a93c2b1"
+  },
+  "school:paintbrush": {
+   "file": "school-paintbrush-251e6825.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "7c83d9bd-4464-4475-9bf1-cd01df1b039d"
+  },
+  "school:paper": {
+   "file": "school-paper-5cf93ddc.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "34c440b9-1ee3-4f32-bbc8-974285d3d93a"
+  },
+  "school:pen": {
+   "file": "school-pen-52c15aa5.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "394ec8ec-6089-4e56-96a4-2868e2ee3115"
+  },
+  "school:pencil": {
+   "file": "school-pencil-6381b38b.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "a97dfcea-d2fe-4e29-8ed8-d6dba8f87d49"
+  },
+  "school:rubber-eraser": {
+   "file": "school-rubber-eraser-32577dbd.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "77515b0b-1269-433a-8b7c-2e9d325806cb"
+  },
+  "school:ruler": {
+   "file": "school-ruler-a806801d.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "1a7241cc-c7c5-4dc4-be29-5c7cc3bf987b"
+  },
+  "school:school": {
+   "file": "school-school-b2d5720d.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "9d025ab4-1676-4df7-9c29-159675c7c5b6"
+  },
+  "school:scissors": {
+   "file": "school-scissors-66179e46.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "09e9e232-92c7-4de4-824a-70660464d440"
+  },
+  "school:student": {
+   "file": "school-student-8e2b9aa4.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "137cfc66-c68a-49fb-9861-9c5587481381"
+  },
+  "sea:clownfish": {
+   "file": "sea-clownfish-08ed853e.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "d830c584-3c11-4909-bbd3-b27efe915a37"
+  },
+  "sea:crab": {
+   "file": "sea-crab-56846f3b.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "ceb4d472-e7d0-4385-8839-5c42ea192011"
+  },
+  "sea:dolphin": {
+   "file": "sea-dolphin-2691e074.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "8790200f-ce19-4273-a804-f15cb8c41aa9"
+  },
+  "sea:jellyfish": {
+   "file": "sea-jellyfish-02f2a008.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "18a6166b-9c7f-4785-a599-26479e07a0e0"
+  },
+  "sea:octopus": {
+   "file": "sea-octopus-29cea808.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "97ea8cd7-0422-4768-a7ca-0e3b40496205"
+  },
+  "sea:prawn": {
+   "file": "sea-prawn-4d351464.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "36644db6-a6d9-44cd-9a87-ae5068137ac2"
+  },
+  "sea:pufferfish": {
+   "file": "sea-pufferfish-644c7d24.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "3fa115c8-00b4-4d5d-a501-cacc49dad9ae"
+  },
+  "sea:sea": {
+   "file": "sea-sea-eba4bf30.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "32e7d416-5bed-404e-ab15-781cafad50e4"
+  },
+  "sea:seal": {
+   "file": "sea-seal-f93f7e9f.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "3cce3984-c953-4645-b555-46328f49dcb8"
+  },
+  "sea:seashell": {
+   "file": "sea-seashell-35b3ca50.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "9df6bcde-9072-4249-ae75-ecfe024c99f8"
+  },
+  "sea:shark": {
+   "file": "sea-shark-8765acc5.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "1d87a82e-b67e-420d-8ad5-3931aaf76d20"
+  },
+  "sea:whale": {
+   "file": "sea-whale-7b1801da.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "8440da69-7cbc-49da-935b-3b5e977a4f0a"
+  },
+  "sky:cloud": {
+   "file": "sky-cloud-9d0f6398.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "d7f9e6d1-d0f8-4504-9be2-ad6fc3e10c8f"
+  },
+  "sky:lightning": {
+   "file": "sky-lightning-52a6e06d.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "ceb50f5d-cfa3-492e-9798-e345e70e873a"
+  },
+  "sky:moon": {
+   "file": "sky-moon-1f431aaa.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "a9c9f766-7655-448c-88fe-e1be83aae167"
+  },
+  "sky:rain": {
+   "file": "sky-rain-f40a90de.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "3c90c517-942f-48c3-abf4-8debc23d41e5"
+  },
+  "sky:rainbow": {
+   "file": "sky-rainbow-6e4a8a47.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "47cfcea1-e1af-41e1-be7e-d6e086079c84"
+  },
+  "sky:snow": {
+   "file": "sky-snow-3fc84e92.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "d0e9dc97-e423-4817-8aff-e68a208495fe"
+  },
+  "sky:star": {
+   "file": "sky-star-3ffce70e.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "89e3b978-4c40-44a3-afb4-cda9f7738dc8"
+  },
+  "sky:sun": {
+   "file": "sky-sun-37bdee8f.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "06b412d0-b65d-499c-8020-b77173b3d831"
+  },
+  "sky:the-earth": {
+   "file": "sky-the-earth-5baf6958.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "2aa3ec49-9f41-472c-aec3-d52e69b41575"
+  },
+  "sky:thunder": {
+   "file": "sky-thunder-713dc3e0.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "9e55b159-3e35-4bd3-9420-c4a6fb059257"
+  },
+  "sky:umbrella": {
+   "file": "sky-umbrella-8d45a6bf.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "ab6b56ec-643c-4d83-853b-2a7c87fd61f7"
+  },
+  "sky:wind": {
+   "file": "sky-wind-93501496.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "7c6aa38e-fa4a-4db9-81a4-1f6d6f6da9cf"
+  },
+  "snacks:bubble-tea": {
+   "file": "snacks-bubble-tea-c4cf1ac7.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "ccb06264-fcf4-4fd0-8179-2a1523dbf998"
+  },
+  "snacks:cake": {
+   "file": "snacks-cake-fc88b48e.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "c6f61d91-496b-4877-a94a-b61c4ae0c9c6"
+  },
+  "snacks:chocolate": {
+   "file": "snacks-chocolate-9bc649b5.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "ff0488f8-267a-4996-b1bd-9a99812d22ea"
+  },
+  "snacks:cookie": {
+   "file": "snacks-cookie-12893f11.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "156c6e3f-dbf7-4975-b7b0-0a70f4dcf08e"
+  },
+  "snacks:doughnut": {
+   "file": "snacks-doughnut-62dd245c.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "11a9c79a-b0d3-422e-97cf-0c157aaba7ae"
+  },
+  "snacks:ice": {
+   "file": "snacks-ice-c95f885c.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "6dfaef7d-ba03-43a6-9b4e-c8e2cef0e898"
+  },
+  "snacks:ice-cream": {
+   "file": "snacks-ice-cream-16ad7e5c.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "0ea8e91f-f5f2-4c95-98ad-1ae689c10426"
+  },
+  "snacks:milk": {
+   "file": "snacks-milk-fc6bfc25.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "d04ea940-444f-40cd-906e-5788464d051d"
+  },
+  "snacks:orange-juice": {
+   "file": "snacks-orange-juice-c0f3ab0f.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "b57f883c-bd07-49ff-9ab8-67fcd30c2716"
+  },
+  "snacks:popcorn": {
+   "file": "snacks-popcorn-2c4a6521.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "0b92d84c-71c4-479d-8f99-e70d09484016"
+  },
+  "snacks:sweets-candy": {
+   "file": "snacks-sweets-candy-1edda555.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "b1da468b-2cba-46ed-9387-e161159a7da3"
+  },
+  "snacks:water": {
+   "file": "snacks-water-a754629b.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "c17a44ee-9506-4694-9f58-9f4551fe9cb3"
+  },
+  "toys:ball": {
+   "file": "toys-ball-09389071.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "b93ddd5f-8003-4628-a69f-f05c91307cab"
+  },
+  "toys:balloon": {
+   "file": "toys-balloon-6c1d8fde.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "d0c7bab8-7c45-461a-84ea-287b383b9d34"
+  },
+  "toys:bubbles": {
+   "file": "toys-bubbles-eddcf7b5.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "9e466bac-0d9f-4854-8855-18f4805d5f71"
+  },
+  "toys:building-blocks": {
+   "file": "toys-building-blocks-09eee46d.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "002c3ed4-578c-4ebd-9b2a-4cfae9a775dd"
+  },
+  "toys:crayons": {
+   "file": "toys-crayons-f36980f3.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "06e39b6c-d2f3-4a51-b2a9-d0b3c9e25f73"
+  },
+  "toys:dice": {
+   "file": "toys-dice-a89a3cee.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "3f2f425e-d842-47d5-a7bb-9df615965c69"
+  },
+  "toys:doll": {
+   "file": "toys-doll-1705cbda.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "b3575a84-08de-42c1-a5ef-416f220b5fa0"
+  },
+  "toys:jigsaw-puzzle": {
+   "file": "toys-jigsaw-puzzle-38c4c14e.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "827f02bc-55d0-4814-aa5a-6ac88811a2f4"
+  },
+  "toys:kite": {
+   "file": "toys-kite-8b2e7fdd.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "5ad8a1ef-0230-4fb0-8084-a6eaab30070b"
+  },
+  "toys:swing": {
+   "file": "toys-swing-db4f277d.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "96d2d6db-e825-465b-b357-ab5501a1aa64"
+  },
+  "toys:teddy-bear": {
+   "file": "toys-teddy-bear-386b84ed.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "0ac9bb49-3a2b-46ce-99dd-e526c35852b7"
+  },
+  "toys:video-game": {
+   "file": "toys-video-game-237c0e0e.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "e36a7526-5b9d-4fda-83c9-0901e674e2c3"
+  },
+  "veggies:beans-nuts": {
+   "file": "veggies-beans-nuts-9b01c2f5.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "e9f8e974-419c-4f10-8ab9-5724a4e744fe"
+  },
+  "veggies:broccoli": {
+   "file": "veggies-broccoli-6f61c738.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "163cfff3-1edc-4b3b-9c53-a3a690524d1e"
+  },
+  "veggies:carrot": {
+   "file": "veggies-carrot-97b24e57.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "9be38fb3-9047-409d-ad72-b2d510986619"
+  },
+  "veggies:chilli": {
+   "file": "veggies-chilli-dbfb1fce.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "51598aae-75fa-4f46-b0fb-30a41fe0f916"
+  },
+  "veggies:corn": {
+   "file": "veggies-corn-3bfa7ff4.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "8df54716-cc34-40b4-aa60-4c5628146dac"
+  },
+  "veggies:cucumber": {
+   "file": "veggies-cucumber-a307473d.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "cfb4582c-e94e-4963-ba7c-bceb0581eb00"
+  },
+  "veggies:garlic": {
+   "file": "veggies-garlic-30db0149.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "2e4c3e62-8982-4b9b-8701-e13e3d738207"
+  },
+  "veggies:mushroom": {
+   "file": "veggies-mushroom-b4e51a7c.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "4cd36f87-663b-4baf-b158-fc45579b821b"
+  },
+  "veggies:onion": {
+   "file": "veggies-onion-5541d603.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "a68e0056-3728-42c4-9be4-bf0982b4fd67"
+  },
+  "veggies:potato": {
+   "file": "veggies-potato-fb55f735.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "05f64f1f-b22c-4c00-bb4f-94b90637e93f"
+  },
+  "veggies:tomato": {
+   "file": "veggies-tomato-1f0d8ff6.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "fdcdafd2-7549-4b4d-baf4-ba71c914eca6"
+  },
+  "veggies:vegetables": {
+   "file": "veggies-vegetables-7c4b04d8.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "bd018e92-4331-43e6-a982-d79cf94c162c"
+  },
+  "wild:bear": {
+   "file": "wild-bear-a103d81c.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "b9f914fb-2406-416c-b955-dc3f7becfe71"
+  },
+  "wild:crocodile": {
+   "file": "wild-crocodile-875f560f.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "d2bc039a-8dce-4770-8537-3d2c004a61d0"
+  },
+  "wild:elephant": {
+   "file": "wild-elephant-24a7af03.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "fef3bd28-d4f4-435e-80f2-735ee7cc0ba9"
+  },
+  "wild:giraffe": {
+   "file": "wild-giraffe-e87d9694.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "b5f8d9fd-78d9-44b0-a285-90836c69bed1"
+  },
+  "wild:hippo": {
+   "file": "wild-hippo-3a03405d.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "206c725f-69e0-4c8d-a9ab-1cbb9aeffb66"
+  },
+  "wild:kangaroo": {
+   "file": "wild-kangaroo-6f9e32ab.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "9b7f9461-ca7b-4b20-8041-282758a8f0b3"
+  },
+  "wild:lion": {
+   "file": "wild-lion-891d9239.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "59efbc15-e8b6-41ac-bd67-a5ad37d06228"
+  },
+  "wild:monkey": {
+   "file": "wild-monkey-c0f6296f.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "4ac2403c-d213-4207-9404-13baf8ae4b78"
+  },
+  "wild:panda": {
+   "file": "wild-panda-6066a553.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "9c848ecc-f957-4c7b-b308-7e544b9b7398"
+  },
+  "wild:parrot": {
+   "file": "wild-parrot-07531276.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "b7f16213-5866-4e6b-8f47-39873e362d7d"
+  },
+  "wild:snake": {
+   "file": "wild-snake-ba91e1c5.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "0aa673e3-202b-470a-873e-d9c81e7e9419"
+  },
+  "wild:tiger": {
+   "file": "wild-tiger-c7e53c02.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "5b971cc1-bcbd-43aa-ad84-478733dab131"
+  },
+  "wild:turtle": {
+   "file": "wild-turtle-f7fc71e1.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "8af2a773-4059-4d08-bd22-09bbd7685f42"
+  },
+  "wild:zebra": {
+   "file": "wild-zebra-883559bb.webp",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job": "23ff8ff3-29c0-426b-8571-489bbd49307e"
+  }
+ }
+}

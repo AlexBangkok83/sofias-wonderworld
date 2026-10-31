@@ -41,7 +41,7 @@ export const PROMPTS = {
   'family:big-sister': 'a smiling teenage girl with her arm around her little sister',
   'family:big-brother': 'a smiling teenage boy with his arm around his little sister',
   'family:little-brother-or-sister': 'a happy toddler sitting on the floor with toy blocks',
-  'family:child': 'a happy child playing in a park',
+  'family:child': 'a happy child about six years old standing on grass in a park, full body, arms stretched out wide',
   'family:grandma': 'a smiling grandmother with grey hair',
   'family:grandpa': 'a smiling grandfather with grey hair',
   'family:family': 'a happy family of four, mother, father and two children, sitting together on a sofa',
@@ -75,7 +75,7 @@ export const PROMPTS = {
   'little-words:help': 'a small girl on tiptoe trying to reach a toy on a high shelf, calling for help',
   'little-words:what': `${GIRL} with a puzzled face, one finger on her chin, eyebrows raised`,
   'little-words:where': `${BOY} searching with a big magnifying glass`,
-  'little-words:how-much': 'a hand holding a small price tag next to mangoes at a Thai market stall',
+  'little-words:how-much': 'a child handing coins to a smiling shopkeeper at a Thai market stall, the coins clearly visible in the child\'s hand',
 
   // Yummy Food
   'food:rice': 'a bowl of steamed white jasmine rice',
@@ -107,7 +107,7 @@ export const PROMPTS = {
   'fruit:durian': 'a spiky durian fruit with one cut open showing yellow flesh',
 
   // My Body
-  'body:head': 'a smiling child\'s head and shoulders, front view',
+  'body:head': 'a smiling child pointing at the top of their own head with both index fingers',
   'body:eye': 'close-up of a child\'s eye',
   'body:ear': 'close-up of a child\'s ear',
   'body:nose': 'close-up of a child\'s nose',
@@ -246,7 +246,7 @@ export const PROMPTS = {
   'phrases:can-i-have-more-please': `${GIRL} holding out her empty bowl to her mother`,
   'phrases:yes-please': `${GIRL} happily taking a plate of fruit with both hands`,
   'phrases:no-thank-you': `${GIRL} politely shaking her head and holding up a hand to refuse a plate of food`,
-  'phrases:so-cute': 'a fluffy puppy with big eyes',
+  'phrases:so-cute': 'a smiling baby wearing a knitted hat with bunny ears',
   'phrases:see-you-tomorrow': 'children waving goodbye to each other at the school gate',
 
   // Things That Go
@@ -355,7 +355,7 @@ export const PROMPTS = {
   'sky:star': 'a sky full of twinkling stars',
   'sky:cloud': 'a fluffy white cloud in a blue sky',
   'sky:rain': 'rain falling, big raindrops splashing in a puddle',
-  'sky:thunder': 'a dark thunderstorm with heavy clouds',
+  'sky:thunder': 'huge dark grey storm clouds rolling low over a green rice field, a very dark dramatic sky, no lightning',
   'sky:lightning': 'a lightning bolt in a stormy sky',
   'sky:snow': 'snow falling on pine trees',
   'sky:wind': 'trees bending in a strong wind, leaves blowing',
@@ -386,7 +386,7 @@ export const PROMPTS = {
   'jobs:farmer': 'a Thai rice farmer in a straw hat in a green rice field',
   'jobs:chef': 'a chef in a white hat cooking',
   'jobs:astronaut': 'an astronaut in a space suit',
-  'jobs:singer': 'a singer singing on a stage',
+  'jobs:singer': 'a grown-up woman singer performing on a concert stage with colourful spotlights and a band behind her',
   'jobs:artist': 'an artist painting at an easel',
   'jobs:scientist': 'a scientist in a lab coat with a test tube',
   'jobs:mechanic': 'a mechanic fixing a car',
