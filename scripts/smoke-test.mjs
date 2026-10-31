@@ -380,6 +380,16 @@ async function main() {
   await settle(page, 300);
   await shot(page, '15-star');
 
+  // Start over asks twice, in the page itself (pop-up dialogs don't show on
+  // claude.ai). One tap must not wipe anything.
+  await page.keyboard.press('Escape');
+  await page.click('#start-over');
+  const armed = await page.textContent('#start-over');
+  check(/again/i.test(armed || ''), `one tap on Start over didn't ask to tap again ("${armed}")`);
+  check((await game(page, () => window.__game.characterCount())) === 2, 'one tap on Start over wiped the village');
+  await page.keyboard.press('Escape');
+  await settle(page, 200);
+
   // --- Persistence ---
   console.log('  Save + reload…');
   await game(page, () => window.__game.saveNow());

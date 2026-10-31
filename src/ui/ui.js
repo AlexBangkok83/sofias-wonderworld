@@ -139,14 +139,33 @@ export class UI {
           toggle('Villager voices', 'voice'),
           toggle('Sounds', 'sounds'),
           el('button', { class: 'btn secondary', onclick: () => this.emit('save') }, 'Save now'),
-          el('button', {
-            class: 'btn danger small',
-            onclick: () => {
-              if (window.confirm('Start the whole village again? Everything will go back to how it was.')) {
-                this.emit('reset');
-              }
-            },
-          }, 'Start over'))));
+          this._startOverButton())));
+  }
+
+  /**
+   * Starting over asks twice, inside the page: the first tap says what will
+   * happen, the second does it. (Browser confirm() pop-ups don't show
+   * everywhere this runs — on claude.ai they're silently refused.)
+   */
+  _startOverButton() {
+    let timer = null;
+    const btn = el('button', {
+      id: 'start-over', class: 'btn danger small',
+      onclick: () => {
+        if (btn.dataset.armed === 'true') {
+          clearTimeout(timer);
+          this.emit('reset');
+          return;
+        }
+        btn.dataset.armed = 'true';
+        btn.textContent = 'Tap again to put everything back to how it was';
+        timer = setTimeout(() => {
+          btn.dataset.armed = 'false';
+          btn.textContent = 'Start over';
+        }, 4000);
+      },
+    }, 'Start over');
+    return btn;
   }
 
   _buildHelp() {
