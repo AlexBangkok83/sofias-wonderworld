@@ -9,7 +9,7 @@ import {
 } from './world/places.js';
 import { seedThings, seedPerson } from './world/seed.js';
 import { landingY } from './world/physics.js';
-import { getThing } from './art/things.js';
+import { getThing, packThings } from './art/things.js';
 import { DEFAULT_CHARACTER } from './art/person.js';
 import { VILLAGERS, getVillager } from './npc/dialogue.js';
 import { Voice } from './npc/voice.js';
@@ -203,8 +203,10 @@ function openShop() {
 function closeShop() {
   ui.closeShop();
   ui.hideTitle();
-  // Straight to the new things.
-  if (boughtSinceOpen) ui.showDrawerTab('stuff', boughtSinceOpen);
+  // Straight to the new things: the toy box, or Characters for a pack of looks.
+  if (!boughtSinceOpen) return;
+  if (packThings(boughtSinceOpen).length) ui.showDrawerTab('stuff', boughtSinceOpen);
+  else ui.openCreator(state.save.characters, state.save.characters[0]?.id);
 }
 
 function buy(packId) {
@@ -325,8 +327,7 @@ ui.on('play', () => resume())
 window.addEventListener('keydown', (e) => {
   if (e.code !== 'Escape') return;
   if (ui.shopOpen) {
-    if (ui.shop.revealOpen) ui.shop.closeReveal();
-    else closeShop();
+    if (!ui.shop.back()) closeShop();
   } else if (!ui.creator.hidden) {
     ui.closeCreator();
   } else if (!ui.helpMenu.hidden) {

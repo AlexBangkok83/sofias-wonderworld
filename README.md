@@ -104,21 +104,31 @@ is no networking code in this repo at all.
 
 ## The shop
 
-Packs of new things, bought with in-game money she never sees.
+Packs of new things, bought with in-game money she never sees. The shop is
+a whole screen, like walking into a toy shop: a striped awning, a sign, and
+a wooden shelf of pack boxes that slides sideways.
 
+- **Every pack is a box** with what's inside drawn on the front, and a tag
+  hanging off its corner: **Buy**, **Not yet 🌙**, or **Yours ✓**. The boxes
+  she can buy bob gently on the shelf.
+- **Tap a box and it opens up big**: everything inside it, with names, and
+  one big button. **Not yet 🌙** (there isn't enough yet) just says to come
+  back another day.
+- **Buy is one tap**, and then it's unboxed: the box wobbles, the lid pops
+  off, everything jumps out one at a time, confetti, ta-da. **Play with
+  them!** goes straight to the new things (the toy box, or Characters for a
+  pack of looks); **Keep shopping** goes back to the shelf.
 - **Money arrives by itself, once a day.** The first time she opens the game
   on a new day, the day's money goes into a hidden piggy bank. Days she
   doesn't play still count, up to a week's worth at once.
 - **There is no number anywhere.** Not on the screen, not in the shop, not on
-  a pack. Each pack just has one button: **Buy**, **Not yet 🌙** (there isn't
-  enough yet — pressing it says to come back another day), or **Yours ✓**.
-  The shop code is never even handed the balance or the prices, and the smoke
-  test fails if a digit ever appears in the shop.
-- **Buy is one tap.** The pack pops open with a little ta-da and confetti and
-  shows what was inside. Close the shop and the toy box opens on the new
-  things; new looks appear in Characters.
+  a pack. The shop code is never even handed the balance or the prices, and
+  the smoke test fails if a digit ever appears in the shop.
 - **Locked things are just not there.** The toy box and the character creator
   only show what she has. The shop shows what's in each pack before buying.
+
+Open it from the gold 🛍 button at the top, the pause menu, or the title
+screen. Esc (or ‹ Back) steps back out one screen at a time.
 
 | Pack | Costs | What's in it |
 |---|---|---|
@@ -240,12 +250,14 @@ sits Sofia on the sofa, puts Mila to bed, switches the lamp, fridge, oven and
 toy box, moves the table and checks the cookie falls off, drops the teddy from
 high up, taps a villager, brings things out of the toy box and puts one back,
 taps into the bakery, carries Wren down the street to the library door, finds
-the Moon House, buys packs (checking there's no number on screen, that the
-next pack says "Not yet", and that it can be bought the next day), finds the
-new things in the toy box and the new ears in the creator, makes a character,
-reloads to confirm everything was saved, then on a phone drags with a finger,
-swipes the street, moves two things with two fingers at once, and buys from
-the 🛍 button. It fails on any console error. Screenshots land in `shots/`.
+the Moon House, goes shopping (opens a box to see what's inside, buys it and
+checks all five things jump out, checks there's no number on screen, that the
+next pack says "Not yet", that Esc steps back to the shelf, and that it can be
+bought the next day), finds the new things in the toy box and the new ears in
+the creator, makes a character, reloads to confirm everything was saved, then
+on a phone drags with a finger, swipes the street, moves two things with two
+fingers at once, and buys from the 🛍 button (checking the Buy button fits on
+a phone held sideways, and that "Play with them!" goes to the new things). It fails on any console error. Screenshots land in `shots/`.
 
 On a machine where Playwright's own browser isn't installed, pass one:
 `CHROMIUM_PATH=/path/to/chrome node scripts/smoke-test.mjs`.

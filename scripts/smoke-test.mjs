@@ -299,44 +299,69 @@ async function main() {
   };
   const status = (id) => game(page, (p) => window.__game.packStatus(p), id);
 
+  const boxStatus = (id) => page.evaluate((p) => document.querySelector(`#shop .pack-box[data-pack="${p}"]`)?.dataset.status, id);
+  // Buyable boxes bob gently on the shelf, so don't wait for them to hold still.
+  const openBox = async (id) => {
+    await page.click(`#shop .pack-box[data-pack="${id}"]`, { force: true });
+    await settle(page, 250);
+  };
+
   await page.click('#shop-btn');
-  await settle(page, 200);
+  await settle(page, 300);
   check(await page.evaluate(() => !document.getElementById('shop').hidden), 'the 🛍 button did not open the shop');
-  const statuses = await page.evaluate(() => [...document.querySelectorAll('#shop .pack-card')].map((c) => c.dataset.status));
-  console.log(`    first visit: ${statuses.join(', ')}`);
+  const statuses = await page.evaluate(() => [...document.querySelectorAll('#shop .pack-box')].map((c) => c.dataset.status));
+  console.log(`    the shelf: ${statuses.join(', ')}`);
+  check(statuses.length === 7, `the shelf shows ${statuses.length} packs, not 7`);
   check(statuses.includes('buy'), 'nothing in the shop can be bought on the first day');
   check(statuses.includes('not-yet'), 'every pack was buyable on the first day');
   await noNumbers('on the first visit');
   await shot(page, '11-shop');
 
-  await page.click('#shop .pack-card[data-pack="candy"] .btn.buy');
-  await settle(page, 300);
+  // Tap a box: it opens up big, showing everything inside.
+  await openBox('candy');
+  const inside = await page.evaluate(() => [...document.querySelectorAll('#shop .pack-detail .inside-item .label')].map((l) => l.textContent));
+  console.log(`    inside the candy pack: ${inside.join(', ')}`);
+  check(inside.includes('Cupcake') && inside.includes('Gumball Machine'), 'the candy pack page does not show what is inside');
+  await noNumbers('on a pack page');
+  await shot(page, '12-shop-pack');
+  await page.click('#shop .pack-detail .btn.buy');
+  await settle(page, 2200);   // the box wobbles, the lid pops, everything jumps out
   const revealed = await page.evaluate(() => !document.querySelector('#shop .shop-reveal').hidden
-    && document.querySelector('#shop .reveal-card h2').textContent);
-  console.log(`    bought candy: ${revealed || 'NO REVEAL'}`);
-  check(revealed === "It's yours!", 'buying a pack did not show the reveal');
+    && document.querySelector('#shop .unbox h2').textContent);
+  const jumpedOut = await page.evaluate(() => document.querySelectorAll('#shop .unbox-item').length);
+  console.log(`    bought candy: ${revealed || 'NO UNBOXING'} (${jumpedOut} things jumped out)`);
+  check(revealed === "It's yours!", 'buying a pack did not unbox it');
+  check(jumpedOut === 5, `${jumpedOut} things jumped out of the candy box, not 5`);
   check((await status('candy')) === 'owned', 'buying the candy pack did not make it hers');
   await noNumbers('after buying');
-  await shot(page, '12-shop-bought');
-  await page.click('#shop .reveal-card .btn');
+  await shot(page, '13-shop-unboxing');
+  await page.click('#shop .reveal-actions .keep');
   await settle(page, 150);
+  check((await boxStatus('candy')) === 'owned', 'the candy box on the shelf does not say it is hers');
 
   const oceanAfter = await status('ocean');
   check(oceanAfter === 'not-yet', `after spending the day's money, ocean was "${oceanAfter}"`);
-  await page.click('#shop .pack-card[data-pack="ocean"] .btn.not-yet');
-  const note = await page.textContent('#shop .pack-card[data-pack="ocean"] .pack-note');
+  await openBox('ocean');
+  await page.click('#shop .pack-detail .btn.not-yet');
+  const note = await page.textContent('#shop .pack-detail .pack-note');
   console.log(`    not yet: "${note}"`);
   check(/come back/i.test(note || ''), 'pressing "Not yet" did not say to come back');
   check((await status('ocean')) === 'not-yet', 'pressing "Not yet" bought the pack anyway');
+  await page.keyboard.press('Escape');   // back to the shelf
+  await settle(page, 150);
+  check(await page.evaluate(() => document.querySelector('#shop .pack-detail').hidden), 'Escape did not go back to the shelf');
+  check(await page.evaluate(() => !document.getElementById('shop').hidden), 'Escape on a pack page left the shop');
 
   await game(page, () => window.__game.skipDays(1));
   const tomorrow = await status('ocean');
   console.log(`    next day, ocean: ${tomorrow}`);
   check(tomorrow === 'buy', `a new day did not make a one-day pack buyable (got "${tomorrow}")`);
-  await page.click('#shop .pack-card[data-pack="animals"] .btn.buy');
-  await settle(page, 200);
-  await page.keyboard.press('Escape');   // closes the reveal
-  await page.keyboard.press('Escape');   // closes the shop
+  check((await boxStatus('ocean')) === 'buy', 'the shelf did not update for the new day');
+  await openBox('animals');
+  await page.click('#shop .pack-detail .btn.buy');
+  await settle(page, 300);
+  await page.keyboard.press('Escape');   // stops the unboxing
+  await page.keyboard.press('Escape');   // leaves the shop
   await settle(page, 300);
   check(await page.evaluate(() => document.getElementById('shop').hidden), 'Escape did not close the shop');
 
@@ -348,7 +373,7 @@ async function main() {
   await settle(page);
   check((await game(page, () => window.__game.things().some((t) => t.kind === 'kitty'))), 'a bought kitty could not be brought out');
   await page.click('#drawer .icon-btn');
-  await shot(page, '13-kitty');
+  await shot(page, '14-kitty');
 
   // --- Characters ---
   console.log('  Character creator…');
@@ -367,7 +392,7 @@ async function main() {
   await page.fill('#creator input[type="text"]', 'Star');
   await clickByText('🎲 Surprise me');
   await clickByText('Bunny Ears');
-  await shot(page, '14-creator');
+  await shot(page, '15-creator');
   await clickByText('Save');
   await settle(page, 200);
   const count = await game(page, () => window.__game.characterCount());
@@ -378,7 +403,7 @@ async function main() {
   check(starHere, 'a new character did not appear in the house');
   await clickByText('Done');
   await settle(page, 300);
-  await shot(page, '15-star');
+  await shot(page, '16-star');
 
   // Start over asks twice, in the page itself (pop-up dialogs don't show on
   // claude.ai). One tap must not wipe anything.
@@ -488,19 +513,31 @@ async function main() {
   await phone.tap('#shop-btn');
   await settle(phone, 200);
   check(await phone.evaluate(() => !document.getElementById('shop').hidden), 'the 🛍 button did not open the shop on a phone');
-  const overflow = await phone.evaluate(() => {
-    const card = document.querySelector('#shop .shop-card');
-    return card.scrollWidth > card.clientWidth;
-  });
-  check(!overflow, 'the shop scrolls sideways on a phone');
+  // The shelf slides sideways; the page itself must not.
+  const overflow = await phone.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);
+  check(!overflow, 'the shop makes the page scroll sideways on a phone');
   await phone.screenshot({ path: path.join(SHOTS, '17-phone-shop.png') });
-  const firstBuy = phone.locator('#shop .pack-card .btn.buy').first();
-  await firstBuy.scrollIntoViewIfNeeded();
-  await firstBuy.tap();
+  const firstBox = phone.locator('#shop .pack-box[data-status="buy"]').first();
+  await firstBox.tap({ force: true });
   await settle(phone, 300);
+  // Held sideways, the pack page has to fit with its button on screen.
+  const buyBtn = phone.locator('#shop .pack-detail .btn.buy');
+  const btnBox = await buyBtn.boundingBox();
+  check(!!btnBox && btnBox.y + btnBox.height <= 390, 'the Buy button is off the bottom of a sideways phone');
+  await buyBtn.tap();
+  await settle(phone, 2200);
   await phone.screenshot({ path: path.join(SHOTS, '18-phone-bought.png') });
   const phonePacks = await phone.evaluate(() => window.__game.ownedPacks().length);
   check(phonePacks === 1, `tapping Buy on a phone left ${phonePacks} packs owned`);
+  // "Play with them!" goes straight to the new things.
+  await phone.tap('#shop .reveal-actions .play');
+  await settle(phone, 300);
+  const afterPlay = await phone.evaluate(() => ({
+    shop: !document.getElementById('shop').hidden,
+    drawer: !document.getElementById('drawer').hidden,
+    creator: !document.getElementById('creator').hidden,
+  }));
+  check(!afterPlay.shop && (afterPlay.drawer || afterPlay.creator), `"Play with them!" didn't go to the new things (${JSON.stringify(afterPlay)})`);
   console.log('  📸 16-phone, 17-phone-shop, 18-phone-bought');
 
   await browser.close();
