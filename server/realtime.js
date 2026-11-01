@@ -107,28 +107,34 @@ export async function handleTokenRequest(input, { env = process.env, ip = 'local
     englishHelp: input.englishHelp,
   });
 
-  const res = await fetch('https://api.openai.com/v1/realtime/client_secrets', {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${env.OPENAI_API_KEY}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      expires_after: { anchor: 'created_at', seconds: 120 },
-      session: {
-        type: 'realtime',
-        model,
-        instructions,
-        max_output_tokens: 1000,
-        audio: {
-          input: {
-            noise_reduction: { type: 'near_field' },
-            transcription: { model: 'gpt-4o-mini-transcribe', language: 'th' },
-            // A child pauses mid-sentence: wait for her to really finish.
-            turn_detection: { type: 'semantic_vad', eagerness: 'low' },
-          },
-          output: { voice: env.REALTIME_VOICE || 'marin', speed: 0.9 },
-        },
+  const session = {
+    type: 'realtime',
+    model,
+    instructions,
+    max_output_tokens: 1000,
+    audio: {
+      input: {
+        noise_reduction: { type: 'near_field' },
+        transcription: { model: 'gpt-4o-mini-transcribe', language: 'th' },
+        // A child pauses mid-sentence: wait for her to really finish.
+        turn_detection: { type: 'semantic_vad', eagerness: 'low' },
       },
-    }),
-  });
+      output: { voice: env.REALTIME_VOICE || 'marin', speed: 0.9 },
+    },
+  };
+
+  let res;
+  try {
+    res = await fetch('https://api.openai.com/v1/realtime/client_secrets', {
+      method: 'POST',
+      signal: AbortSignal.timeout(15000),
+      headers: { Authorization: `Bearer ${env.OPENAI_API_KEY}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ expires_after: { anchor: 'created_at', seconds: 120 }, session }),
+    });
+  } catch {
+    // Offline, DNS trouble or a hung connection: answer instead of throwing.
+    return { status: 502, body: { error: 'offline', message: "Couldn't reach OpenAI. Check the internet connection and try again." } };
+  }
   const data = await res.json().catch(() => ({}));
   if (!res.ok || !data.value) {
     return { status: 502, body: { error: 'openai', message: data.error?.message || `OpenAI said ${res.status}` } };

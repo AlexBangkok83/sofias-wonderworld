@@ -17,10 +17,15 @@ function realtimeTokenApi() {
       for await (const chunk of req) raw += chunk;
       let body = {};
       try { body = JSON.parse(raw || '{}'); } catch { /* empty body */ }
-      const { handleTokenRequest } = await import('./server/realtime.js');
-      const out = req.method === 'POST'
-        ? await handleTokenRequest(body, { env, ip: req.socket.remoteAddress })
-        : { status: 405, body: { error: 'method' } };
+      let out;
+      try {
+        const { handleTokenRequest } = await import('./server/realtime.js');
+        out = req.method === 'POST'
+          ? await handleTokenRequest(body, { env, ip: req.socket.remoteAddress })
+          : { status: 405, body: { error: 'method' } };
+      } catch (err) { // never take the dev server down with it
+        out = { status: 500, body: { error: 'server', message: err.message } };
+      }
       res.statusCode = out.status;
       res.setHeader('Content-Type', 'application/json');
       res.setHeader('Cache-Control', 'no-store');

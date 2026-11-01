@@ -11,6 +11,19 @@ Two apps in one repo:
 
 ### Try it on your computer
 
+**On a Mac, one line does everything.** Paste it into Terminal:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/AlexBangkok83/sofias-wonderworld/ccr-eb9708e9-feko08/scripts/setup-mac.sh | bash
+```
+
+It installs Node.js if needed (asks for your Mac password), downloads the app into
+`~/Desktop/thai-learning`, asks for your OpenAI key and a family passcode, puts a
+**Learn Thai** shortcut on the Desktop and opens the app. Run the same line again to update.
+See [`scripts/setup-mac.sh`](scripts/setup-mac.sh).
+
+By hand, on any computer with Node.js 22:
+
 ```bash
 git clone https://github.com/AlexBangkok83/sofias-wonderworld.git
 cd sofias-wonderworld

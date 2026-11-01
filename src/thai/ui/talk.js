@@ -117,6 +117,7 @@ export function talkCallRoute(screen, sceneId) {
       passcode: 'The family passcode is not right. A grown-up can fix it in Grown-ups.',
       'not-configured': "Talking isn't set up on the server yet. A grown-up needs to add OPENAI_API_KEY and CHAT_PASSCODE.",
       mic: 'The microphone is blocked. Allow it for this site and try again.',
+      offline: "Khru Mali can't be reached right now. Check the internet and try again.",
     };
     teardown(); // a dropped call must let go of the microphone
     errorBox.hidden = false;
